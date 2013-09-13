@@ -4,6 +4,7 @@
  */
 package com.tccz.tccz.core.model;
 
+import java.util.Date;
 import java.util.List;
 
 import com.tccz.tccz.core.model.enums.DiscountState;
@@ -22,12 +23,23 @@ public class Discount extends BaseBankBusinessEntity {
 	private Enterprise proposer;
 	/** 金额 */
 	private Money amount;
-	/** 状态 */
+	/**
+	 * 状态(需要特别注意状态与到期日期的校验)
+	 */
 	private DiscountState state;
 	/*
 	 * 非基本属性
 	 */
 	private List<DiscountChange> changeHistory;
+
+	@Override
+	public boolean occupyLimit(Date compareDate) {
+		if (state == DiscountState.TRANSFER || state == DiscountState.COLLECTED) {
+			return false;
+		} else {
+			return super.occupyLimit(compareDate);
+		}
+	}
 
 	public String getBandarNoteNumber() {
 		return bandarNoteNumber;

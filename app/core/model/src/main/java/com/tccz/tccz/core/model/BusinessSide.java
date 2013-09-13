@@ -11,7 +11,7 @@ package com.tccz.tccz.core.model;
  * @version $Id: BusinessSide.java, v 0.1 2013-9-12 上午10:51:27
  *          narutoying09@gmail.com Exp $
  */
-public class BusinessSide extends BaseEntity {
+public abstract class BusinessSide extends BaseEntity {
 	/** 企业名 */
 	protected String name;
 	/** 账户号 */

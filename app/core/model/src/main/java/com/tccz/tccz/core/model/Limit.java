@@ -14,10 +14,10 @@ import com.tccz.tccz.core.model.enums.LimitType;
  *          Exp $
  */
 public class Limit {
-	
+
 	/** 额度类型 */
 	private LimitType limitType;
-	
+
 	/** 金额 */
 	private Money money;
 
@@ -35,5 +35,10 @@ public class Limit {
 
 	public void setMoney(Money money) {
 		this.money = money;
+	}
+
+	@Override
+	public String toString() {
+		return limitType.getCode() + ", " + money.toString();
 	}
 }

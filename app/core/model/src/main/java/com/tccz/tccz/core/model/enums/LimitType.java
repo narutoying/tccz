@@ -15,12 +15,12 @@ public enum LimitType {
 
 	/** 综合授信额度 */
 	COMPOSITE_CREDIT("COMPOSITE_CREDIT", "综合授信额度"),
-	/** 流动贷款额度 */
-	FLOATING_LOAN("FLOATING_LOAN", "流动贷款额度"),
-	/** 银票额度 */
-	BANDAR_NOTE("BANDAR_NOTE", "银票额度"),
-	/** 贴现额度 */
-	DISCOUNT("DISCOUNT", "贴现额度"),
+	/** 流动贷款占用额度 */
+	FLOATING_LOAN_USED("FLOATING_LOAN_USED", "流动贷款占用额度"),
+	/** 银票占用额度 */
+	BANDAR_NOTE_USED("BANDAR_NOTE_USED", "银票占用额度"),
+	/** 贴现占用额度 */
+	DISCOUNT_USED("DISCOUNT_USED", "贴现占用额度"),
 	/** 可用额度 */
 	AVAILABLE("AVAILABLE", "可用额度");
 

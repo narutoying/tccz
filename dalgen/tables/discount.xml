@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="GBK"?>
-<table sqlname="user">
+<table sqlname="discount">
 
 	<operation name="getById">
 		<sql><![CDATA[
-			select * from user where id=?
+			select * from discount where id=?
 		]]></sql>
 	</operation>
 	
 	<operation name="getAll" multiplicity="many">
 		<sql><![CDATA[
-			select * from user
+			select * from discount
 		]]></sql>
 	</operation>
 	
 	<!--
 	<operation name="getByCondition" multiplicity="many" paging="true" parameterClass="map">
 		<extraparams>
-			<param name="username" javatype="java.lang.String"/>
+			<param name="discountname" javatype="java.lang.String"/>
 		 </extraparams>
 		<sql><![CDATA[
-			select * from user
+			select * from discount
 		]]></sql>
 		<sqlmap><![CDATA[
-          select * from user
+          select * from discount
 			<dynamic prepend="WHERE">
-				<isNotEmpty prepend="and" property="username">
+				<isNotEmpty prepend="and" property="discountname">
 					${cdata-start}
-						username = #username#
+						discountname = #discountname#
 					${cdata-end}
 				</isNotEmpty>
 			</dynamic>

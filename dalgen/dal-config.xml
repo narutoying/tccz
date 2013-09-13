@@ -22,5 +22,8 @@
     <typemap from="short" to="int"/>
     <appName>tccz</appName>
     
-    <include table="tables/test.xml" />
+    <!--
+	<include table="tables/test.xml" />
+	-->
+	<include table="tables/discount.xml" />
 </tables>
