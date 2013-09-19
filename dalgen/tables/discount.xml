@@ -13,6 +13,57 @@
 		]]></sql>
 	</operation>
 	
+	<operation name="insert">
+		<sql><![CDATA[
+			insert into discount(bandar_note_number, proposer_id, amount, state, expire_date, create_time, modify_time)
+			 values(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		]]></sql>
+	</operation>
+	
+	<operation name="delete">
+		<sql><![CDATA[
+			delete from discount where id=?
+		]]></sql>
+	</operation>
+	
+	<operation name="update" paramtype="object">
+		<sql><![CDATA[
+			update discount set bandar_note_number=?, proposer_id=?, amount=?, state=?, expire_date=?, modify_time=CURRENT_TIMESTAMP where id=?
+		]]></sql>
+	</operation>
+	
+	<operation name="getByCondition" multiplicity="many" parameterClass="map" paging="true">
+		<extraparams>
+			<param name="enterpriseName" javatype="java.lang.String"/>
+			<param name="bandarNoteNumber" javatype="java.lang.String"/>
+			<param name="showExpire" javatype="java.lang.Boolean"/>
+			<param name="doPage" javatype="java.lang.Boolean"/>
+		 </extraparams>
+		<sql><![CDATA[
+			select * from discount
+		]]></sql>
+		<sqlmap><![CDATA[
+          select d.* from discount d
+			<dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="enterpriseName">
+					d.proposer_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="bandarNoteNumber">
+					d.bandar_note_number = #bandarNoteNumber#
+				</isNotEmpty>
+				 <isEqual prepend="and" property="showExpire" compareValue = "false">
+					 ${cdata-start}
+						d.expire_date >= CURRENT_DATE
+					 ${cdata-end}
+				</isEqual>
+			</dynamic>
+			order by id DESC
+			<isEqual prepend="" property="doPage" compareValue = "true">
+				limit #pageNum#, #pageSize#
+			</isEqual>
+		 ]]></sqlmap>
+	</operation>
+	
 	<!--
 	<operation name="getByCondition" multiplicity="many" paging="true" parameterClass="map">
 		<extraparams>

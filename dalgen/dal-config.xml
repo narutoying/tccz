@@ -26,4 +26,5 @@
 	<include table="tables/test.xml" />
 	-->
 	<include table="tables/discount.xml" />
+	<include table="tables/discount_change.xml" />
 </tables>

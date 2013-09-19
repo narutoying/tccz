@@ -10,5 +10,6 @@
     <!--  DAO���塣                                                               -->
     <!-- ======================================================================== -->
     <bean id="discountDAO" class="com.tccz.tccz.common.dal.ibatis.IbatisDiscountDAO" parent="baseSqlMapClientDAO"/>
+    <bean id="discountChangeDAO" class="com.tccz.tccz.common.dal.ibatis.IbatisDiscountChangeDAO" parent="baseSqlMapClientDAO"/>
 
 </beans>

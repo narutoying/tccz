@@ -6,4 +6,5 @@
     <sqlMap resource="sqlmap/common-sqlmap-mapping.xml"/>
 	-->
     <sqlMap resource="sqlmap/Discount-sqlmap-mapping.xml"/>
+    <sqlMap resource="sqlmap/DiscountChange-sqlmap-mapping.xml"/>
 </sqlMapConfig>

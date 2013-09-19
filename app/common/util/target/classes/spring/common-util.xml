@@ -18,6 +18,8 @@
       http://code.alibabatech.com/schema/dubbo
       http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
 	default-autowire="byName">
+		
+		<bean id="commonManageTemplate" class="com.tccz.tccz.common.util.template.impl.CommonManageTemplateImpl" />
 	
 </beans>
 

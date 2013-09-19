@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.tccz.tccz.common.util.PageList;
 import com.tccz.tccz.core.model.Discount;
+import com.tccz.tccz.core.model.DiscountChange;
 import com.tccz.tccz.core.model.query.DiscountQueryCondition;
 
 /**
@@ -21,21 +22,13 @@ public interface DiscountQueryService {
 
 	/**
 	 * 条件查询贴现列表
+	 * 若不进行分页，则分页器无效
 	 * 
 	 * @param condition
 	 *            查询条件
 	 * @return
 	 */
-	List<Discount> queryByCondition(DiscountQueryCondition condition);
-
-	/**
-	 * 条件查询贴现列表（分页）
-	 * 
-	 * @param condition
-	 *            查询条件
-	 * @return
-	 */
-	PageList<Discount> queryByConditionWithPage(DiscountQueryCondition condition);
+	PageList<Discount> queryByCondition(DiscountQueryCondition condition);
 
 	/**
 	 * 查询指定id的贴现
@@ -44,5 +37,13 @@ public interface DiscountQueryService {
 	 * @return
 	 */
 	Discount queryById(int discountId);
+
+	/**
+	 * 查询贴现变更历史
+	 * 
+	 * @param discountId
+	 * @return
+	 */
+	List<DiscountChange> queryDiscountChanges(int discountId);
 
 }

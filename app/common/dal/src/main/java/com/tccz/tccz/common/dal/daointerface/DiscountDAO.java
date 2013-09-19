@@ -5,9 +5,12 @@
 package com.tccz.tccz.common.dal.daointerface;
 
 // auto generated imports
-import com.tccz.tccz.common.dal.dataobject.DiscountDO;
-import org.springframework.dao.DataAccessException;
 import java.util.List;
+
+import org.springframework.dao.DataAccessException;
+
+import com.tccz.tccz.common.dal.dataobject.DiscountDO;
+import com.tccz.tccz.dal.util.PageList;
 
 /**
  * A dao interface provides methods to access database table <tt>discount</tt>.
@@ -55,5 +58,74 @@ public interface DiscountDAO {
 	 *	@throws DataAccessException
 	 */	 
     public List<DiscountDO> getAll() throws DataAccessException;
+
+	/**
+	 *  Insert one <tt>DiscountDO</tt> object to DB table <tt>discount</tt>, return primary key
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>insert into discount(bandar_note_number,proposer_id,amount,state,expire_date,create_time,modify_time) values (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)</tt>
+	 *
+	 *	@param discount
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int insert(DiscountDO discount) throws DataAccessException;
+
+	/**
+	 *  Delete records from DB table <tt>discount</tt>.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>delete from discount where (id = ?)</tt>
+	 *
+	 *	@param id
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int delete(int id) throws DataAccessException;
+
+	/**
+	 *  Update DB table <tt>discount</tt>.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>update discount set bandar_note_number=?, proposer_id=?, amount=?, state=?, expire_date=?, modify_time=CURRENT_TIMESTAMP where (id = ?)</tt>
+	 *
+	 *	@param discount
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int update(DiscountDO discount) throws DataAccessException;
+
+	/**
+	 *  Query DB table <tt>discount</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>select * from discount</tt>
+	 *
+	 *	@param enterpriseName
+	 *	@param bandarNoteNumber
+	 *	@param showExpire
+	 *	@param doPage
+	 *	@param pageSize
+	 *	@param pageNum
+	 *	@return PageList
+	 *	@throws DataAccessException
+	 */	 
+    public PageList getByCondition(String enterpriseName, String bandarNoteNumber, Boolean showExpire, Boolean doPage, int pageSize, int pageNum) throws DataAccessException;
 
 }

@@ -4,8 +4,8 @@
  */
 package com.tccz.tccz.core.service;
 
+import com.tccz.tccz.common.util.CommonResult;
 import com.tccz.tccz.core.model.Discount;
-import com.tccz.tccz.core.model.result.CommonResult;
 
 /**
  * 贴现操作服务

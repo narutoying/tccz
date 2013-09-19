@@ -27,6 +27,7 @@
 	<bean class="com.tccz.tccz.core.service.ObjectConvertor" />
 	<bean id="discountQueryService" class="com.tccz.tccz.core.service.impl.DiscountQueryServiceImpl" />
 	<bean id="discountManageService" class="com.tccz.tccz.core.service.impl.DiscountManageServiceImpl" />
+	<bean id="businessSideQueryService" class=" com.tccz.tccz.core.service.impl.BusinessSideQueryServiceImpl" />
 		
 </beans>
 

@@ -4,6 +4,11 @@
  */
 package com.tccz.tccz.core.model.enums;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 贴现状态
  * 
@@ -26,6 +31,25 @@ public enum DiscountState {
 	private DiscountState(String code, String description) {
 		this.code = code;
 		this.description = description;
+	}
+
+	public static DiscountState getByCode(String code) {
+		if (StringUtils.isNotBlank(code)) {
+			for (DiscountState mode : values()) {
+				if (StringUtils.equals(code, mode.getCode())) {
+					return mode;
+				}
+			}
+		}
+		return null;
+	}
+
+	public static Map<String, String> toMap() {
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		for (DiscountState DiscountState : values()) {
+			map.put(DiscountState.getCode(), DiscountState.getDescription());
+		}
+		return map;
 	}
 
 	private String code;

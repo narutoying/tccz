@@ -5,6 +5,7 @@
 package com.tccz.tccz.common.dal.dataobject;
 
 // auto generated imports
+import java.util.Date;
 
 /**
  * A data object class directly models database table <tt>discount</tt>.
@@ -31,6 +32,41 @@ public class DiscountDO {
 	 */
 	private int id;
 
+	/**
+	 * This property corresponds to db column <tt>bandar_note_number</tt>.
+	 */
+	private String bandarNoteNumber;
+
+	/**
+	 * This property corresponds to db column <tt>proposer_id</tt>.
+	 */
+	private int proposerId;
+
+	/**
+	 * This property corresponds to db column <tt>amount</tt>.
+	 */
+	private long amount;
+
+	/**
+	 * This property corresponds to db column <tt>state</tt>.
+	 */
+	private String state;
+
+	/**
+	 * This property corresponds to db column <tt>expire_date</tt>.
+	 */
+	private Date expireDate;
+
+	/**
+	 * This property corresponds to db column <tt>create_time</tt>.
+	 */
+	private Date createTime;
+
+	/**
+	 * This property corresponds to db column <tt>modify_time</tt>.
+	 */
+	private Date modifyTime;
+
     //========== getters and setters ==========
 
     /**
@@ -49,5 +85,131 @@ public class DiscountDO {
      */
 	public void setId(int id) {
 		this.id = id;
+	}
+
+    /**
+     * Getter method for property <tt>bandarNoteNumber</tt>.
+     *
+     * @return property value of bandarNoteNumber
+     */
+	public String getBandarNoteNumber() {
+		return bandarNoteNumber;
+	}
+	
+	/**
+	 * Setter method for property <tt>bandarNoteNumber</tt>.
+	 * 
+	 * @param bandarNoteNumber value to be assigned to property bandarNoteNumber
+     */
+	public void setBandarNoteNumber(String bandarNoteNumber) {
+		this.bandarNoteNumber = bandarNoteNumber;
+	}
+
+    /**
+     * Getter method for property <tt>proposerId</tt>.
+     *
+     * @return property value of proposerId
+     */
+	public int getProposerId() {
+		return proposerId;
+	}
+	
+	/**
+	 * Setter method for property <tt>proposerId</tt>.
+	 * 
+	 * @param proposerId value to be assigned to property proposerId
+     */
+	public void setProposerId(int proposerId) {
+		this.proposerId = proposerId;
+	}
+
+    /**
+     * Getter method for property <tt>amount</tt>.
+     *
+     * @return property value of amount
+     */
+	public long getAmount() {
+		return amount;
+	}
+	
+	/**
+	 * Setter method for property <tt>amount</tt>.
+	 * 
+	 * @param amount value to be assigned to property amount
+     */
+	public void setAmount(long amount) {
+		this.amount = amount;
+	}
+
+    /**
+     * Getter method for property <tt>state</tt>.
+     *
+     * @return property value of state
+     */
+	public String getState() {
+		return state;
+	}
+	
+	/**
+	 * Setter method for property <tt>state</tt>.
+	 * 
+	 * @param state value to be assigned to property state
+     */
+	public void setState(String state) {
+		this.state = state;
+	}
+
+    /**
+     * Getter method for property <tt>expireDate</tt>.
+     *
+     * @return property value of expireDate
+     */
+	public Date getExpireDate() {
+		return expireDate;
+	}
+	
+	/**
+	 * Setter method for property <tt>expireDate</tt>.
+	 * 
+	 * @param expireDate value to be assigned to property expireDate
+     */
+	public void setExpireDate(Date expireDate) {
+		this.expireDate = expireDate;
+	}
+
+    /**
+     * Getter method for property <tt>createTime</tt>.
+     *
+     * @return property value of createTime
+     */
+	public Date getCreateTime() {
+		return createTime;
+	}
+	
+	/**
+	 * Setter method for property <tt>createTime</tt>.
+	 * 
+	 * @param createTime value to be assigned to property createTime
+     */
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+    /**
+     * Getter method for property <tt>modifyTime</tt>.
+     *
+     * @return property value of modifyTime
+     */
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+	
+	/**
+	 * Setter method for property <tt>modifyTime</tt>.
+	 * 
+	 * @param modifyTime value to be assigned to property modifyTime
+     */
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
 	}
 }

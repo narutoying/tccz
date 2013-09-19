@@ -26,6 +26,13 @@
     <!-- result maps for database table discount -->
     <resultMap id="RM-DISCOUNT" class="com.tccz.tccz.common.dal.dataobject.DiscountDO">
         <result property="id" column="id" javaType="int" jdbcType="int unsigned" nullValue="0"/>
+        <result property="bandarNoteNumber" column="bandar_note_number" javaType="java.lang.String" jdbcType="varchar"/>
+        <result property="proposerId" column="proposer_id" javaType="int" jdbcType="int" nullValue="0"/>
+        <result property="amount" column="amount" javaType="long" jdbcType="bigint" nullValue="0"/>
+        <result property="state" column="state" javaType="java.lang.String" jdbcType="char"/>
+        <result property="expireDate" column="expire_date" javaType="java.util.Date" jdbcType="DATETIME"/>
+        <result property="createTime" column="create_time" javaType="java.util.Date" jdbcType="datetime"/>
+        <result property="modifyTime" column="modify_time" javaType="java.util.Date" jdbcType="datetime"/>
     </resultMap>
 
 
@@ -44,6 +51,69 @@
     <![CDATA[
         select /*MS-TCCZ-DISCOUNT-GET-ALL*/ * from discount
     ]]>
+    </select>
+
+    <!-- mapped statement for IbatisDiscountDAO.insert -->
+	<insert id="MS-DISCOUNT-INSERT">
+	insert /*MS-TCCZ-DISCOUNT-INSERT*/ into discount(bandar_note_number,proposer_id,amount,state,expire_date,create_time,modify_time) values (#bandarNoteNumber#, #proposerId#, #amount#, #state#, #expireDate#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    <selectKey resultClass="int" keyProperty="id">
+		select last_insert_id() as id
+    </selectKey>
+	</insert>
+
+    <!-- mapped statement for IbatisDiscountDAO.delete -->
+    <delete id="MS-DISCOUNT-DELETE">
+    <![CDATA[
+        delete /*MS-TCCZ-DISCOUNT-DELETE*/ from discount where (id = #value#)
+    ]]>
+    </delete>
+
+    <!-- mapped statement for IbatisDiscountDAO.update -->
+    <update id="MS-DISCOUNT-UPDATE">
+    <![CDATA[
+        update /*MS-TCCZ-DISCOUNT-UPDATE*/ discount set bandar_note_number=#bandarNoteNumber#, proposer_id=#proposerId#, amount=#amount#, state=#state#, expire_date=#expireDate#, modify_time=CURRENT_TIMESTAMP where (id = #id#)
+    ]]>
+    </update>
+
+    <!-- mapped statement for IbatisDiscountDAO.getByCondition -->
+    <select id="MS-DISCOUNT-GET-BY-CONDITION" resultMap="RM-DISCOUNT">
+        select /*MS-TCCZ-DISCOUNT-GET-BY-CONDITION*/ d.* from discount d
+			<dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="enterpriseName">
+					d.proposer_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="bandarNoteNumber">
+					d.bandar_note_number = #bandarNoteNumber#
+				</isNotEmpty>
+				 <isEqual prepend="and" property="showExpire" compareValue = "false">
+					 <![CDATA[
+						d.expire_date >= CURRENT_DATE
+					 ]]>
+				</isEqual>
+			</dynamic>
+			order by id DESC
+			<isEqual prepend="" property="doPage" compareValue = "true">
+				limit #pageNum#, #pageSize#
+			</isEqual>
+    </select>
+
+    <!-- mapped statement for IbatisDiscountDAO.getByCondition, needed by paging -->
+    <select id="MS-TCCZ-DISCOUNT-GET-BY-CONDITION-COUNT-FOR-PAGING" resultClass="int">
+        select /*MS-TCCZ-DISCOUNT-GET-BY-CONDITION-COUNT-FOR-PAGING*/ count(*) from discount d
+			<dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="enterpriseName">
+					d.proposer_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="bandarNoteNumber">
+					d.bandar_note_number = #bandarNoteNumber#
+				</isNotEmpty>
+				 <isEqual prepend="and" property="showExpire" compareValue = "false">
+					 <![CDATA[
+						d.expire_date >= CURRENT_DATE
+					 ]]>
+				</isEqual>
+			</dynamic>
+			
     </select>
 
 </sqlMap>

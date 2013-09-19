@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="GBK"?>
+<table sqlname="discount_change">
+	
+	<operation name="getByDiscountId" multiplicity="many">
+		<sql><![CDATA[
+			select * from discount_change where discount_id = ?
+		]]></sql>
+	</operation>
+	
+	<operation name="insert">
+		<sql><![CDATA[
+			insert into discount_change(discount_id, state, create_time) values(?, ?, CURRENT_TIMESTAMP)
+		]]></sql>
+	</operation>
+		
+</table>
