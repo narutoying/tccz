@@ -19,6 +19,8 @@ public class DiscountPageResultForm {
 	private Integer pageSize;
 	/** 当前页 */
 	private Integer pageNum;
+	/** 总记录数 */
+	private Integer totalCount;
 	/** 贴现数据项 */
 	private List<DiscountPageItem> items = new ArrayList<DiscountPageItem>();
 
@@ -44,5 +46,13 @@ public class DiscountPageResultForm {
 
 	public void setItems(List<DiscountPageItem> items) {
 		this.items = items;
+	}
+
+	public Integer getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(Integer totalCount) {
+		this.totalCount = totalCount;
 	}
 }

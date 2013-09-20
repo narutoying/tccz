@@ -29,7 +29,7 @@ public class TestDiscountService extends BaseTestCase {
 		condition.setBandarNoteNumber("123");
 		condition.setEnterpriseName("");
 //		condition.setDoPage(true);
-		condition.setPageSize(1);
+		condition.setLimit(1);
 		PageList<Discount> queryByCondition = discountQueryService
 				.queryByCondition(condition);
 		System.out.println(queryByCondition.getDataList().size());

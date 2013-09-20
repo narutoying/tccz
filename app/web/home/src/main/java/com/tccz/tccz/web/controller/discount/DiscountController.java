@@ -19,6 +19,7 @@ import com.tccz.tccz.common.util.PageList;
 import com.tccz.tccz.core.model.Discount;
 import com.tccz.tccz.core.model.query.DiscountQueryCondition;
 import com.tccz.tccz.core.service.query.DiscountQueryService;
+import com.tccz.tccz.dal.util.Paginator;
 import com.tccz.tccz.web.util.JSONUtil;
 
 /**
@@ -51,13 +52,16 @@ public class DiscountController {
 		PageList<Discount> queryByCondition = discountQueryService
 				.queryByCondition(condition);
 		List<Discount> dataList = queryByCondition.getDataList();
-		JSONUtil.writeBackJsonWithConfig(res,
-				buildDiscountPageResultForm(dataList));
+		JSONUtil.writeBackJsonWithConfig(
+				res,
+				buildDiscountPageResultForm(dataList,
+						queryByCondition.getPaginator()));
 	}
 
 	private DiscountPageResultForm buildDiscountPageResultForm(
-			List<Discount> dataList) {
+			List<Discount> dataList, Paginator paginator) {
 		DiscountPageResultForm result = new DiscountPageResultForm();
+		result.setTotalCount(paginator.getItems());
 		for (Discount data : dataList) {
 			DiscountPageItem item = new DiscountPageItem();
 			item.setAmount(data.getAmount().toString());

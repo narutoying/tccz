@@ -24,9 +24,9 @@ public class DiscountQueryCondition {
 	/*
 	 * 分页参数，若不分页，则这些参数不起作用
 	 */
-	private boolean doPage = false;
-	private Integer pageSize = PageUtil.PAGE_SIZE;
-	private Integer currentPage = 1; // 默认第一页
+	private boolean doPage = true;
+	private Integer limit = PageUtil.PAGE_SIZE;
+	private Integer page = 1;
 
 	public String getEnterpriseName() {
 		return enterpriseName;
@@ -52,20 +52,12 @@ public class DiscountQueryCondition {
 		this.showExpire = showExpire;
 	}
 
-	public Integer getPageSize() {
-		return pageSize;
+	public Integer getLimit() {
+		return limit;
 	}
 
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
-
-	public Integer getCurrentPage() {
-		return currentPage;
-	}
-
-	public void setCurrentPage(Integer currentPage) {
-		this.currentPage = currentPage;
+	public void setLimit(Integer limit) {
+		this.limit = limit;
 	}
 
 	public boolean isDoPage() {
@@ -74,5 +66,13 @@ public class DiscountQueryCondition {
 
 	public void setDoPage(boolean doPage) {
 		this.doPage = doPage;
+	}
+
+	public Integer getPage() {
+		return page;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
 	}
 }

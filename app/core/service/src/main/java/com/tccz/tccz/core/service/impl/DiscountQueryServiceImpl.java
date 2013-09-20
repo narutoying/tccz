@@ -43,11 +43,11 @@ public class DiscountQueryServiceImpl implements DiscountQueryService {
 	@Override
 	public PageList<Discount> queryByCondition(DiscountQueryCondition condition) {
 		PageList<Discount> result = new PageList<Discount>();
-		Integer pageSize = condition.getPageSize();
+		Integer pageSize = condition.getLimit();
 		com.tccz.tccz.dal.util.PageList list = discountDAO.getByCondition(
 				condition.getEnterpriseName(), condition.getBandarNoteNumber(),
 				condition.isShowExpire(), condition.isDoPage(), pageSize,
-				PageUtil.getOffset(pageSize, condition.getCurrentPage()));
+				PageUtil.getOffset(pageSize, condition.getPage()));
 		result.setDataList(convertToDomains(list));
 		result.setPaginator(list.getPaginator());
 		return result;

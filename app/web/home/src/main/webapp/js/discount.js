@@ -20,7 +20,6 @@ Ext.onReady(function(){
     
     // create the Data Store
     var store = Ext.create('Ext.data.Store', {
-        pageSize: 20,
         model: 'Discount',
         remoteSort: true,
         proxy: {
@@ -28,9 +27,11 @@ Ext.onReady(function(){
             url: getContextPath() + '/query/discount/index.json',
             reader: {
                 type: 'json',
-                root: 'items'
+                root: 'items',
+                totalProperty: 'totalCount'
             }
         },
+        pageSize: 6
     });
     
     var pluginExpanded = true;
