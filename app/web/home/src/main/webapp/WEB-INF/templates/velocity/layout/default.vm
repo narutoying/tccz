@@ -6,10 +6,8 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=8" />
         <link rel="icon" href="$!contextPath/images/favicon.ico" type="image/x-icon"/>
-        <link rel="stylesheet" href="$!contextPath/css/bootstrap-responsive.min.css" type="text/css">
-        <link rel="stylesheet" href="$!contextPath/css/bootstrap.min.css" type="text/css">
-        <script type="text/javascript" src="$!contextPath/js/jquery-1.7.1.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="$!contextPath/extjs/resources/css/ext-all-neptune.css">
+        <script type="text/javascript" src="$!contextPath/js/jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="$!contextPath/extjs/bootstrap.js"></script>
 		<script type="text/javascript">
 			function getContextPath() {

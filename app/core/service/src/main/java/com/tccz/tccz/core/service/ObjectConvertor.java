@@ -11,9 +11,13 @@ import org.springframework.util.CollectionUtils;
 
 import com.tccz.tccz.common.dal.dataobject.DiscountChangeDO;
 import com.tccz.tccz.common.dal.dataobject.DiscountDO;
+import com.tccz.tccz.common.dal.dataobject.EnterpriseDO;
+import com.tccz.tccz.common.dal.dataobject.PersonDO;
 import com.tccz.tccz.core.model.Discount;
 import com.tccz.tccz.core.model.DiscountChange;
+import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Money;
+import com.tccz.tccz.core.model.Person;
 import com.tccz.tccz.core.model.enums.DiscountState;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 import com.tccz.tccz.core.service.query.DiscountQueryService;
@@ -90,6 +94,36 @@ public class ObjectConvertor {
 				result.add(convertToDiscountChange(data));
 			}
 		}
+		return result;
+	}
+
+	public static Enterprise convertToEnterprise(EnterpriseDO dataObject,
+			BusinessSideQueryService businessSideQueryService) {
+		if (dataObject == null) {
+			return null;
+		}
+		Enterprise result = new Enterprise();
+		result.setId(dataObject.getId());
+		result.setName(dataObject.getName());
+		result.setAccountNumber(dataObject.getAccountNumber());
+		result.setLegalPerson(businessSideQueryService
+				.queryPersonById(dataObject.getLegalPersonId()));
+		result.setCreateTime(dataObject.getCreateTime());
+		result.setModifyTime(dataObject.getModifyTime());
+		return result;
+	}
+
+	public static Person convertToPerson(PersonDO dataObject) {
+		if (dataObject == null) {
+			return null;
+		}
+		Person result = new Person();
+		result.setId(dataObject.getId());
+		result.setName(dataObject.getName());
+		result.setAccountNumber(dataObject.getAccountNumber());
+		result.setCreateTime(dataObject.getCreateTime());
+		result.setModifyTime(dataObject.getModifyTime());
+		result.setOwnEnterprises(null);// TODO 填充企业列表
 		return result;
 	}
 }

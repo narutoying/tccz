@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="GBK"?>
+<table sqlname="enterprise">
+	
+	<operation name="getById" multiplicity="one">
+		<sql><![CDATA[
+			select * from enterprise where id = ?
+		]]></sql>
+	</operation>
+	
+</table>

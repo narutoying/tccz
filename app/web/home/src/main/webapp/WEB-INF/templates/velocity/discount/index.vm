@@ -1,2 +1,5 @@
 <script type="text/javascript" src="$!contextPath/js/discount.js?num=Math.random()"></script>
-<div id="topic-grid"></div>
+<div id="queryForm"></div>
+<div id="queryResult"></div>
+<script type="text/javascript">
+</script>

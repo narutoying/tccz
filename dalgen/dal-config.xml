@@ -27,4 +27,6 @@
 	-->
 	<include table="tables/discount.xml" />
 	<include table="tables/discount_change.xml" />
+	<include table="tables/enterprise.xml" />
+	<include table="tables/person.xml" />
 </tables>

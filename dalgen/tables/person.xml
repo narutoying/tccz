@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="GBK"?>
+<table sqlname="person">
+    
+    <operation name="getById" multiplicity="one">
+        <sql>
+            <![CDATA[
+			select * from person where id = ?
+		]]>
+        </sql>
+    </operation>
+    
+</table>

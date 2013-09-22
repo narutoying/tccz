@@ -4,8 +4,13 @@
  */
 package com.tccz.tccz.core.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.tccz.tccz.common.dal.daointerface.EnterpriseDAO;
+import com.tccz.tccz.common.dal.daointerface.PersonDAO;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Person;
+import com.tccz.tccz.core.service.ObjectConvertor;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 
 /**
@@ -16,14 +21,19 @@ import com.tccz.tccz.core.service.query.BusinessSideQueryService;
  */
 public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 
+	@Autowired
+	private EnterpriseDAO enterpriseDAO;
+
+	@Autowired
+	private PersonDAO personDAO;
+
 	/**
 	 * @see com.tccz.tccz.core.service.query.BusinessSideQueryService#queryEnterpriseById(int)
 	 */
 	@Override
 	public Enterprise queryEnterpriseById(int enterpriseId) {
-		Enterprise result = new Enterprise();
-		result.setName("香塘");
-		return result;
+		return ObjectConvertor.convertToEnterprise(
+				enterpriseDAO.getById(enterpriseId), this);
 	}
 
 	/**
@@ -31,7 +41,7 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 	 */
 	@Override
 	public Person queryPersonById(int personId) {
-		return null;
+		return ObjectConvertor.convertToPerson(personDAO.getById(personId));
 	}
 
 }
