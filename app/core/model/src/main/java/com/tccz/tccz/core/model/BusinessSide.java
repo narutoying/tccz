@@ -12,6 +12,7 @@ package com.tccz.tccz.core.model;
  *          narutoying09@gmail.com Exp $
  */
 public abstract class BusinessSide extends BaseEntity {
+
 	/** 企业名 */
 	protected String name;
 	/** 账户号 */

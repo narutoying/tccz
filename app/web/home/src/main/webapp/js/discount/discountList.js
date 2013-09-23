@@ -1,9 +1,3 @@
-Ext.Loader.setConfig({
-    enabled: true
-});
-
-Ext.require(['Ext.grid.*', 'Ext.form.*', 'Ext.data.*', 'Ext.util.*', 'Ext.layout.container.Column', 'Ext.toolbar.Paging', 'Ext.ux.DataTip', 'Ext.ux.PreviewPlugin', 'Ext.ModelManager', 'Ext.tip.QuickTipManager', 'Ext.fx.target.Element']);
-
 Ext.onReady(function(){
     Ext.tip.QuickTipManager.init();
     Ext.QuickTips.init();
@@ -15,7 +9,11 @@ Ext.onReady(function(){
             mapping: 'expireDate',
             type: 'date',
             dateFormat: 'Ymd'
-        }, 'state'],
+        }, 'state', {
+            name: 'id',
+            mapping: 'id',
+            type: 'int'
+        }],
         idProperty: 'threadid'
     });
     // create the Data Store
@@ -40,10 +38,8 @@ Ext.onReady(function(){
         xtype: 'form',
         layout: 'form',
         collapsible: true,
-        id: 'simpleForm',
-        url: 'save-form.php',
         frame: true,
-        title: '',
+        title: '贴现查询',
         bodyPadding: '5 5 0',
         width: 350,
         fieldDefaults: {
@@ -74,6 +70,13 @@ Ext.onReady(function(){
             inputValue: 'showExpire'
         }],
         buttons: [{
+            xtype: 'component',
+            autoEl: {
+                tag: 'a',
+                href: getContextPath() + '/update/discount/add.htm',
+                html: '新增贴现'
+            }
+        }, {
             text: '查询',
             handler: function(){
                 store.getProxy().setExtraParam("bandarNoteNumber", Ext.getCmp("bandarNoteNumber").getValue());
@@ -152,6 +155,13 @@ Ext.onReady(function(){
             id: 'state',
             text: "当前状态",
             dataIndex: 'state'
+        }, {
+            dataIndex: 'id',
+            text: "操作",
+            renderer: function(value, p, r){
+                return buildButton(value, "查看", "/query/discount/view.htm") +
+                buildButton(value, "修改", "/update/discount/modify.htm");
+            }
         }],
         bbar: Ext.create('Ext.PagingToolbar', {
             store: store,

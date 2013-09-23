@@ -4,7 +4,10 @@
  */
 package com.tccz.tccz.core.model.enums;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -50,6 +53,17 @@ public enum DiscountState {
 			map.put(DiscountState.getCode(), DiscountState.getDescription());
 		}
 		return map;
+	}
+
+	public static List<Map<String, String>> toList() {
+		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		for (DiscountState DiscountState : values()) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("stateCode", DiscountState.getCode());
+			map.put("stateDesc", DiscountState.getDescription());
+			result.add(map);
+		}
+		return result;
 	}
 
 	private String code;

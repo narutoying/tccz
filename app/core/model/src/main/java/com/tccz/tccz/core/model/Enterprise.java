@@ -12,6 +12,17 @@ package com.tccz.tccz.core.model;
  *          narutoying09@gmail.com Exp $
  */
 public class Enterprise extends BusinessSide {
+
+	public Enterprise() {
+		super();
+	}
+
+	public Enterprise(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
 	/*
 	 * 基本属性
 	 */

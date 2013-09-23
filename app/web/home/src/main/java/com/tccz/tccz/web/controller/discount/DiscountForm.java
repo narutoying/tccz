@@ -4,19 +4,35 @@
  */
 package com.tccz.tccz.web.controller.discount;
 
+import java.util.Date;
+
 /**
  * 
  * @author narutoying09@gmail.com
- * @version $Id: DiscountPageItem.java, v 0.1 2013-9-20 上午12:55:24
+ * @version $Id: DiscountForm.java, v 0.1 2013-9-23 上午8:37:14
  *          narutoying09@gmail.com Exp $
  */
-public class DiscountPageItem {
-	private int id;
+public class DiscountForm {
+	
+	private Integer id;
+
 	private String bandarNoteNumber;
-	private String proposer;
+
+	private int proposerId;
+
 	private String amount;
-	private String expireDate;
+
 	private String state;
+
+	private Date expireDate;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getBandarNoteNumber() {
 		return bandarNoteNumber;
@@ -26,12 +42,12 @@ public class DiscountPageItem {
 		this.bandarNoteNumber = bandarNoteNumber;
 	}
 
-	public String getProposer() {
-		return proposer;
+	public int getProposerId() {
+		return proposerId;
 	}
 
-	public void setProposer(String proposer) {
-		this.proposer = proposer;
+	public void setProposerId(int proposerId) {
+		this.proposerId = proposerId;
 	}
 
 	public String getAmount() {
@@ -42,14 +58,6 @@ public class DiscountPageItem {
 		this.amount = amount;
 	}
 
-	public String getExpireDate() {
-		return expireDate;
-	}
-
-	public void setExpireDate(String expireDate) {
-		this.expireDate = expireDate;
-	}
-
 	public String getState() {
 		return state;
 	}
@@ -58,12 +66,12 @@ public class DiscountPageItem {
 		this.state = state;
 	}
 
-	public int getId() {
-		return id;
+	public Date getExpireDate() {
+		return expireDate;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setExpireDate(Date expireDate) {
+		this.expireDate = expireDate;
 	}
 
 }

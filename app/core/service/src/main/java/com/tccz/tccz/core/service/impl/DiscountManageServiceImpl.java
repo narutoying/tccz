@@ -58,6 +58,7 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 					public void checkParameter() {
 						ParaCheckUtil.checkParaNotNull(discount.getAmount());
 						ParaCheckUtil.checkParaNotNull(discount.getProposer());
+						// TODO 校验是否存在该企业
 						ParaCheckUtil.checkParaNotNull(discount.getState());
 					}
 				});

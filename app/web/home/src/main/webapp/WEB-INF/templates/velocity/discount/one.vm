@@ -1,0 +1,15 @@
+<script type="text/javascript" src="$!contextPath/js/discount/oneDiscount.js?num=Math.random()"></script>
+<script type="text/javascript">
+	function operationType() {
+		return "$!operation";
+	}
+	function operationTypeDesc() {
+		return "$!operationDesc";
+	}
+	function getItemId() {
+		return "$!itemId";
+	}
+	function getStates() {
+		return $states;
+	}
+</script>

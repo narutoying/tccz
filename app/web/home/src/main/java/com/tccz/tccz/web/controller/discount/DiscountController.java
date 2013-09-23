@@ -4,23 +4,39 @@
  */
 package com.tccz.tccz.web.controller.discount;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONSerializer;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.tccz.tccz.common.util.CommonResult;
 import com.tccz.tccz.common.util.DateUtil;
 import com.tccz.tccz.common.util.PageList;
 import com.tccz.tccz.core.model.Discount;
+import com.tccz.tccz.core.model.Enterprise;
+import com.tccz.tccz.core.model.Money;
+import com.tccz.tccz.core.model.enums.DiscountState;
 import com.tccz.tccz.core.model.query.DiscountQueryCondition;
+import com.tccz.tccz.core.service.DiscountManageService;
 import com.tccz.tccz.core.service.query.DiscountQueryService;
 import com.tccz.tccz.dal.util.Paginator;
+import com.tccz.tccz.web.enums.OperationType;
 import com.tccz.tccz.web.util.JSONUtil;
+import com.tccz.tccz.web.util.WebPageCallback;
+import com.tccz.tccz.web.util.WebUtil;
 
 /**
  * 贴现
@@ -32,17 +48,18 @@ import com.tccz.tccz.web.util.JSONUtil;
 @Controller
 public class DiscountController {
 
+	private static final String QUERY_DISCOUNT_INDEX_HTM = "/query/discount/index.htm";
+
 	@Autowired
 	private DiscountQueryService discountQueryService;
 
+	@Autowired
+	private DiscountManageService discountManageService;
+
 	private static final String PREFIX = "discount/";
 
-	@RequestMapping("/query/discount/index.htm")
+	@RequestMapping(QUERY_DISCOUNT_INDEX_HTM)
 	public String index(ModelMap modelMap, DiscountQueryCondition condition) {
-		PageList<Discount> queryByCondition = discountQueryService
-				.queryByCondition(condition);
-		modelMap.addAttribute("pageList", queryByCondition);
-		modelMap.addAttribute("queryCondition", condition);
 		return PREFIX + "index";
 	}
 
@@ -64,6 +81,7 @@ public class DiscountController {
 		result.setTotalCount(paginator.getItems());
 		for (Discount data : dataList) {
 			DiscountPageItem item = new DiscountPageItem();
+			item.setId(data.getId());
 			item.setAmount(data.getAmount().toString());
 			item.setBandarNoteNumber(data.getBandarNoteNumber());
 			item.setExpireDate(DateUtil.getDateString(data.getExpireDate()));
@@ -73,4 +91,53 @@ public class DiscountController {
 		}
 		return result;
 	}
+
+	@RequestMapping("/update/discount/add.htm")
+	public String goAdd(ModelMap modelMap) {
+		OperationType add = OperationType.ADD;
+		modelMap.addAttribute(OperationType.OPERATION, add.getCode());
+		modelMap.addAttribute(OperationType.OPERATION_DESC,
+				add.getDescription());
+		modelMap.addAttribute("states",
+				JSONSerializer.toJSON(DiscountState.toList()));
+		return PREFIX + "one";
+	}
+
+	@RequestMapping(value = "/update/discount/add.htm", method = RequestMethod.POST)
+	public String doAdd(ModelMap modelMap, DiscountForm form) {
+		CommonResult result = discountManageService
+				.createDiscount(buildDiscount(form));
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return "redirect:" + QUERY_DISCOUNT_INDEX_HTM;
+			}
+		});
+	}
+
+	private Discount buildDiscount(DiscountForm form) {
+		Discount result = new Discount();
+		Integer id = form.getId();
+		if (id != null) {
+			result.setId(id);
+		}
+		result.setAmount(new Money(form.getAmount()));
+		result.setBandarNoteNumber(form.getBandarNoteNumber());
+		result.setExpireDate(form.getExpireDate());
+		Enterprise proposer = new Enterprise();
+		proposer.setId(form.getProposerId());
+		result.setProposer(proposer);
+		result.setState(DiscountState.getByCode(form.getState()));
+		return result;
+	}
+
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) throws ServletException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(
+				dateFormat, false));
+	}
+
 }
