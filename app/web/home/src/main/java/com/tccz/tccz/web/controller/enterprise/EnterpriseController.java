@@ -4,7 +4,6 @@
  */
 package com.tccz.tccz.web.controller.enterprise;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +33,8 @@ public class EnterpriseController {
 	@RequestMapping("/query/enterprise/fuzzyQuery.json")
 	public void fuzzyQuery(String fuzzyName, HttpServletResponse response) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		List<Enterprise> enterprises = new ArrayList<Enterprise>();
-		enterprises.add(new Enterprise(1, "香塘"));
-		enterprises.add(new Enterprise(2, "民生"));
+		List<Enterprise> enterprises = businessSideQueryService
+				.fuzzyQueryEnterprises(fuzzyName);
 		resultMap.put("totalItems", enterprises.size());
 		resultMap.put("items", enterprises);
 		JSONUtil.writeBackJsonWithConfig(response, resultMap);

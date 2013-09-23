@@ -61,20 +61,16 @@ Ext.onReady(function(){
             hidden: true,
             value: getItemId()
         }, {
-            fieldLabel: '银票号',
-            name: 'bandarNoteNumber'
-        }, {
             xtype: "combobox",
             name: 'proposerId',
+            fieldLabel: '申请企业',
+            store: enterpriseStore,
             afterLabelTextTpl: required,
             allowBlank: false,
-            fieldLabel: '申请企业',
+            forceSelection: true,
             displayField: 'name',
             valueField: 'id',
-            width: 500,
-            labelWidth: 130,
-            store: enterpriseStore,
-            queryParam: 'q',
+            queryParam: 'fuzzyName',
             queryMode: 'remote',
             triggerAction: 'query',
             minChars: 0,
@@ -100,18 +96,22 @@ Ext.onReady(function(){
             name: 'amount',
             allowBlank: false
         }, {
-			xtype: "combobox",
+            xtype: "combobox",
             fieldLabel: '状态',
             afterLabelTextTpl: required,
             name: 'state',
             allowBlank: false,
+            forceSelection: true,
             displayField: 'stateDesc',
-			valueField: 'stateCode',
+            valueField: 'stateCode',
             width: 500,
             labelWidth: 130,
             store: stateStore,
             queryMode: 'local',
             typeAhead: true
+        }, {
+            fieldLabel: '银票号',
+            name: 'bandarNoteNumber'
         }],
         buttons: [{
             text: operationTypeDesc(),
@@ -119,9 +119,9 @@ Ext.onReady(function(){
                 this.up('form').getForm().submit();
             }
         }, {
-            text: '重置',
+            text: '返回',
             handler: function(){
-                this.up('form').getForm().reset();
+                window.history.back();
             }
         }]
     }).render(document.body);

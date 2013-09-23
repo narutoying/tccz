@@ -94,6 +94,7 @@ Ext.onReady(function(){
     var grid = Ext.create('Ext.grid.Panel', {
         width: 700,
         height: 500,
+        margin: '10 10 10 10',
         title: '贴现总览',
         store: store,
         disableSelection: true,
@@ -114,15 +115,17 @@ Ext.onReady(function(){
             id: 'bandarNoteNumberCol',
             text: "银票号",
             dataIndex: 'bandarNoteNumber',
-            flex: 1
+			sortable: false
         }, {
             id: 'proposer',
             text: "申请人",
-            dataIndex: 'proposer'
+            dataIndex: 'proposer',
+			sortable: false
         }, {
             id: 'amount',
             text: "金额",
-            dataIndex: 'amount'
+            dataIndex: 'amount',
+			sortable: false
         }, {
             id: 'expireDate',
             text: "到期日期",
@@ -150,18 +153,21 @@ Ext.onReady(function(){
                     }
                 }
                 return "<font style='color:" + color + "'>" + valueStr + "</font>";
-            }
+            },
+			sortable: false
         }, {
             id: 'state',
             text: "当前状态",
-            dataIndex: 'state'
+            dataIndex: 'state',
+			sortable: false
         }, {
             dataIndex: 'id',
             text: "操作",
             renderer: function(value, p, r){
                 return buildButton(value, "查看", "/query/discount/view.htm") +
                 buildButton(value, "修改", "/update/discount/modify.htm");
-            }
+            },
+			sortable: false
         }],
         bbar: Ext.create('Ext.PagingToolbar', {
             store: store,

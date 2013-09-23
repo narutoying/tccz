@@ -13,3 +13,4 @@
 		return $states;
 	}
 </script>
+##<b>可用额度：</b><font id="availableLimit>"></font>

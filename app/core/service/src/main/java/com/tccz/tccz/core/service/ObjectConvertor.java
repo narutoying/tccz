@@ -5,6 +5,7 @@
 package com.tccz.tccz.core.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.util.CollectionUtils;
@@ -110,6 +111,19 @@ public class ObjectConvertor {
 				.queryPersonById(dataObject.getLegalPersonId()));
 		result.setCreateTime(dataObject.getCreateTime());
 		result.setModifyTime(dataObject.getModifyTime());
+		return result;
+	}
+
+	public static List<Enterprise> convertToEnterpriseList(
+			List<EnterpriseDO> dataObjects,
+			BusinessSideQueryService businessSideQueryService) {
+		if (CollectionUtils.isEmpty(dataObjects)) {
+			return Collections.emptyList();
+		}
+		List<Enterprise> result = new ArrayList<Enterprise>();
+		for (EnterpriseDO data : dataObjects) {
+			result.add(convertToEnterprise(data, businessSideQueryService));
+		}
 		return result;
 	}
 

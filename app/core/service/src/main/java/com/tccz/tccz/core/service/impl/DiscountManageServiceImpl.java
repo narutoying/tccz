@@ -17,6 +17,7 @@ import com.tccz.tccz.common.util.exception.CommonException;
 import com.tccz.tccz.common.util.template.CommonManageTemplate;
 import com.tccz.tccz.common.util.template.callback.CommonManageCallback;
 import com.tccz.tccz.core.model.Discount;
+import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.enums.DiscountState;
 import com.tccz.tccz.core.service.DiscountManageService;
 import com.tccz.tccz.core.service.ObjectConvertor;
@@ -49,16 +50,19 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 
 					@Override
 					public void doManage() {
-						discountDAO.insert(ObjectConvertor
+						int discountId = discountDAO.insert(ObjectConvertor
 								.convertToDiscountDO(discount));
+						createDiscountChange(discountId, discount.getState()
+								.getCode());
 						CommonResult.buildResult(result, true, "创建贴现成功");
 					}
 
 					@Override
 					public void checkParameter() {
 						ParaCheckUtil.checkParaNotNull(discount.getAmount());
-						ParaCheckUtil.checkParaNotNull(discount.getProposer());
-						// TODO 校验是否存在该企业
+						Enterprise proposer = discount.getProposer();
+						ParaCheckUtil.checkParaNotNull(proposer);
+						ParaCheckUtil.checkParaPositive(proposer.getId());
 						ParaCheckUtil.checkParaNotNull(discount.getState());
 					}
 				});
@@ -101,10 +105,9 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 					public void doManage() {
 						discountDAO.update(ObjectConvertor
 								.convertToDiscountDO(discount));
-						DiscountChangeDO discountChange = new DiscountChangeDO();
-						discountChange.setDiscountId(discount.getId());
-						discountChange.setState(discount.getState().getCode());
-						discountChangeDAO.insert(discountChange);
+						int discountId = discount.getId();
+						String stateCode = discount.getState().getCode();
+						createDiscountChange(discountId, stateCode);
 						CommonResult.buildResult(result, true, "创建贴现成功");
 					}
 
@@ -126,5 +129,12 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 					}
 				});
 		return result;
+	}
+
+	private void createDiscountChange(int discountId, String stateCode) {
+		DiscountChangeDO discountChange = new DiscountChangeDO();
+		discountChange.setDiscountId(discountId);
+		discountChange.setState(stateCode);
+		discountChangeDAO.insert(discountChange);
 	}
 }

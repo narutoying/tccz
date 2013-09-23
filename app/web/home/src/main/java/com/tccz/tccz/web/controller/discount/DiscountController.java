@@ -85,7 +85,10 @@ public class DiscountController {
 			item.setAmount(data.getAmount().toString());
 			item.setBandarNoteNumber(data.getBandarNoteNumber());
 			item.setExpireDate(DateUtil.getDateString(data.getExpireDate()));
-			item.setProposer(data.getProposer().getName());
+			Enterprise proposer = data.getProposer();
+			if (proposer != null) {
+				item.setProposer(proposer.getName());
+			}
 			item.setState(data.getState().getDescription());
 			result.getItems().add(item);
 		}

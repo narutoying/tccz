@@ -4,6 +4,8 @@
  */
 package com.tccz.tccz.core.service.query;
 
+import java.util.List;
+
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Person;
 
@@ -23,6 +25,14 @@ public interface BusinessSideQueryService {
 	 * @return
 	 */
 	Enterprise queryEnterpriseById(int enterpriseId);
+
+	/**
+	 * 模糊查询企业
+	 * 
+	 * @param fuzzyEnterpriseName 企业名
+	 * @return
+	 */
+	List<Enterprise> fuzzyQueryEnterprises(String fuzzyEnterpriseName);
 
 	/**
 	 * 查询个人信息

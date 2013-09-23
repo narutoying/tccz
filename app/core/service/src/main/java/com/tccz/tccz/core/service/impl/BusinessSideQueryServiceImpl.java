@@ -4,6 +4,8 @@
  */
 package com.tccz.tccz.core.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tccz.tccz.common.dal.daointerface.EnterpriseDAO;
@@ -42,6 +44,12 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 	@Override
 	public Person queryPersonById(int personId) {
 		return ObjectConvertor.convertToPerson(personDAO.getById(personId));
+	}
+
+	@Override
+	public List<Enterprise> fuzzyQueryEnterprises(String fuzzyEnterpriseName) {
+		return ObjectConvertor.convertToEnterpriseList(
+				enterpriseDAO.fuzzyQueryByName(fuzzyEnterpriseName), this);
 	}
 
 }
