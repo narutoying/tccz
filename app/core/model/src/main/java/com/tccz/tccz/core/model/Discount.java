@@ -7,6 +7,8 @@ package com.tccz.tccz.core.model;
 import java.util.Date;
 import java.util.List;
 
+import net.sf.json.JSON;
+
 import com.tccz.tccz.core.model.enums.DiscountState;
 
 /**
@@ -31,6 +33,7 @@ public class Discount extends BaseBankBusinessEntity {
 	 * 非基本属性
 	 */
 	private List<DiscountChange> changeHistory;
+	private JSON changeHistoryJson;
 
 	@Override
 	public boolean occupyLimit(Date compareDate) {
@@ -79,5 +82,13 @@ public class Discount extends BaseBankBusinessEntity {
 
 	public void setChangeHistory(List<DiscountChange> changeHistory) {
 		this.changeHistory = changeHistory;
+	}
+
+	public JSON getChangeHistoryJson() {
+		return changeHistoryJson;
+	}
+
+	public void setChangeHistoryJson(JSON changeHistoryJson) {
+		this.changeHistoryJson = changeHistoryJson;
 	}
 }

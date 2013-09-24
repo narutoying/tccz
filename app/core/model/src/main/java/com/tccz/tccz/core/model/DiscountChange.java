@@ -18,6 +18,7 @@ public class DiscountChange extends BaseEntity {
 	private int discountId;
 	/** 贴现变更状态 */
 	private DiscountState state;
+	private String stateDesc;
 
 	public DiscountState getState() {
 		return state;
@@ -33,5 +34,13 @@ public class DiscountChange extends BaseEntity {
 
 	public void setDiscountId(int discountId) {
 		this.discountId = discountId;
+	}
+
+	public String getStateDesc() {
+		return state.getDescription();
+	}
+
+	public void setStateDesc(String stateDesc) {
+		this.stateDesc = stateDesc;
 	}
 }

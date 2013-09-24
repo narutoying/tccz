@@ -38,7 +38,7 @@
     <!-- mapped statement for IbatisDiscountChangeDAO.getByDiscountId -->
     <select id="MS-DISCOUNT-CHANGE-GET-BY-DISCOUNT-ID" resultMap="RM-DISCOUNT-CHANGE">
     <![CDATA[
-        select /*MS-TCCZ-DISCOUNT-CHANGE-GET-BY-DISCOUNT-ID*/ * from discount_change where (discount_id = #value#)
+        select /*MS-TCCZ-DISCOUNT-CHANGE-GET-BY-DISCOUNT-ID*/ * from discount_change where (discount_id = #value#) order by create_time DESC
     ]]>
     </select>
 

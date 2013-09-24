@@ -50,6 +50,7 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 
 					@Override
 					public void doManage() {
+						// TODO 校验额度是否够用，如够用则允许创建，否则返回错误信息
 						int discountId = discountDAO.insert(ObjectConvertor
 								.convertToDiscountDO(discount));
 						createDiscountChange(discountId, discount.getState()
@@ -108,7 +109,7 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 						int discountId = discount.getId();
 						String stateCode = discount.getState().getCode();
 						createDiscountChange(discountId, stateCode);
-						CommonResult.buildResult(result, true, "创建贴现成功");
+						CommonResult.buildResult(result, true, "更新贴现成功");
 					}
 
 					@Override

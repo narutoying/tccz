@@ -1,5 +1,21 @@
 <script type="text/javascript" src="$!contextPath/js/discount/oneDiscount.js?num=Math.random()"></script>
 <script type="text/javascript">
+	// 全局变量
+	var discount_bandarNoteNumber;
+	var discount_proposerName;
+	var discount_proposerId;
+	var discount_amount;
+	var discount_state;
+	var discount_expireDate;
+	#if($discount)
+    	discount_bandarNoteNumber = $!discount.bandarNoteNumber;
+    	discount_proposerName = "$!discount.proposer.name";
+    	discount_proposerId = $!discount.proposer.id;
+    	discount_amount = "$!discount.amount.toString()";
+    	discount_state = "$!discount.state.getCode()";
+    	discount_expireDate = "$dateUtil.format('yyyy-MM-dd', $!discount.expireDate)";
+	#end
+	// 全局方法
 	function operationType() {
 		return "$!operation";
 	}
@@ -10,7 +26,42 @@
 		return "$!itemId";
 	}
 	function getStates() {
-		return $states;
+		#if($states && $states.size() > 0)
+			return $states;
+		#else
+			return new Array();		
+		#end
 	}
+	function isReadOnly() {
+		#if($readOnly && $readOnly == true)
+			return true;
+		#else
+			return false;
+		#end
+	}
+	function getFormAction() {
+		#if($!operation == "ADD")
+			return "add.htm";
+		#elseif($!operation == "UPDATE")
+			return "modify.htm";
+		#else
+			return "";
+		#end
+	}
+	function getDiscountChange() {
+		#if($discount)
+			return $!discount.changeHistoryJson;
+		#else
+			return new Array();		
+		#end
+	}
+	function isAdd() {
+		#if($!operation == "ADD")
+			return true;
+		#else
+			return false;
+		#end
+	}
+	
 </script>
 ##<b>可用额度：</b><font id="availableLimit>"></font>

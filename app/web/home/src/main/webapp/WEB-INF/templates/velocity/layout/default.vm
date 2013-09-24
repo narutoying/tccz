@@ -10,6 +10,7 @@
         <script type="text/javascript" src="$!contextPath/js/jquery-1.7.1.min.js"></script>
         <script type="text/javascript" src="$!contextPath/js/default.js"></script>
 		<script type="text/javascript" src="$!contextPath/extjs/bootstrap.js"></script>
+		<script type="text/javascript" src="$!contextPath/extjs/locale/ext-lang-zh_CN.js"></script>
 		<script type="text/javascript">
 			function getContextPath() {
 				return "$!contextPath";			

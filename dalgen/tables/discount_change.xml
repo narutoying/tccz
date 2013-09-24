@@ -3,7 +3,7 @@
 	
 	<operation name="getByDiscountId" multiplicity="many">
 		<sql><![CDATA[
-			select * from discount_change where discount_id = ?
+			select * from discount_change where discount_id = ? order by create_time DESC
 		]]></sql>
 	</operation>
 	

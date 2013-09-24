@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.sf.json.JSONSerializer;
+
 import org.springframework.util.CollectionUtils;
 
 import com.tccz.tccz.common.dal.dataobject.DiscountChangeDO;
@@ -59,8 +61,11 @@ public class ObjectConvertor {
 		result.setAmount(new Money(dataObject.getAmount()));
 		result.setBandarNoteNumber(dataObject.getBandarNoteNumber());
 		if (discountQueryService != null) {
-			result.setChangeHistory(discountQueryService
-					.queryDiscountChanges(id));
+			List<DiscountChange> queryDiscountChanges = discountQueryService
+					.queryDiscountChanges(id);
+			result.setChangeHistory(queryDiscountChanges);
+			result.setChangeHistoryJson(JSONSerializer
+					.toJSON(queryDiscountChanges));
 		}
 		result.setCreateTime(dataObject.getCreateTime());
 		result.setExpireDate(dataObject.getExpireDate());

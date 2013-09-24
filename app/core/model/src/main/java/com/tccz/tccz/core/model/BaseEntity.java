@@ -9,6 +9,8 @@ import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import com.tccz.tccz.common.util.DateUtil;
+
 /**
  * 基本实体
  * 
@@ -22,6 +24,8 @@ public class BaseEntity {
 	protected Date createTime;
 	/** 修改时间 */
 	protected Date modifyTime;
+	protected String createTimeStr;
+	protected String modifyTimeStr;
 
 	public int getId() {
 		return id;
@@ -37,6 +41,7 @@ public class BaseEntity {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+		this.createTimeStr = DateUtil.getNewFormatDateString(createTime);
 	}
 
 	public Date getModifyTime() {
@@ -45,11 +50,20 @@ public class BaseEntity {
 
 	public void setModifyTime(Date modifyTime) {
 		this.modifyTime = modifyTime;
+		this.modifyTimeStr = DateUtil.getNewFormatDateString(modifyTime);
 	}
 
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this,
 				ToStringStyle.SHORT_PREFIX_STYLE);
+	}
+
+	public String getCreateTimeStr() {
+		return createTimeStr;
+	}
+
+	public String getModifyTimeStr() {
+		return modifyTimeStr;
 	}
 }

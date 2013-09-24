@@ -38,7 +38,7 @@ public class IbatisDiscountChangeDAO extends SqlMapClientDaoSupport implements D
    	 *  <tt></tt>
 	 *  <p>
 	 *  The sql statement for this operation is <br>
-	 *  <tt>select * from discount_change where (discount_id = ?)</tt>
+	 *  <tt>select * from discount_change where (discount_id = ?) order by create_time DESC</tt>
 	 *
 	 *	@param discountId
 	 *	@return List<DiscountChangeDO>

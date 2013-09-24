@@ -37,7 +37,6 @@ Ext.onReady(function(){
     var simple = Ext.widget({
         xtype: 'form',
         layout: 'form',
-        collapsible: true,
         frame: true,
         title: '贴现查询',
         bodyPadding: '5 5 0',
@@ -93,7 +92,6 @@ Ext.onReady(function(){
     var pluginExpanded = true;
     var grid = Ext.create('Ext.grid.Panel', {
         width: 700,
-        height: 500,
         margin: '10 10 10 10',
         title: '贴现总览',
         store: store,
@@ -115,21 +113,25 @@ Ext.onReady(function(){
             id: 'bandarNoteNumberCol',
             text: "银票号",
             dataIndex: 'bandarNoteNumber',
-			sortable: false
+			flex: 2,
+            sortable: false
         }, {
             id: 'proposer',
             text: "申请人",
             dataIndex: 'proposer',
-			sortable: false
+			flex: 1,
+            sortable: false
         }, {
             id: 'amount',
             text: "金额",
             dataIndex: 'amount',
-			sortable: false
+			flex: 1.5,
+            sortable: false
         }, {
             id: 'expireDate',
             text: "到期日期",
             dataIndex: 'expireDate',
+			flex: 2,
             renderer: function(value, p, r){
                 p.tdAttr = 'data-qtip="1. <font style=\'color:red\'>标红：</font>过期日期<当前日期<br/>2. <font style=\'color:blue\'>标蓝：</font>过期日期=当前日期<br/>3. <font style=\'color:green\'>标绿：</font>过期日期>当前日期"';
                 /*
@@ -154,20 +156,23 @@ Ext.onReady(function(){
                 }
                 return "<font style='color:" + color + "'>" + valueStr + "</font>";
             },
-			sortable: false
+            sortable: false
         }, {
             id: 'state',
             text: "当前状态",
             dataIndex: 'state',
-			sortable: false
+			flex: 2,
+            sortable: false
         }, {
             dataIndex: 'id',
+			flex: 3,
             text: "操作",
             renderer: function(value, p, r){
                 return buildButton(value, "查看", "/query/discount/view.htm") +
-                buildButton(value, "修改", "/update/discount/modify.htm");
+                buildButton(value, "修改", "/update/discount/modify.htm") +
+                buildButton(value, "删除", "/update/discount/delete.htm", {text: "确认删除此条记录吗？"});
             },
-			sortable: false
+            sortable: false
         }],
         bbar: Ext.create('Ext.PagingToolbar', {
             store: store,
