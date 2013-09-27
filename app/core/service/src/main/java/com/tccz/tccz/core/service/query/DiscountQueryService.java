@@ -4,6 +4,7 @@
  */
 package com.tccz.tccz.core.service.query;
 
+import java.util.Date;
 import java.util.List;
 
 import com.tccz.tccz.common.util.PageList;
@@ -21,8 +22,7 @@ import com.tccz.tccz.core.model.query.DiscountQueryCondition;
 public interface DiscountQueryService {
 
 	/**
-	 * 条件查询贴现列表
-	 * 若不进行分页，则分页器无效
+	 * 条件查询贴现列表 若不进行分页，则分页器无效
 	 * 
 	 * @param condition
 	 *            查询条件
@@ -45,5 +45,16 @@ public interface DiscountQueryService {
 	 * @return
 	 */
 	List<DiscountChange> queryDiscountChanges(int discountId);
+
+	/**
+	 * 查询
+	 * 
+	 * @param proposerId
+	 * @param expireStart
+	 * @param expireEnd
+	 * @return
+	 */
+	List<Discount> queryDiscounts(int proposerId, Date expireStart,
+			Date expireEnd);
 
 }

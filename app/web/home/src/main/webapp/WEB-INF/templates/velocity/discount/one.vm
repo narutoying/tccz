@@ -7,8 +7,11 @@
 	var discount_amount;
 	var discount_state;
 	var discount_expireDate;
+	var discount_bandarNoteNumber;
 	#if($discount)
-    	discount_bandarNoteNumber = $!discount.bandarNoteNumber;
+		#if($!discount.bandarNoteNumber.length > 0)
+    		discount_bandarNoteNumber = $!discount.bandarNoteNumber;
+		#end
     	discount_proposerName = "$!discount.proposer.name";
     	discount_proposerId = $!discount.proposer.id;
     	discount_amount = "$!discount.amount.toString()";

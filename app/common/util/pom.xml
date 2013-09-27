@@ -104,6 +104,10 @@
 		    <artifactId>poi</artifactId>
 		    <version>3.9</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.directory.studio</groupId>
+		    <artifactId>org.apache.commons.collections</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

@@ -5,6 +5,7 @@
 package com.tccz.tccz.common.dal.daointerface;
 
 // auto generated imports
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -127,5 +128,23 @@ public interface DiscountDAO {
 	 *	@throws DataAccessException
 	 */	 
     public PageList getByCondition(String enterpriseName, String bandarNoteNumber, Boolean showExpire, Boolean doPage, int pageSize, int pageNum) throws DataAccessException;
+
+	/**
+	 *  Query DB table <tt>discount</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>select * from discount</tt>
+	 *
+	 *	@param proposerId
+	 *	@param expireStart
+	 *	@param expireEnd
+	 *	@return List<DiscountDO>
+	 *	@throws DataAccessException
+	 */	 
+    public List<DiscountDO> getByExpireDate(int proposerId, Date expireStart, Date expireEnd) throws DataAccessException;
 
 }

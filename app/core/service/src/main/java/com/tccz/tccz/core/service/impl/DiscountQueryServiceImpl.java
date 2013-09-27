@@ -6,6 +6,7 @@ package com.tccz.tccz.core.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class DiscountQueryServiceImpl implements DiscountQueryService {
 		return result;
 	}
 
-	private List<Discount> convertToDomains(com.tccz.tccz.dal.util.PageList list) {
+	private List<Discount> convertToDomains(List list) {
 		if (!CollectionUtils.isEmpty(list)) {
 			List<Discount> result = new ArrayList<Discount>();
 			for (Object o : list) {
@@ -79,5 +80,12 @@ public class DiscountQueryServiceImpl implements DiscountQueryService {
 	public List<DiscountChange> queryDiscountChanges(int discountId) {
 		return ObjectConvertor.convertToDiscountChangeList(discountChangeDAO
 				.getByDiscountId(discountId));
+	}
+
+	@Override
+	public List<Discount> queryDiscounts(int proposerId, Date expireStart,
+			Date expireEnd) {
+		return convertToDomains(discountDAO.getByExpireDate(proposerId,
+				expireStart, expireEnd));
 	}
 }

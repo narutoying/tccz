@@ -4,6 +4,7 @@
  */
 package com.tccz.tccz.common.dal.ibatis;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -183,6 +184,33 @@ public class IbatisDiscountDAO extends SqlMapClientDaoSupport implements Discoun
         }
         
         return pageList;
+    }
+
+	/**
+	 *  Query DB table <tt>discount</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>select * from discount</tt>
+	 *
+	 *	@param proposerId
+	 *	@param expireStart
+	 *	@param expireEnd
+	 *	@return List<DiscountDO>
+	 *	@throws DataAccessException
+	 */	 
+    public List<DiscountDO> getByExpireDate(int proposerId, Date expireStart, Date expireEnd) throws DataAccessException {
+        Map param = new HashMap();
+
+        param.put("proposerId", new Integer(proposerId));
+        param.put("expireStart", expireStart);
+        param.put("expireEnd", expireEnd);
+
+        return getSqlMapClientTemplate().queryForList("MS-DISCOUNT-GET-BY-EXPIRE-DATE", param);
+
     }
 
 }

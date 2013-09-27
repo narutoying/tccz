@@ -19,8 +19,11 @@ import com.tccz.tccz.common.util.template.callback.CommonManageCallback;
 import com.tccz.tccz.core.model.Discount;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.enums.DiscountState;
+import com.tccz.tccz.core.model.result.LimitControlResult;
 import com.tccz.tccz.core.service.DiscountManageService;
+import com.tccz.tccz.core.service.LimitService;
 import com.tccz.tccz.core.service.ObjectConvertor;
+import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 
 /**
  * 
@@ -39,6 +42,12 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 	@Autowired
 	private DiscountChangeDAO discountChangeDAO;
 
+	@Autowired
+	private LimitService limitService;
+
+	@Autowired
+	private BusinessSideQueryService businessSideQueryService;
+
 	/**
 	 * @see com.tccz.tccz.core.service.DiscountManageService#createDiscount(com.tccz.tccz.core.model.Discount)
 	 */
@@ -50,21 +59,26 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 
 					@Override
 					public void doManage() {
-						// TODO 校验额度是否够用，如够用则允许创建，否则返回错误信息
-						int discountId = discountDAO.insert(ObjectConvertor
-								.convertToDiscountDO(discount));
-						createDiscountChange(discountId, discount.getState()
-								.getCode());
-						CommonResult.buildResult(result, true, "创建贴现成功");
+						LimitControlResult controlResult = limitService
+								.isOverLimit(businessSideQueryService
+										.queryEnterpriseById(discount
+												.getProposer().getId()), null,
+										discount.getAmount());
+						if (!controlResult.isOverLimit()) {
+							int discountId = discountDAO.insert(ObjectConvertor
+									.convertToDiscountDO(discount));
+							createDiscountChange(discountId, discount
+									.getState().getCode());
+							CommonResult.buildResult(result, true, "创建贴现成功");
+						} else {
+							CommonResult.buildResult(result, false, "创建贴现失败，"
+									+ controlResult.getResultString());
+						}
 					}
 
 					@Override
 					public void checkParameter() {
-						ParaCheckUtil.checkParaNotNull(discount.getAmount());
-						Enterprise proposer = discount.getProposer();
-						ParaCheckUtil.checkParaNotNull(proposer);
-						ParaCheckUtil.checkParaPositive(proposer.getId());
-						ParaCheckUtil.checkParaNotNull(discount.getState());
+						defaultCheck(discount);
 					}
 				});
 		return result;
@@ -114,12 +128,9 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 
 					@Override
 					public void checkParameter() {
-						ParaCheckUtil.checkParaNotNull(discount.getAmount());
-						ParaCheckUtil.checkParaNotNull(discount.getProposer());
-						DiscountState state = discount.getState();
-						ParaCheckUtil.checkParaNotNull(state);
+						defaultCheck(discount);
 						// 状态校验
-						if (state == DiscountState.COLLECTED) {
+						if (discount.getState() == DiscountState.COLLECTED) {
 							Date now = new Date();
 							if (now.getTime() < discount.getExpireDate()
 									.getTime()) {
@@ -137,5 +148,19 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 		discountChange.setDiscountId(discountId);
 		discountChange.setState(stateCode);
 		discountChangeDAO.insert(discountChange);
+	}
+
+	private void defaultCheck(final Discount discount) {
+		ParaCheckUtil.checkParaNotNull(discount.getAmount());
+		Enterprise proposer = discount.getProposer();
+		ParaCheckUtil.checkParaNotNull(proposer);
+		int proposerId = proposer.getId();
+		ParaCheckUtil.checkParaPositive(proposerId);
+		Enterprise queryEnterpriseById = businessSideQueryService
+				.queryEnterpriseById(proposerId);
+		if (queryEnterpriseById == null) {
+			throw new CommonException("不存在企业id=" + proposerId);
+		}
+		ParaCheckUtil.checkParaNotNull(discount.getState());
 	}
 }

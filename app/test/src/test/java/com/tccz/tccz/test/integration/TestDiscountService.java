@@ -4,12 +4,22 @@
  */
 package com.tccz.tccz.test.integration;
 
+import java.util.Date;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tccz.tccz.common.dal.daointerface.DiscountDAO;
+import com.tccz.tccz.common.util.CommonResult;
 import com.tccz.tccz.common.util.PageList;
 import com.tccz.tccz.core.model.Discount;
+import com.tccz.tccz.core.model.Enterprise;
+import com.tccz.tccz.core.model.Money;
+import com.tccz.tccz.core.model.enums.DiscountState;
+import com.tccz.tccz.core.model.enums.LimitType;
 import com.tccz.tccz.core.model.query.DiscountQueryCondition;
+import com.tccz.tccz.core.service.DiscountManageService;
+import com.tccz.tccz.core.service.LimitService;
 import com.tccz.tccz.core.service.query.DiscountQueryService;
 
 /**
@@ -23,15 +33,43 @@ public class TestDiscountService extends BaseTestCase {
 	@Autowired
 	private DiscountQueryService discountQueryService;
 
-	@Test
-	public void test() {
+	@Autowired
+	private DiscountManageService discountManageService;
+
+	@Autowired
+	private LimitService limitService;
+
+	@Autowired
+	private DiscountDAO discountDAO;
+
+	public void testQuery() {
 		DiscountQueryCondition condition = new DiscountQueryCondition();
 		condition.setBandarNoteNumber("123");
 		condition.setEnterpriseName("");
-//		condition.setDoPage(true);
+		condition.setDoPage(true);
 		condition.setLimit(1);
 		PageList<Discount> queryByCondition = discountQueryService
 				.queryByCondition(condition);
 		System.out.println(queryByCondition.getDataList().size());
+	}
+
+	@Test
+	public void testCreate() {
+		// List<DiscountDO> byExpireDate = discountDAO.getByExpireDate(1,
+		// new Date(), null);
+		// System.out.println(byExpireDate);
+		Enterprise proposer = new Enterprise(1, "香塘");
+		System.out.println("可用额度："
+				+ limitService.calculateLimit(proposer, null,
+						LimitType.AVAILABLE));
+		Discount discount = new Discount();
+		discount.setAmount(new Money("9999200"));
+		discount.setBandarNoteNumber("123456");
+		discount.setExpireDate(new Date());
+		discount.setProposer(proposer);
+		discount.setState(DiscountState.IN_STORE);
+		CommonResult commonResult = discountManageService
+				.createDiscount(discount);
+		System.out.println(commonResult);
 	}
 }

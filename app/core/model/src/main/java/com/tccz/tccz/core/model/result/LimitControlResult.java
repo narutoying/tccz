@@ -32,6 +32,12 @@ public class LimitControlResult {
 				ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 
+	public String getResultString() {
+		return "提交金额(" + compareAmount.toString() + ")元，"
+				+ (isOverLimit == true ? "超过" : "") + "可用额度为(" + available
+				+ ")元";
+	}
+
 	public boolean isOverLimit() {
 		return isOverLimit;
 	}
