@@ -13,6 +13,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
+import com.tccz.tccz.common.util.exception.CommonException;
 import com.tccz.tccz.core.model.BandarNote;
 import com.tccz.tccz.core.model.BusinessSide;
 import com.tccz.tccz.core.model.Discount;
@@ -57,35 +58,43 @@ public class LimitServiceImpl implements LimitService {
 			Money money = new Money();
 			result.setMoney(money);
 			int bizSideId = businessSide.getId();
-			if (businessSide instanceof Person) {
-				// 个人只有流贷业务，无其他业务
-				if (limitType == LimitType.FLOATING_LOAN_USED) {
-					Map<String, Object> extraParams = new HashMap<String, Object>();
-					extraParams.put("isPerson", true);
-					money.addTo(calculteOccupiedMoneyForFL(bankBizQueryService
-							.query(FloatingLoan.class, bizSideId, calDate,
-									null, extraParams), calDate));
-				}
-			} else if (businessSide instanceof Enterprise) {
-				if (limitType == LimitType.FLOATING_LOAN_USED) {
-					money.addTo(calculteOccupiedMoneyForFL(bankBizQueryService
-							.query(FloatingLoan.class, bizSideId, calDate,
-									null, null), calDate));
-				} else if (limitType == LimitType.BANDAR_NOTE_USED) {
-					money.addTo(calculteOccupiedMoneyForBN(bankBizQueryService
-							.query(BandarNote.class, bizSideId, calDate, null,
-									null), calDate));
-				} else if (limitType == LimitType.DISCOUNT_USED) {
-					money.addTo(calculteOccupiedMoneyForDC(bankBizQueryService
-							.query(Discount.class, bizSideId, calDate, null,
-									null), calDate));
+			if (bizSideId > 0) {
+				if (businessSide instanceof Person) {
+					// 个人只有流贷业务，无其他业务
+					if (limitType == LimitType.FLOATING_LOAN_USED) {
+						Map<String, Object> extraParams = new HashMap<String, Object>();
+						extraParams.put("isPerson", true);
+						money.addTo(calculteOccupiedMoneyForFL(
+								bankBizQueryService.query(FloatingLoan.class,
+										bizSideId, calDate, null, extraParams),
+								calDate));
+					}
+				} else if (businessSide instanceof Enterprise) {
+					if (limitType == LimitType.FLOATING_LOAN_USED) {
+						money.addTo(calculteOccupiedMoneyForFL(
+								bankBizQueryService.query(FloatingLoan.class,
+										bizSideId, calDate, null, null),
+								calDate));
+					} else if (limitType == LimitType.BANDAR_NOTE_USED) {
+						money.addTo(calculteOccupiedMoneyForBN(
+								bankBizQueryService.query(BandarNote.class,
+										bizSideId, calDate, null, null),
+								calDate));
+					} else if (limitType == LimitType.DISCOUNT_USED) {
+						money.addTo(calculteOccupiedMoneyForDC(
+								bankBizQueryService.query(Discount.class,
+										bizSideId, calDate, null, null),
+								calDate));
+					}
+				} else {
+					throw new CommonException("不支持的业务方" + businessSide);
 				}
 			} else {
-				throw new RuntimeException("不支持的业务方" + businessSide);
+				throw new CommonException("业务方id=" + bizSideId + "，需要大于0");
 			}
 			return result;
 		} else {
-			throw new RuntimeException("不支持的额度计算类型");
+			throw new CommonException("不支持的额度计算类型");
 		}
 	}
 

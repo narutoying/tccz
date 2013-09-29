@@ -29,7 +29,8 @@ public class BaseBankBusinessEntity extends BaseEntity implements LimitDecider {
 	}
 
 	/**
-	 * 默认判断策略是到期日期A和比较日期B相比，若A>=B，则表示占用；反之，则不占用。 各业务实体可决定自己的判断策略。
+	 * 默认判断策略是到期日期A和比较日期B相比，若A>=B，则表示占用；反之，则不占用。 
+	 * 各业务实体可决定自己的判断策略。
 	 * 
 	 * @see com.tccz.tccz.core.model.interfaces.LimitDecider#occupyLimit(java.util.Date)
 	 */

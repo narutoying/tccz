@@ -97,7 +97,7 @@ public class DiscountController {
 
 	@RequestMapping("/update/discount/add.htm")
 	public String goAdd(ModelMap modelMap) {
-		initModelMap(modelMap, OperationType.ADD);
+		initModelMap(modelMap, OperationType.ADD, null);
 		return PREFIX + "one";
 	}
 
@@ -128,9 +128,9 @@ public class DiscountController {
 
 	@RequestMapping("/update/discount/modify.htm")
 	public String goModify(ModelMap modelMap, Integer itemId) {
-		initModelMap(modelMap, OperationType.UPDATE);
-		modelMap.addAttribute("discount",
-				discountQueryService.queryById(itemId));
+		Discount discount = discountQueryService.queryById(itemId);
+		initModelMap(modelMap, OperationType.UPDATE, discount);
+		modelMap.addAttribute("discount", discount);
 		modelMap.addAttribute("itemId", itemId);
 		return PREFIX + "one";
 	}
@@ -150,19 +150,23 @@ public class DiscountController {
 
 	@RequestMapping("/query/discount/view.htm")
 	public String view(ModelMap modelMap, Integer itemId) {
-		initModelMap(modelMap, OperationType.QUERY);
-		modelMap.addAttribute("discount",
-				discountQueryService.queryById(itemId));
+		Discount discount = discountQueryService.queryById(itemId);
+		initModelMap(modelMap, OperationType.QUERY, discount);
+		modelMap.addAttribute("discount", discount);
 		modelMap.addAttribute("readOnly", true);
 		return PREFIX + "one";
 	}
 
-	private void initModelMap(ModelMap modelMap, OperationType operationType) {
+	private void initModelMap(ModelMap modelMap, OperationType operationType,
+			Discount item) {
 		modelMap.addAttribute(OperationType.OPERATION, operationType.getCode());
 		modelMap.addAttribute(OperationType.OPERATION_DESC,
 				operationType.getDescription());
 		modelMap.addAttribute("states",
 				JSONSerializer.toJSON(DiscountState.toList()));
+		if (item != null) {
+			modelMap.addAttribute("item", JSONSerializer.toJSON(item));
+		}
 	}
 
 	private Discount buildDiscount(DiscountForm form) {

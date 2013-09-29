@@ -1,81 +1,37 @@
 Ext.onReady(function(){
-    Ext.QuickTips.init();
     var bd = Ext.getBody();
-    var required = '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>';
-    /*
-     * 企业相关
-     */
-    var enterpriseStore = new Ext.data.Store({
-        proxy: {
-            type: 'ajax',
-            url: getContextPath() + '/query/enterprise/fuzzyQuery.json',
-            reader: {
-                type: 'json',
-                totalProperty: 'totalItems',
-                root: 'items'
-            }
-        },
-        autoLoad: true,
-        fields: [{
-            name: 'name'
-        }, {
-            name: 'id'
-        }]
-    });
-    var states = [{
-        'stateCode': 'IN_STORE',
-        'stateDesc': '在库'
-    }];
-    /*
-     * 状态相关
-     */
-    var stateStore = Ext.create('Ext.data.Store', {
-        mode: 'local',
-        data: getStates(),
-        fields: [{
-            name: 'stateCode'
-        }, {
-            name: 'stateDesc'
-        }],
-        autoLoad: true
-    });
-    // 贴现操作表单
+    // 业务操作表单
     Ext.widget({
         xtype: 'form',
         layout: 'form',
         id: 'simpleForm',
-        url: getFormAction(),
-        method: 'POST',
         standardSubmit: true,
         frame: true,
-        title: operationTypeDesc() + '贴现',
         bodyPadding: '5 5 0',
         margin: '10 10 10 10',
-        width: 350,
+        width: 600,
         fieldDefaults: {
             msgTarget: 'side',
-            labelWidth: 75
+            labelWidth: 150
         },
         plugins: {
             ptype: 'datatip'
         },
         defaultType: 'textfield',
+        url: getFormAction(),
+        method: 'POST',
+        title: operationTypeDesc() + '贴现',
         items: [{
+            // 隐藏id列，用于修改
             name: 'id',
             hidden: true,
-            value: getItemId()
+            value: (item != null ? item.id : 0)
         }, {
             xtype: "combobox",
-            name: 'proposerId',
             fieldLabel: '申请企业',
-            store: enterpriseStore,
             afterLabelTextTpl: required,
             allowBlank: false,
-            readOnly: isReadOnly(),
             forceSelection: true,
-            displayField: 'name',
-            valueField: 'id',
-            queryParam: 'fuzzyName',
             queryMode: 'remote',
             triggerAction: 'query',
             minChars: 0,
@@ -84,13 +40,41 @@ Ext.onReady(function(){
                     return '{[values.name.replace(this.field.getRawValue(), "<b>" + this.field.getRawValue() + "</b>")]}';
                 }
             },
+            name: 'proposerId',
+            store: new Ext.data.Store({
+                proxy: {
+                    type: 'ajax',
+                    url: getContextPath() + '/query/enterprise/fuzzyQuery.json',
+                    reader: {
+                        type: 'json',
+                        totalProperty: 'totalItems',
+                        root: 'items'
+                    }
+                },
+                autoLoad: true,
+                fields: [{
+                    name: 'name'
+                }, {
+                    name: 'id'
+                }]
+            }),
+            readOnly: isReadOnly(),
+            displayField: 'name',
+            valueField: 'id',
+            queryParam: 'fuzzyName',
             listeners: {
                 render: function(c){
+                    var bizSideId = (item != null ? item.proposer.id : 0);
                     this.getStore().on('load', function(){
                         if (c.getValue() == null) {
-                            c.setValue(discount_proposerId);
+                            c.setValue(bizSideId);
+                            // 显示企业可用额度
+                            getAndDisplayAvailableLimit("Enterprise", bizSideId, "showAvailableLimit");
                         }
                     }, this); //初始化显示
+                },
+                select: function(){
+                    getAndDisplayAvailableLimit("Enterprise", this.getValue(), "showAvailableLimit");
                 }
             },
         }, {
@@ -101,7 +85,7 @@ Ext.onReady(function(){
             xtype: 'datefield',
             format: 'Y-m-d',
             allowBlank: false,
-            value: Ext.Date.parse(discount_expireDate, 'Y-m-d')
+            value: Ext.Date.format((item != null ? new Date(item.expireDate.time) : null), 'Y-m-d')
         }, {
             xtype: 'numberfield',
             fieldLabel: '金额',
@@ -109,27 +93,36 @@ Ext.onReady(function(){
             name: 'amount',
             readOnly: !isAdd(),
             allowBlank: false,
-            value: discount_amount,
+            value: (item != null ? item.amount.amount : null),
             minValue: 0
         }, {
             xtype: "combobox",
-            id: "stateCombo",
             fieldLabel: '状态',
             afterLabelTextTpl: required,
-            name: 'state',
-            readOnly: isReadOnly(),
             allowBlank: false,
             forceSelection: true,
-            displayField: 'stateDesc',
-            valueField: 'stateCode',
             width: 500,
             labelWidth: 130,
-            store: stateStore,
+            id: "stateCombo",
+            name: 'state',
+            readOnly: isReadOnly(),
+            displayField: 'stateDesc',
+            valueField: 'stateCode',
+            store: Ext.create('Ext.data.Store', {
+                mode: 'local',
+                data: getStates(),
+                fields: [{
+                    name: 'stateCode'
+                }, {
+                    name: 'stateDesc'
+                }],
+                autoLoad: true
+            }),
             queryMode: 'local',
             listeners: {
                 render: function(c){
                     if (c.getValue() == null) {
-                        c.setValue(discount_state);
+                        c.setValue((item != null ? item.state : null));
                     }
                 }
             }
@@ -137,7 +130,11 @@ Ext.onReady(function(){
             fieldLabel: '银票号',
             name: 'bandarNoteNumber',
             readOnly: isReadOnly(),
-            value: discount_bandarNoteNumber
+            value: (item != null ? item.bandarNoteNumber : null)
+        }, {
+            fieldLabel: '当前可用额度(元)',
+            id: 'showAvailableLimit',
+            readOnly: true
         }],
         buttons: [{
             text: operationTypeDesc(),
@@ -153,26 +150,24 @@ Ext.onReady(function(){
         }]
     }).render(document.body);
     
-    var discountChangeStore = Ext.create('Ext.data.Store', {
-        mode: 'local',
-        data: getDiscountChange(),
-        fields: [{
-            name: 'createTimeStr'
-        }, {
-            name: 'stateDesc'
-        }]
-    });
-    
+    // 贴现变更历史表格
     if (getDiscountChange().length > 0) {
         var grid = Ext.create('Ext.grid.Panel', {
-            width: 400,
+            width: 600,
             margin: '10 10 10 10',
             title: '贴现变更历史',
-            store: discountChangeStore,
+            store: Ext.create('Ext.data.Store', {
+                mode: 'local',
+                data: getDiscountChange(),
+                fields: [{
+                    name: 'createTimeStr'
+                }, {
+                    name: 'stateDesc'
+                }]
+            }),
             disableSelection: true,
             loadMask: true,
             viewConfig: {
-                id: 'gv',
                 trackOver: false,
                 stripeRows: false,
                 plugins: [{

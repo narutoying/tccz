@@ -1,22 +1,9 @@
 <script type="text/javascript" src="$!contextPath/js/discount/oneDiscount.js?num=Math.random()"></script>
 <script type="text/javascript">
-	// 全局变量
-	var discount_bandarNoteNumber;
-	var discount_proposerName;
-	var discount_proposerId;
-	var discount_amount;
-	var discount_state;
-	var discount_expireDate;
-	var discount_bandarNoteNumber;
-	#if($discount)
-		#if($!discount.bandarNoteNumber.length > 0)
-    		discount_bandarNoteNumber = $!discount.bandarNoteNumber;
-		#end
-    	discount_proposerName = "$!discount.proposer.name";
-    	discount_proposerId = $!discount.proposer.id;
-    	discount_amount = "$!discount.amount.toString()";
-    	discount_state = "$!discount.state.getCode()";
-    	discount_expireDate = "$dateUtil.format('yyyy-MM-dd', $!discount.expireDate)";
+	// 业务实体
+	var item; 
+	#if($$item)
+		item = $item;
 	#end
 	// 全局方法
 	function operationType() {
@@ -24,9 +11,6 @@
 	}
 	function operationTypeDesc() {
 		return "$!operationDesc";
-	}
-	function getItemId() {
-		return "$!itemId";
 	}
 	function getStates() {
 		#if($states && $states.size() > 0)

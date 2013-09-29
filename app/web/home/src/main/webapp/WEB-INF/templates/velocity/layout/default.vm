@@ -8,19 +8,23 @@
         <link rel="icon" href="$!contextPath/images/favicon.ico" type="image/x-icon"/>
 		<link rel="stylesheet" type="text/css" href="$!contextPath/extjs/resources/css/ext-all-neptune.css">
         <script type="text/javascript" src="$!contextPath/js/jquery-1.7.1.min.js"></script>
-        <script type="text/javascript" src="$!contextPath/js/default.js"></script>
 		<script type="text/javascript" src="$!contextPath/extjs/bootstrap.js"></script>
 		<script type="text/javascript" src="$!contextPath/extjs/locale/ext-lang-zh_CN.js"></script>
 		<script type="text/javascript">
+			var required = '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>';
+			
 			function getContextPath() {
 				return "$!contextPath";			
 			}
 			Ext.Loader.setConfig({
                 enabled: true
             });
-            
             Ext.require(['Ext.window.MessageBox', 'Ext.grid.*', 'Ext.form.*', 'Ext.form.field.*', 'Ext.data.*', 'Ext.util.*', 'Ext.layout.container.Column', 'Ext.toolbar.Paging', 'Ext.ux.DataTip', 'Ext.ux.PreviewPlugin', 'Ext.ModelManager', 'Ext.tip.QuickTipManager', 'Ext.fx.target.Element']);
+			Ext.tip.QuickTipManager.init();
+		    Ext.QuickTips.init();
 		</script>
+		<script type="text/javascript" src="$!contextPath/js/default.js"></script>
+		<script type="text/javascript" src="$!contextPath/js/limit.js"></script>
 	</head>
 	
 	<body>

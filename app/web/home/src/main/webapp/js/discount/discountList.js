@@ -1,7 +1,5 @@
 Ext.onReady(function(){
-    Ext.tip.QuickTipManager.init();
-    Ext.QuickTips.init();
-    
+    // 业务模型定义
     Ext.define('Discount', {
         extend: 'Ext.data.Model',
         fields: ['bandarNoteNumber', 'proposer', 'amount', {
@@ -13,13 +11,11 @@ Ext.onReady(function(){
             name: 'id',
             mapping: 'id',
             type: 'int'
-        }],
-        idProperty: 'threadid'
+        }]
     });
-    // create the Data Store
+    // 创建业务数据Store
     var store = Ext.create('Ext.data.Store', {
         model: 'Discount',
-        remoteSort: true,
         proxy: {
             type: 'ajax',
             url: getContextPath() + '/query/discount/index.json',
@@ -29,7 +25,7 @@ Ext.onReady(function(){
                 totalProperty: 'totalCount'
             }
         },
-        pageSize: 6
+        pageSize: 6 // 每页显示数据条目
     });
     // 渲染查询表单
     var bd = Ext.getBody();
@@ -37,8 +33,6 @@ Ext.onReady(function(){
     var simple = Ext.widget({
         xtype: 'form',
         layout: 'form',
-        frame: true,
-        title: '贴现查询',
         bodyPadding: '5 5 0',
         width: 350,
         fieldDefaults: {
@@ -48,25 +42,24 @@ Ext.onReady(function(){
         plugins: {
             ptype: 'datatip'
         },
+        frame: true,
         defaultType: 'textfield',
+        title: '贴现查询',
         items: [{
             fieldLabel: '企业名',
             id: 'enterpriseName',
             name: 'enterpriseName',
             allowBlank: true,
-            tooltip: '请输入企业名'
         }, {
             fieldLabel: '银票号',
             id: 'bandarNoteNumber',
             name: 'bandarNoteNumber',
             allowBlank: true,
-            tooltip: '请输入银票号'
         }, {
             xtype: 'checkbox',
             boxLabel: '显示已到期',
             id: 'showExpire',
-            name: 'showExpire',
-            inputValue: 'showExpire'
+            name: 'showExpire'
         }],
         buttons: [{
             xtype: 'component',
@@ -80,8 +73,7 @@ Ext.onReady(function(){
             handler: function(){
                 store.getProxy().setExtraParam("bandarNoteNumber", Ext.getCmp("bandarNoteNumber").getValue());
                 store.getProxy().setExtraParam("enterpriseName", Ext.getCmp("enterpriseName").getValue());
-                var showExpire = Ext.getCmp("showExpire").getValue();
-                store.getProxy().setExtraParam("showExpire", showExpire);
+                store.getProxy().setExtraParam("showExpire", Ext.getCmp("showExpire").getValue());
                 store.loadPage(1);
             }
         }],
@@ -89,11 +81,10 @@ Ext.onReady(function(){
     });
     simple.render(Ext.get("queryForm"));
     
-    var pluginExpanded = true;
+    // 渲染分页表格
     var grid = Ext.create('Ext.grid.Panel', {
         width: 700,
         margin: '10 10 10 10',
-        title: '贴现总览',
         store: store,
         disableSelection: true,
         loadMask: true,
@@ -108,24 +99,24 @@ Ext.onReady(function(){
                 pluginId: 'preview'
             }]
         },
-        // grid columns
+        renderTo: 'queryResult',
+        title: '贴现总览',
+        // 表格列
         columns: [{
-            id: 'proposer',
-            text: "申请人",
             dataIndex: 'proposer',
+            text: "申请人",
             flex: 1,
             sortable: false
         }, {
-            id: 'amount',
-            text: "金额",
             dataIndex: 'amount',
+            text: "金额",
             flex: 1.5,
             sortable: false
         }, {
-            id: 'expireDate',
-            text: "到期日期",
             dataIndex: 'expireDate',
+            text: "到期日期",
             flex: 2,
+            sortable: false,
             renderer: function(value, p, r){
                 p.tdAttr = 'data-qtip="1. <font style=\'color:red\'>标红：</font>过期日期<当前日期<br/>2. <font style=\'color:blue\'>标蓝：</font>过期日期=当前日期<br/>3. <font style=\'color:green\'>标绿：</font>过期日期>当前日期"';
                 /*
@@ -149,22 +140,19 @@ Ext.onReady(function(){
                     }
                 }
                 return "<font style='color:" + color + "'>" + valueStr + "</font>";
-            },
-            sortable: false
+            }
         }, {
-            id: 'state',
-            text: "当前状态",
             dataIndex: 'state',
+            text: "当前状态",
             flex: 2,
             sortable: false
         }, {
-            id: 'bandarNoteNumberCol',
-            text: "银票号",
             dataIndex: 'bandarNoteNumber',
+            text: "银票号",
             flex: 2,
             sortable: false
         }, {
-            dataIndex: 'id',
+			dataIndex: 'id',
             flex: 3,
             text: "操作",
             renderer: function(value, p, r){
@@ -180,11 +168,8 @@ Ext.onReady(function(){
             store: store,
             displayInfo: true,
             emptyMsg: "无数据显示",
-            items: ['-']
-        }),
-        renderTo: 'queryResult'
+        })
     });
-    
+    // 默认显示第一页
     store.loadPage(1);
-    
 });
