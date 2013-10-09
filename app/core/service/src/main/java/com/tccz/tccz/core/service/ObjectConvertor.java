@@ -12,15 +12,18 @@ import net.sf.json.JSONSerializer;
 
 import org.springframework.util.CollectionUtils;
 
+import com.tccz.tccz.common.dal.dataobject.BandarNoteDO;
 import com.tccz.tccz.common.dal.dataobject.DiscountChangeDO;
 import com.tccz.tccz.common.dal.dataobject.DiscountDO;
 import com.tccz.tccz.common.dal.dataobject.EnterpriseDO;
 import com.tccz.tccz.common.dal.dataobject.PersonDO;
+import com.tccz.tccz.core.model.BandarNote;
 import com.tccz.tccz.core.model.Discount;
 import com.tccz.tccz.core.model.DiscountChange;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Money;
 import com.tccz.tccz.core.model.Person;
+import com.tccz.tccz.core.model.enums.BandarNoteType;
 import com.tccz.tccz.core.model.enums.DiscountState;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 import com.tccz.tccz.core.service.query.DiscountQueryService;
@@ -144,5 +147,29 @@ public class ObjectConvertor {
 		result.setModifyTime(dataObject.getModifyTime());
 		result.setOwnEnterprises(null);// TODO 填充企业列表
 		return result;
+	}
+
+	public static BandarNote convertToBandarNote(BandarNoteDO data,
+			BusinessSideQueryService businessSideQueryService) {
+		if (data == null) {
+			return null;
+		}
+		BandarNote result = new BandarNote();
+		result.setAmount(new Money(data.getAmount()));
+		result.setCreateTime(data.getCreateTime());
+		result.setDrawDate(data.getDrawDate());
+		result.setDrawer(businessSideQueryService.queryEnterpriseById(data
+				.getEnterpriseId()));
+		result.setExpireDate(data.getExpireDate());
+		result.setId(data.getId());
+		result.setMargin(new Money(data.getMarginAmount()));
+		result.setModifyTime(data.getModifyTime());
+		result.setNumber(data.getBandarNoteNumber());
+		result.setType(BandarNoteType.getByCode(data.getType()));
+		return result;
+	}
+
+	public static BandarNoteDO convertToBandarNoteDO(BandarNote data) {
+		return null;
 	}
 }

@@ -15,11 +15,22 @@ import ${table.qualifiedDAOClassName};
 
 // auto generated imports
 #foreach($importClass in $table.daoImports) 
+#if($importClass == "com.iwallet.biz.common.util.PageList")
+import com.tccz.tccz.dal.util.PageList;
+#else
 import $importClass;
+#end
 #end
 #foreach($importClass in $table.ibatisImports)
+#if($importClass == "com.alibaba.common.lang.Paginator")
+import com.tccz.tccz.dal.util.Paginator;
+#else
 import $importClass;
 #end
+#end
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An ibatis based implementation of dao interface <tt>${table.qualifiedDAOClassName}</tt>.

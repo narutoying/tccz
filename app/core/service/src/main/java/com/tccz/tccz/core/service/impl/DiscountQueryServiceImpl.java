@@ -40,7 +40,6 @@ public class DiscountQueryServiceImpl implements DiscountQueryService {
 	@Autowired
 	private BusinessSideQueryService businessSideQueryService;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public PageList<Discount> queryByCondition(DiscountQueryCondition condition) {
 		PageList<Discount> result = new PageList<Discount>();
@@ -54,7 +53,8 @@ public class DiscountQueryServiceImpl implements DiscountQueryService {
 		return result;
 	}
 
-	private List<Discount> convertToDomains(List list) {
+	private List<Discount> convertToDomains(
+			@SuppressWarnings("rawtypes") List list) {
 		if (!CollectionUtils.isEmpty(list)) {
 			List<Discount> result = new ArrayList<Discount>();
 			for (Object o : list) {

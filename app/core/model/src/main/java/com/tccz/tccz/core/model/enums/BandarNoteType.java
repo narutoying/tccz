@@ -4,6 +4,14 @@
  */
 package com.tccz.tccz.core.model.enums;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 银票类型
  * 
@@ -38,5 +46,35 @@ public enum BandarNoteType {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public static BandarNoteType getByCode(String code) {
+		if (StringUtils.isNotBlank(code)) {
+			for (BandarNoteType mode : values()) {
+				if (StringUtils.equals(code, mode.getCode())) {
+					return mode;
+				}
+			}
+		}
+		return null;
+	}
+
+	public static Map<String, String> toMap() {
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		for (BandarNoteType BandarNoteType : values()) {
+			map.put(BandarNoteType.getCode(), BandarNoteType.getDescription());
+		}
+		return map;
+	}
+
+	public static List<Map<String, String>> toList() {
+		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		for (BandarNoteType BandarNoteType : values()) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("code", BandarNoteType.getCode());
+			map.put("desc", BandarNoteType.getDescription());
+			result.add(map);
+		}
+		return result;
 	}
 }

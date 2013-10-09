@@ -22,7 +22,7 @@ import com.tccz.tccz.core.model.query.DiscountQueryCondition;
 public interface DiscountQueryService {
 
 	/**
-	 * 条件查询贴现列表 若不进行分页，则分页器无效
+	 * 条件查询贴现列表
 	 * 
 	 * @param condition
 	 *            查询条件

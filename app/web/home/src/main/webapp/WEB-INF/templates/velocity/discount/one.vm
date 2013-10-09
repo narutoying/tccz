@@ -49,6 +49,20 @@
 			return false;
 		#end
 	}
+	function canModify(fieldName) {
+		#if($!operation == "UPDATE")
+			if(fieldName == "state") {
+			// 特定字段才允许修改
+				return true;
+			} else {
+				return false;
+			}
+		#elseif($!operation == "QUERY")
+			return false;
+		#else
+			return true;
+		#end
+	}
 	
 </script>
 ##<b>可用额度：</b><font id="availableLimit>"></font>

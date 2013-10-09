@@ -3,7 +3,11 @@ package ${table.DAOPackage};
 
 // auto generated imports
 #foreach($importClass in $table.daoImports) 
+#if($importClass == "com.iwallet.biz.common.util.PageList")
+import com.tccz.tccz.dal.util.PageList;
+#else
 import $importClass;
+#end
 #end
 
 /**

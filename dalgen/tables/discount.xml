@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="GBK"?>
 <table sqlname="discount">
 	
-	expire_date date
-
 	<operation name="getById">
 		<sql><![CDATA[
 			select * from discount where id=?
@@ -77,16 +75,16 @@
 		]]></sql>
 		<sqlmap><![CDATA[
           select d.* from discount d where d.proposer_id = #proposerId# 
-				<isNotEmpty prepend=" and " property="expireStart">
+				<isNotNull prepend=" and " property="expireStart">
 					 ${cdata-start}
 						d.expire_date >= DATE(#expireStart#)
 					 ${cdata-end}
-				</isNotEmpty>
-				<isNotEmpty prepend=" and " property="expireEnd">
+				</isNotNull>
+				<isNotNull prepend=" and " property="expireEnd">
 					 ${cdata-start}
 						d.expire_date <= DATE(#expireEnd#)
 					 ${cdata-end}
-				</isNotEmpty>
+				</isNotNull>
 			order by id DESC
 		 ]]></sqlmap>
 	</operation>

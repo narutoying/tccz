@@ -58,7 +58,7 @@ Ext.onReady(function(){
                     name: 'id'
                 }]
             }),
-            readOnly: isReadOnly(),
+            readOnly: !canModify(null),
             displayField: 'name',
             valueField: 'id',
             queryParam: 'fuzzyName',
@@ -80,7 +80,7 @@ Ext.onReady(function(){
         }, {
             fieldLabel: '到期日',
             name: 'expireDate',
-            readOnly: isReadOnly(),
+            readOnly: !canModify(null),
             afterLabelTextTpl: required,
             xtype: 'datefield',
             format: 'Y-m-d',
@@ -91,7 +91,7 @@ Ext.onReady(function(){
             fieldLabel: '金额',
             afterLabelTextTpl: required,
             name: 'amount',
-            readOnly: !isAdd(),
+            readOnly: !canModify(null),
             allowBlank: false,
             value: (item != null ? item.amount.amount : null),
             minValue: 0
@@ -105,7 +105,7 @@ Ext.onReady(function(){
             labelWidth: 130,
             id: "stateCombo",
             name: 'state',
-            readOnly: isReadOnly(),
+            readOnly: !canModify("state"),
             displayField: 'stateDesc',
             valueField: 'stateCode',
             store: Ext.create('Ext.data.Store', {
@@ -129,7 +129,7 @@ Ext.onReady(function(){
         }, {
             fieldLabel: '银票号',
             name: 'bandarNoteNumber',
-            readOnly: isReadOnly(),
+            readOnly: !canModify(null),
             value: (item != null ? item.bandarNoteNumber : null)
         }, {
             fieldLabel: '当前可用额度(元)',

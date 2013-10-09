@@ -23,67 +23,74 @@
     <!-- RESULT MAPS                                   -->
     <!-- ============================================= -->
 
-    <!-- result maps for database table discount -->
-    <resultMap id="RM-DISCOUNT" class="com.tccz.tccz.common.dal.dataobject.DiscountDO">
+    <!-- result maps for database table bandar_note -->
+    <resultMap id="RM-BANDAR-NOTE" class="com.tccz.tccz.common.dal.dataobject.BandarNoteDO">
         <result property="id" column="id" javaType="int" jdbcType="int unsigned" nullValue="0"/>
         <result property="bandarNoteNumber" column="bandar_note_number" javaType="java.lang.String" jdbcType="varchar"/>
-        <result property="proposerId" column="proposer_id" javaType="int" jdbcType="int" nullValue="0"/>
+        <result property="enterpriseId" column="enterprise_id" javaType="int" jdbcType="int" nullValue="0"/>
+        <result property="type" column="type" javaType="java.lang.String" jdbcType="char"/>
         <result property="amount" column="amount" javaType="long" jdbcType="bigint" nullValue="0"/>
-        <result property="state" column="state" javaType="java.lang.String" jdbcType="char"/>
+        <result property="drawDate" column="draw_date" javaType="java.util.Date" jdbcType="DATETIME"/>
         <result property="expireDate" column="expire_date" javaType="java.util.Date" jdbcType="DATETIME"/>
+        <result property="marginAmount" column="margin_amount" javaType="long" jdbcType="bigint" nullValue="0"/>
+        <result property="exposureAmount" column="exposure_amount" javaType="long" jdbcType="bigint" nullValue="0"/>
+        <result property="exposureCloseAmount" column="exposure_close_amount" javaType="long" jdbcType="bigint" nullValue="0"/>
         <result property="createTime" column="create_time" javaType="java.util.Date" jdbcType="datetime"/>
         <result property="modifyTime" column="modify_time" javaType="java.util.Date" jdbcType="datetime"/>
     </resultMap>
 
 
     <!-- ============================================= -->
-    <!-- mapped statements for IbatisDiscountDAO -->
+    <!-- mapped statements for IbatisBandarNoteDAO -->
     <!-- ============================================= -->
-    <!-- mapped statement for IbatisDiscountDAO.getById -->
-    <select id="MS-DISCOUNT-GET-BY-ID" resultMap="RM-DISCOUNT">
+    <!-- mapped statement for IbatisBandarNoteDAO.getById -->
+    <select id="MS-BANDAR-NOTE-GET-BY-ID" resultMap="RM-BANDAR-NOTE">
     <![CDATA[
-        select /*MS-TCCZ-DISCOUNT-GET-BY-ID*/ * from discount where (id = #value#)
+        select /*MS-TCCZ-BANDAR-NOTE-GET-BY-ID*/ * from bandar_note where (id = #value#)
     ]]>
     </select>
 
-    <!-- mapped statement for IbatisDiscountDAO.getAll -->
-    <select id="MS-DISCOUNT-GET-ALL" resultMap="RM-DISCOUNT">
+    <!-- mapped statement for IbatisBandarNoteDAO.getAll -->
+    <select id="MS-BANDAR-NOTE-GET-ALL" resultMap="RM-BANDAR-NOTE">
     <![CDATA[
-        select /*MS-TCCZ-DISCOUNT-GET-ALL*/ * from discount
+        select /*MS-TCCZ-BANDAR-NOTE-GET-ALL*/ * from bandar_note
     ]]>
     </select>
 
-    <!-- mapped statement for IbatisDiscountDAO.insert -->
-	<insert id="MS-DISCOUNT-INSERT">
-	insert /*MS-TCCZ-DISCOUNT-INSERT*/ into discount(bandar_note_number,proposer_id,amount,state,expire_date,create_time,modify_time) values (#bandarNoteNumber#, #proposerId#, #amount#, #state#, #expireDate#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    <!-- mapped statement for IbatisBandarNoteDAO.insert -->
+	<insert id="MS-BANDAR-NOTE-INSERT">
+	insert /*MS-TCCZ-BANDAR-NOTE-INSERT*/ into bandar_note(bandar_note_number,enterprise_id,type,amount,draw_date,margin_amount,exposure_amount,exposure_close_amount,create_time,modify_time) values (#bandarNoteNumber#, #enterpriseId#, #type#, #amount#, #drawDate#, #marginAmount#, #exposureAmount#, #exposureCloseAmount#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     <selectKey resultClass="int" keyProperty="id">
 		select last_insert_id() as id
     </selectKey>
 	</insert>
 
-    <!-- mapped statement for IbatisDiscountDAO.delete -->
-    <delete id="MS-DISCOUNT-DELETE">
+    <!-- mapped statement for IbatisBandarNoteDAO.delete -->
+    <delete id="MS-BANDAR-NOTE-DELETE">
     <![CDATA[
-        delete /*MS-TCCZ-DISCOUNT-DELETE*/ from discount where (id = #value#)
+        delete /*MS-TCCZ-BANDAR-NOTE-DELETE*/ from bandar_note where (id = #value#)
     ]]>
     </delete>
 
-    <!-- mapped statement for IbatisDiscountDAO.update -->
-    <update id="MS-DISCOUNT-UPDATE">
+    <!-- mapped statement for IbatisBandarNoteDAO.update -->
+    <update id="MS-BANDAR-NOTE-UPDATE">
     <![CDATA[
-        update /*MS-TCCZ-DISCOUNT-UPDATE*/ discount set bandar_note_number=#bandarNoteNumber#, proposer_id=#proposerId#, amount=#amount#, state=#state#, expire_date=#expireDate#, modify_time=CURRENT_TIMESTAMP where (id = #id#)
+        update /*MS-TCCZ-BANDAR-NOTE-UPDATE*/ bandar_note set bandar_note_number=#bandarNoteNumber#, enterprise_id=#enterpriseId#, type=#type#, amount=#amount#, draw_date=#drawDate#, margin_amount=#marginAmount#, exposure_amount=#exposureAmount#, exposure_close_amount=#exposureCloseAmount#, modify_time=CURRENT_TIMESTAMP where (id = #id#)
     ]]>
     </update>
 
-    <!-- mapped statement for IbatisDiscountDAO.getByCondition -->
-    <select id="MS-DISCOUNT-GET-BY-CONDITION" resultMap="RM-DISCOUNT">
-        select /*MS-TCCZ-DISCOUNT-GET-BY-CONDITION*/ d.* from discount d
+    <!-- mapped statement for IbatisBandarNoteDAO.getByCondition -->
+    <select id="MS-BANDAR-NOTE-GET-BY-CONDITION" resultMap="RM-BANDAR-NOTE">
+        select /*MS-TCCZ-BANDAR-NOTE-GET-BY-CONDITION*/ d.* from bandar_note d
 			<dynamic prepend="WHERE">
 				<isNotEmpty prepend="and" property="enterpriseName">
-					d.proposer_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+					d.enterprise_id in (select e.id from enterprise e where e.name = #enterpriseName#)
 				</isNotEmpty>
 				<isNotEmpty prepend="and" property="bandarNoteNumber">
 					d.bandar_note_number = #bandarNoteNumber#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="bandarNoteType">
+					d.type = #bandarNoteType#
 				</isNotEmpty>
 				 <isEqual prepend="and" property="showExpire" compareValue = "false">
 					 <![CDATA[
@@ -92,20 +99,21 @@
 				</isEqual>
 			</dynamic>
 			order by id DESC
-			<isEqual prepend="" property="doPage" compareValue = "true">
 				limit #pageNum#, #pageSize#
-			</isEqual>
     </select>
 
-    <!-- mapped statement for IbatisDiscountDAO.getByCondition, needed by paging -->
-    <select id="MS-TCCZ-DISCOUNT-GET-BY-CONDITION-COUNT-FOR-PAGING" resultClass="int">
-        select /*MS-TCCZ-DISCOUNT-GET-BY-CONDITION-COUNT-FOR-PAGING*/ count(*) from discount d
+    <!-- mapped statement for IbatisBandarNoteDAO.getByCondition, needed by paging -->
+    <select id="MS-TCCZ-BANDAR-NOTE-GET-BY-CONDITION-COUNT-FOR-PAGING" resultClass="int">
+        select /*MS-TCCZ-BANDAR-NOTE-GET-BY-CONDITION-COUNT-FOR-PAGING*/ count(*) from bandar_note d
 			<dynamic prepend="WHERE">
 				<isNotEmpty prepend="and" property="enterpriseName">
-					d.proposer_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+					d.enterprise_id in (select e.id from enterprise e where e.name = #enterpriseName#)
 				</isNotEmpty>
 				<isNotEmpty prepend="and" property="bandarNoteNumber">
 					d.bandar_note_number = #bandarNoteNumber#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="bandarNoteType">
+					d.type = #bandarNoteType#
 				</isNotEmpty>
 				 <isEqual prepend="and" property="showExpire" compareValue = "false">
 					 <![CDATA[
@@ -116,9 +124,9 @@
 			
     </select>
 
-    <!-- mapped statement for IbatisDiscountDAO.getByExpireDate -->
-    <select id="MS-DISCOUNT-GET-BY-EXPIRE-DATE" resultMap="RM-DISCOUNT">
-        select /*MS-TCCZ-DISCOUNT-GET-BY-EXPIRE-DATE*/ d.* from discount d where d.proposer_id = #proposerId# 
+    <!-- mapped statement for IbatisBandarNoteDAO.getByExpireDate -->
+    <select id="MS-BANDAR-NOTE-GET-BY-EXPIRE-DATE" resultMap="RM-BANDAR-NOTE">
+        select /*MS-TCCZ-BANDAR-NOTE-GET-BY-EXPIRE-DATE*/ d.* from bandar_note d where d.enterprise_id = #enterpriseId# 
 				<isNotNull prepend=" and " property="expireStart">
 					 <![CDATA[
 						d.expire_date >= DATE(#expireStart#)

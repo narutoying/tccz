@@ -14,6 +14,9 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import com.tccz.tccz.common.dal.dataobject.DiscountChangeDO;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * An ibatis based implementation of dao interface <tt>com.tccz.tccz.common.dal.daointerface.DiscountChangeDAO</tt>.
  *

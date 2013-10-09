@@ -12,6 +12,9 @@ import com.tccz.tccz.common.dal.daointerface.PersonDAO;
 import com.tccz.tccz.common.dal.dataobject.PersonDO;
 import org.springframework.dao.DataAccessException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * An ibatis based implementation of dao interface <tt>com.tccz.tccz.common.dal.daointerface.PersonDAO</tt>.
  *

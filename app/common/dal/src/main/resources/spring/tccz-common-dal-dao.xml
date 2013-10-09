@@ -9,6 +9,7 @@
     <!-- ======================================================================== -->
     <!--  DAO���塣                                                               -->
     <!-- ======================================================================== -->
+    <bean id="bandarNoteDAO" class="com.tccz.tccz.common.dal.ibatis.IbatisBandarNoteDAO" parent="baseSqlMapClientDAO"/>
     <bean id="discountDAO" class="com.tccz.tccz.common.dal.ibatis.IbatisDiscountDAO" parent="baseSqlMapClientDAO"/>
     <bean id="discountChangeDAO" class="com.tccz.tccz.common.dal.ibatis.IbatisDiscountChangeDAO" parent="baseSqlMapClientDAO"/>
     <bean id="enterpriseDAO" class="com.tccz.tccz.common.dal.ibatis.IbatisEnterpriseDAO" parent="baseSqlMapClientDAO"/>

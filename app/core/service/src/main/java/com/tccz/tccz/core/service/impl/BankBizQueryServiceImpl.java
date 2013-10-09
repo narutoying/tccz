@@ -11,7 +11,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tccz.tccz.core.model.BandarNote;
 import com.tccz.tccz.core.model.Discount;
+import com.tccz.tccz.core.service.query.BandarNoteQueryService;
 import com.tccz.tccz.core.service.query.BankBizQueryService;
 import com.tccz.tccz.core.service.query.DiscountQueryService;
 
@@ -26,6 +28,9 @@ public class BankBizQueryServiceImpl implements BankBizQueryService {
 	@Autowired
 	private DiscountQueryService discountQueryService;
 
+	@Autowired
+	private BandarNoteQueryService bandarNoteQueryService;
+
 	/**
 	 * @see com.tccz.tccz.core.service.query.BankBizQueryService#query(java.lang.Class,
 	 *      java.lang.Integer, java.util.Date, java.util.Date, java.util.Map)
@@ -38,8 +43,10 @@ public class BankBizQueryServiceImpl implements BankBizQueryService {
 		if (classType == Discount.class) {
 			return (List<T>) discountQueryService.queryDiscounts(bizSideId,
 					expireDateStart, expireDateEnd);
+		} else if (classType == BandarNote.class) {
+			return (List<T>) bandarNoteQueryService.queryListByExpireDate(
+					bizSideId, expireDateStart, expireDateEnd);
 		}
 		return Collections.emptyList();
 	}
-
 }

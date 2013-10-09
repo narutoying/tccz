@@ -20,9 +20,9 @@ import com.tccz.tccz.core.model.Discount;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.enums.DiscountState;
 import com.tccz.tccz.core.model.result.LimitControlResult;
-import com.tccz.tccz.core.service.DiscountManageService;
 import com.tccz.tccz.core.service.LimitService;
 import com.tccz.tccz.core.service.ObjectConvertor;
+import com.tccz.tccz.core.service.manage.DiscountManageService;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 
 /**
@@ -49,7 +49,7 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 	private BusinessSideQueryService businessSideQueryService;
 
 	/**
-	 * @see com.tccz.tccz.core.service.DiscountManageService#createDiscount(com.tccz.tccz.core.model.Discount)
+	 * @see com.tccz.tccz.core.service.manage.DiscountManageService#createDiscount(com.tccz.tccz.core.model.Discount)
 	 */
 	@Override
 	public CommonResult createDiscount(final Discount discount) {
@@ -85,7 +85,7 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 	}
 
 	/**
-	 * @see com.tccz.tccz.core.service.DiscountManageService#deleteDiscount(int)
+	 * @see com.tccz.tccz.core.service.manage.DiscountManageService#deleteDiscount(int)
 	 */
 	@Override
 	public CommonResult deleteDiscount(final int discountId) {
@@ -108,7 +108,7 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 	}
 
 	/**
-	 * @see com.tccz.tccz.core.service.DiscountManageService#updateDiscount(com.tccz.tccz.core.model.Discount)
+	 * @see com.tccz.tccz.core.service.manage.DiscountManageService#updateDiscount(com.tccz.tccz.core.model.Discount)
 	 */
 	@Override
 	public CommonResult updateDiscount(final Discount discount) {

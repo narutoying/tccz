@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="GBK"?>
+<table sqlname="bandar_note">
+    
+    <operation name="getById">
+        <sql>
+            <![CDATA[
+			select * from bandar_note where id=?
+		]]>
+        </sql>
+    </operation>
+    
+    <operation name="getAll" multiplicity="many">
+        <sql>
+            <![CDATA[
+			select * from bandar_note
+		]]>
+        </sql>
+    </operation>
+    
+    <operation name="insert">
+        <sql>
+            <![CDATA[
+			insert into bandar_note(bandar_note_number,enterprise_id,type,amount,draw_date,margin_amount,exposure_amount,exposure_close_amount,	create_time,modify_time) values(?, ?, ?, ?, ?, ?, ?, ?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		]]>
+        </sql>
+    </operation>
+    
+    <operation name="delete">
+        <sql>
+            <![CDATA[
+			delete from bandar_note where id=?
+		]]>
+        </sql>
+    </operation>
+	
+    <operation name="update" paramtype="object">
+        <sql>
+            <![CDATA[
+			update bandar_note set bandar_note_number = ?,
+			enterprise_id = ?,
+			type = ?,
+			amount = ?,
+			draw_date = ?,
+			margin_amount = ?,
+			exposure_amount = ?,
+			exposure_close_amount = ?,
+			modify_time=CURRENT_TIMESTAMP where id=?
+		]]>
+        </sql>
+    </operation>
+    
+    <operation name="getByCondition" multiplicity="many" parameterClass="map" paging="true">
+        <extraparams>
+            <param name="enterpriseName" javatype="java.lang.String"/>
+            <param name="bandarNoteNumber" javatype="java.lang.String"/>
+            <param name="bandarNoteType" javatype="java.lang.String"/>
+            <param name="showExpire" javatype="java.lang.Boolean"/>
+        </extraparams>
+        <sql>
+            <![CDATA[
+			select * from bandar_note
+		]]>
+        </sql>
+        <sqlmap>
+            <![CDATA[
+          select d.* from bandar_note d
+			<dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="enterpriseName">
+					d.enterprise_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="bandarNoteNumber">
+					d.bandar_note_number = #bandarNoteNumber#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="bandarNoteType">
+					d.type = #bandarNoteType#
+				</isNotEmpty>
+				 <isEqual prepend="and" property="showExpire" compareValue = "false">
+					 ${cdata-start}
+						d.expire_date >= CURRENT_DATE
+					 ${cdata-end}
+				</isEqual>
+			</dynamic>
+			order by id DESC
+				limit #pageNum#, #pageSize#
+		 ]]>
+        </sqlmap>
+    </operation>
+    
+    <operation name="getByExpireDate" multiplicity="many" parameterClass="map">
+        <extraparams>
+            <param name="enterpriseId" javatype="int"/>
+            <param name="expireStart" javatype="java.util.Date"/>
+            <param name="expireEnd" javatype="java.util.Date"/>
+        </extraparams>
+        <sql>
+            <![CDATA[
+			select * from bandar_note
+		]]>
+        </sql>
+        <sqlmap>
+            <![CDATA[
+          select d.* from bandar_note d where d.enterprise_id = #enterpriseId# 
+				<isNotNull prepend=" and " property="expireStart">
+					 ${cdata-start}
+						d.expire_date >= DATE(#expireStart#)
+					 ${cdata-end}
+				</isNotNull>
+				<isNotNull prepend=" and " property="expireEnd">
+					 ${cdata-start}
+						d.expire_date <= DATE(#expireEnd#)
+					 ${cdata-end}
+				</isNotNull>
+			order by id DESC
+		 ]]>
+        </sqlmap>
+    </operation>
+    
+</table>

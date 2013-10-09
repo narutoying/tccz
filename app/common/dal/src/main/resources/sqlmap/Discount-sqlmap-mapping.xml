@@ -119,16 +119,16 @@
     <!-- mapped statement for IbatisDiscountDAO.getByExpireDate -->
     <select id="MS-DISCOUNT-GET-BY-EXPIRE-DATE" resultMap="RM-DISCOUNT">
         select /*MS-TCCZ-DISCOUNT-GET-BY-EXPIRE-DATE*/ d.* from discount d where d.proposer_id = #proposerId# 
-				<isNotEmpty prepend=" and " property="expireStart">
+				<isNotNull prepend=" and " property="expireStart">
 					 <![CDATA[
 						d.expire_date >= DATE(#expireStart#)
 					 ]]>
-				</isNotEmpty>
-				<isNotEmpty prepend=" and " property="expireEnd">
+				</isNotNull>
+				<isNotNull prepend=" and " property="expireEnd">
 					 <![CDATA[
 						d.expire_date <= DATE(#expireEnd#)
 					 ]]>
-				</isNotEmpty>
+				</isNotNull>
 			order by id DESC
     </select>
 

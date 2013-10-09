@@ -30,7 +30,7 @@ import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Money;
 import com.tccz.tccz.core.model.enums.DiscountState;
 import com.tccz.tccz.core.model.query.DiscountQueryCondition;
-import com.tccz.tccz.core.service.DiscountManageService;
+import com.tccz.tccz.core.service.manage.DiscountManageService;
 import com.tccz.tccz.core.service.query.DiscountQueryService;
 import com.tccz.tccz.dal.util.Paginator;
 import com.tccz.tccz.web.enums.OperationType;
