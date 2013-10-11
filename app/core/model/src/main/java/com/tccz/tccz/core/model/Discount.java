@@ -91,4 +91,9 @@ public class Discount extends BaseBankBusinessEntity {
 	public void setChangeHistoryJson(JSON changeHistoryJson) {
 		this.changeHistoryJson = changeHistoryJson;
 	}
+
+	@Override
+	public Money occupyMoney() {
+		return this.amount;
+	}
 }

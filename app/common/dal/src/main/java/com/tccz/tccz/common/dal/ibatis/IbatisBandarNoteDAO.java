@@ -12,13 +12,13 @@ import com.tccz.tccz.common.dal.daointerface.BandarNoteDAO;
 import com.tccz.tccz.common.dal.dataobject.BandarNoteDO;
 import org.springframework.dao.DataAccessException;
 import java.util.List;
-import com.tccz.tccz.dal.util.PageList;
 import java.util.Date;
+import com.tccz.tccz.dal.util.PageList;
 import com.tccz.tccz.common.dal.dataobject.BandarNoteDO;
+import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
 import com.tccz.tccz.dal.util.Paginator;
-import java.util.Date;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -159,18 +159,22 @@ public class IbatisBandarNoteDAO extends SqlMapClientDaoSupport implements Banda
 	 *	@param bandarNoteNumber
 	 *	@param bandarNoteType
 	 *	@param showExpire
+	 *	@param expireStart
+	 *	@param expireEnd
 	 *	@param pageSize
 	 *	@param pageNum
 	 *	@return PageList
 	 *	@throws DataAccessException
 	 */	 
-    public PageList getByCondition(String enterpriseName, String bandarNoteNumber, String bandarNoteType, Boolean showExpire, int pageSize, int pageNum) throws DataAccessException {
+    public PageList getByCondition(String enterpriseName, String bandarNoteNumber, String bandarNoteType, Boolean showExpire, Date expireStart, Date expireEnd, int pageSize, int pageNum) throws DataAccessException {
         Map param = new HashMap();
 
         param.put("enterpriseName", enterpriseName);
         param.put("bandarNoteNumber", bandarNoteNumber);
         param.put("bandarNoteType", bandarNoteType);
         param.put("showExpire", showExpire);
+        param.put("expireStart", expireStart);
+        param.put("expireEnd", expireEnd);
         param.put("pageSize", new Integer(pageSize));
         param.put("pageNum", new Integer(pageNum));
 

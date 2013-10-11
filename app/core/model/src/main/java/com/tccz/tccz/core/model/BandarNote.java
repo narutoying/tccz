@@ -15,19 +15,23 @@ import com.tccz.tccz.core.model.enums.BandarNoteType;
  * @version $Id: BandarNote.java, v 0.1 2013-9-11 下午5:06:44
  *          narutoying09@gmail.com Exp $
  */
-public class BandarNote extends BaseBankBusinessEntity {
+public abstract class BandarNote extends BaseBankBusinessEntity {
 	/** 银票号 */
-	private String number;
+	protected String number;
 	/** 出票方 */
-	private Enterprise drawer;
+	protected Enterprise drawer;
 	/** 银票类型 */
-	private BandarNoteType type;
+	protected BandarNoteType type;
 	/** 银票金额 */
-	private Money amount;
+	protected Money amount;
 	/** 出票日 */
-	private Date drawDate;
+	protected Date drawDate;
 	/** 保证金 */
-	private Money margin;
+	protected Money margin;
+	/**
+	 * 校验数据准确性
+	 */
+	public abstract void verifyData();
 
 	public String getNumber() {
 		return number;

@@ -4,6 +4,8 @@
  */
 package com.tccz.tccz.core.model.query;
 
+import java.util.Date;
+
 import com.tccz.tccz.common.util.PageUtil;
 
 /**
@@ -22,6 +24,10 @@ public class BandarNoteQueryCondition {
 	private String type;
 	/** 是否显示过期条目 */
 	private boolean showExpire = false;
+	/** 过期日期查询起始 */
+	private Date expireStart;
+	/** 过期日期查询结束 */
+	private Date expireEnd;
 	/** 单页记录数目 */
 	private Integer limit = PageUtil.PAGE_SIZE;
 	/** 当前页 */
@@ -73,5 +79,21 @@ public class BandarNoteQueryCondition {
 
 	public void setPage(Integer page) {
 		this.page = page;
+	}
+
+	public Date getExpireStart() {
+		return expireStart;
+	}
+
+	public void setExpireStart(Date expireStart) {
+		this.expireStart = expireStart;
+	}
+
+	public Date getExpireEnd() {
+		return expireEnd;
+	}
+
+	public void setExpireEnd(Date expireEnd) {
+		this.expireEnd = expireEnd;
 	}
 }

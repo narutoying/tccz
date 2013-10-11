@@ -47,7 +47,8 @@ public class BandarNoteQueryServiceImpl implements BandarNoteQueryService {
 		com.tccz.tccz.dal.util.PageList byCondition = bandarNoteDAO
 				.getByCondition(condition.getEnterpriseName(),
 						condition.getNumber(), condition.getType(),
-						condition.isShowExpire(), pageSize,
+						condition.isShowExpire(), condition.getExpireStart(),
+						condition.getExpireEnd(), pageSize,
 						PageUtil.getOffset(pageSize, condition.getPage()));
 		result.setDataList(convertToDomains(byCondition));
 		result.setPaginator(byCondition.getPaginator());

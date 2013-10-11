@@ -63,7 +63,7 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 								.isOverLimit(businessSideQueryService
 										.queryEnterpriseById(discount
 												.getProposer().getId()), null,
-										discount.getAmount());
+										discount.occupyMoney());
 						if (!controlResult.isOverLimit()) {
 							int discountId = discountDAO.insert(ObjectConvertor
 									.convertToDiscountDO(discount));

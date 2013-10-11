@@ -97,6 +97,16 @@
 						d.expire_date >= CURRENT_DATE
 					 ]]>
 				</isEqual>
+				<isNotNull prepend="and" property="expireStart">
+					<![CDATA[
+						d.expire_date >= DATE(#expireStart#)
+					 ]]>
+				</isNotNull>
+				<isNotNull prepend="and" property="expireEnd">
+					<![CDATA[
+						d.expire_date <= DATE(#expireEnd#)
+					 ]]>
+				</isNotNull>
 			</dynamic>
 			order by id DESC
 				limit #pageNum#, #pageSize#
@@ -120,6 +130,16 @@
 						d.expire_date >= CURRENT_DATE
 					 ]]>
 				</isEqual>
+				<isNotNull prepend="and" property="expireStart">
+					<![CDATA[
+						d.expire_date >= DATE(#expireStart#)
+					 ]]>
+				</isNotNull>
+				<isNotNull prepend="and" property="expireEnd">
+					<![CDATA[
+						d.expire_date <= DATE(#expireEnd#)
+					 ]]>
+				</isNotNull>
 			</dynamic>
 			
     </select>

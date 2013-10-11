@@ -8,8 +8,8 @@ package com.tccz.tccz.common.dal.daointerface;
 import com.tccz.tccz.common.dal.dataobject.BandarNoteDO;
 import org.springframework.dao.DataAccessException;
 import java.util.List;
-import com.tccz.tccz.dal.util.PageList;
 import java.util.Date;
+import com.tccz.tccz.dal.util.PageList;
 
 /**
  * A dao interface provides methods to access database table <tt>bandar_note</tt>.
@@ -120,12 +120,14 @@ public interface BandarNoteDAO {
 	 *	@param bandarNoteNumber
 	 *	@param bandarNoteType
 	 *	@param showExpire
+	 *	@param expireStart
+	 *	@param expireEnd
 	 *	@param pageSize
 	 *	@param pageNum
 	 *	@return PageList
 	 *	@throws DataAccessException
 	 */	 
-    public PageList getByCondition(String enterpriseName, String bandarNoteNumber, String bandarNoteType, Boolean showExpire, int pageSize, int pageNum) throws DataAccessException;
+    public PageList getByCondition(String enterpriseName, String bandarNoteNumber, String bandarNoteType, Boolean showExpire, Date expireStart, Date expireEnd, int pageSize, int pageNum) throws DataAccessException;
 
 	/**
 	 *  Query DB table <tt>bandar_note</tt> for records.

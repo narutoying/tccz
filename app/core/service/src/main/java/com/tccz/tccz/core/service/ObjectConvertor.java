@@ -17,11 +17,14 @@ import com.tccz.tccz.common.dal.dataobject.DiscountChangeDO;
 import com.tccz.tccz.common.dal.dataobject.DiscountDO;
 import com.tccz.tccz.common.dal.dataobject.EnterpriseDO;
 import com.tccz.tccz.common.dal.dataobject.PersonDO;
+import com.tccz.tccz.common.util.exception.CommonException;
 import com.tccz.tccz.core.model.BandarNote;
 import com.tccz.tccz.core.model.Discount;
 import com.tccz.tccz.core.model.DiscountChange;
 import com.tccz.tccz.core.model.Enterprise;
+import com.tccz.tccz.core.model.FullMarginBandarNote;
 import com.tccz.tccz.core.model.Money;
+import com.tccz.tccz.core.model.OpenBandarNote;
 import com.tccz.tccz.core.model.Person;
 import com.tccz.tccz.core.model.enums.BandarNoteType;
 import com.tccz.tccz.core.model.enums.DiscountState;
@@ -154,7 +157,15 @@ public class ObjectConvertor {
 		if (data == null) {
 			return null;
 		}
-		BandarNote result = new BandarNote();
+		BandarNoteType type = BandarNoteType.getByCode(data.getType());
+		BandarNote result = null;
+		if (type == BandarNoteType.OPEN) {
+			result = new OpenBandarNote();
+		} else if (type == BandarNoteType.FULL_MARGIN) {
+			result = new FullMarginBandarNote();
+		} else {
+			throw new CommonException("不支持的银票类型");
+		}
 		result.setAmount(new Money(data.getAmount()));
 		result.setCreateTime(data.getCreateTime());
 		result.setDrawDate(data.getDrawDate());
@@ -165,7 +176,7 @@ public class ObjectConvertor {
 		result.setMargin(new Money(data.getMarginAmount()));
 		result.setModifyTime(data.getModifyTime());
 		result.setNumber(data.getBandarNoteNumber());
-		result.setType(BandarNoteType.getByCode(data.getType()));
+		result.setType(type);
 		return result;
 	}
 

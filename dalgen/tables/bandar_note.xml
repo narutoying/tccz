@@ -55,6 +55,8 @@
             <param name="bandarNoteNumber" javatype="java.lang.String"/>
             <param name="bandarNoteType" javatype="java.lang.String"/>
             <param name="showExpire" javatype="java.lang.Boolean"/>
+            <param name="expireStart" javatype="java.util.Date"/>
+            <param name="expireEnd" javatype="java.util.Date"/>
         </extraparams>
         <sql>
             <![CDATA[
@@ -79,6 +81,16 @@
 						d.expire_date >= CURRENT_DATE
 					 ${cdata-end}
 				</isEqual>
+				<isNotNull prepend="and" property="expireStart">
+					${cdata-start}
+						d.expire_date >= DATE(#expireStart#)
+					 ${cdata-end}
+				</isNotNull>
+				<isNotNull prepend="and" property="expireEnd">
+					${cdata-start}
+						d.expire_date <= DATE(#expireEnd#)
+					 ${cdata-end}
+				</isNotNull>
 			</dynamic>
 			order by id DESC
 				limit #pageNum#, #pageSize#

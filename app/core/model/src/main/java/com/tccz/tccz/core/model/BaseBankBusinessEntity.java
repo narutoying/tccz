@@ -15,7 +15,15 @@ import com.tccz.tccz.core.model.interfaces.LimitDecider;
  * @version $Id: BaseBusinessEntity.java, v 0.1 2013-9-12 下午2:51:41
  *          narutoying09@gmail.com Exp $
  */
-public class BaseBankBusinessEntity extends BaseEntity implements LimitDecider {
+public abstract class BaseBankBusinessEntity extends BaseEntity implements
+		LimitDecider {
+
+	/**
+	 * 业务实体所占用的金额额度
+	 * 
+	 * @return
+	 */
+	public abstract Money occupyMoney();
 
 	/** 到期日期 */
 	protected Date expireDate;
@@ -29,8 +37,7 @@ public class BaseBankBusinessEntity extends BaseEntity implements LimitDecider {
 	}
 
 	/**
-	 * 默认判断策略是到期日期A和比较日期B相比，若A>=B，则表示占用；反之，则不占用。 
-	 * 各业务实体可决定自己的判断策略。
+	 * 默认判断策略是到期日期A和比较日期B相比，若A>=B，则表示占用；反之，则不占用。 各业务实体可决定自己的判断策略。
 	 * 
 	 * @see com.tccz.tccz.core.model.interfaces.LimitDecider#occupyLimit(java.util.Date)
 	 */

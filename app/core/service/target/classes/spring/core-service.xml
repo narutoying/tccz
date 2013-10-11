@@ -29,6 +29,7 @@
 	<bean id="discountManageService" class="com.tccz.tccz.core.service.impl.DiscountManageServiceImpl" />
 	<bean id="businessSideQueryService" class="com.tccz.tccz.core.service.impl.BusinessSideQueryServiceImpl" />
 	<bean id="bandarNoteQueryService" class="com.tccz.tccz.core.service.impl.BandarNoteQueryServiceImpl" />
+	<bean id="bandarNoteManageService" class="com.tccz.tccz.core.service.impl.BandarNoteManageServiceImpl" />
 		
 </beans>
 

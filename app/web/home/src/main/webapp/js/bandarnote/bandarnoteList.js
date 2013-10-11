@@ -1,24 +1,30 @@
 Ext.onReady(function(){
     // 业务模型定义
-    Ext.define('Discount', {
+    Ext.define('BandarNote', {
         extend: 'Ext.data.Model',
-        fields: ['bandarNoteNumber', 'proposer', 'amount', {
+        fields: ['bandarNoteNumber', 'drawer', 'amount', {
             name: 'expireDate',
             mapping: 'expireDate',
             type: 'date',
             dateFormat: 'Ymd'
-        }, 'state', {
+        }, {
+            name: 'drawDate',
+            mapping: 'drawDate',
+            type: 'date',
+            dateFormat: 'Ymd'
+        }, 'type', {
             name: 'id',
             mapping: 'id',
             type: 'int'
         }]
     });
+    
     // 创建业务数据Store
     var store = Ext.create('Ext.data.Store', {
-        model: 'Discount',
+        model: 'BandarNote',
         proxy: {
             type: 'ajax',
-            url: getContextPath() + '/query/discount/index.json',
+            url: getContextPath() + '/query/bandarnote/index.json',
             reader: {
                 type: 'json',
                 root: 'items',
@@ -44,7 +50,7 @@ Ext.onReady(function(){
         },
         frame: true,
         defaultType: 'textfield',
-        title: '贴现查询',
+        title: '银票查询',
         items: [{
             fieldLabel: '企业名',
             id: 'enterpriseName',
@@ -52,9 +58,31 @@ Ext.onReady(function(){
             allowBlank: true,
         }, {
             fieldLabel: '银票号',
-            id: 'bandarNoteNumber',
-            name: 'bandarNoteNumber',
+            id: 'number',
+            name: 'number',
             allowBlank: true,
+        }, {
+            xtype: "combobox",
+            fieldLabel: '银票类型',
+            allowBlank: true,
+            forceSelection: true,
+            width: 500,
+            labelWidth: 130,
+            id: "type",
+            name: 'type',
+            displayField: 'desc',
+            valueField: 'code',
+            store: Ext.create('Ext.data.Store', {
+                mode: 'local',
+                data: getTypes(),
+                fields: [{
+                    name: 'code'
+                }, {
+                    name: 'desc'
+                }],
+                autoLoad: true
+            }),
+            queryMode: 'local'
         }, {
             xtype: 'checkbox',
             boxLabel: '显示已到期',
@@ -65,14 +93,15 @@ Ext.onReady(function(){
             xtype: 'component',
             autoEl: {
                 tag: 'a',
-                href: getContextPath() + '/update/discount/add.htm',
-                html: '新增贴现'
+                href: getContextPath() + '/update/bandarnote/add.htm',
+                html: '新增银票'
             }
         }, {
             text: '查询',
             handler: function(){
-                store.getProxy().setExtraParam("bandarNoteNumber", Ext.getCmp("bandarNoteNumber").getValue());
+                store.getProxy().setExtraParam("number", Ext.getCmp("number").getValue());
                 store.getProxy().setExtraParam("enterpriseName", Ext.getCmp("enterpriseName").getValue());
+                store.getProxy().setExtraParam("type", Ext.getCmp("type").getValue());
                 store.getProxy().setExtraParam("showExpire", Ext.getCmp("showExpire").getValue());
                 store.loadPage(1);
             }
@@ -83,7 +112,7 @@ Ext.onReady(function(){
     
     // 渲染分页表格
     var grid = Ext.create('Ext.grid.Panel', {
-        width: 700,
+        width: 900,
         margin: '10 10 10 10',
         store: store,
         disableSelection: true,
@@ -100,21 +129,39 @@ Ext.onReady(function(){
             }]
         },
         renderTo: 'queryResult',
-        title: '贴现总览',
+        title: '银票总览',
         // 表格列
         columns: [{
-            dataIndex: 'proposer',
-            text: "申请人",
-            flex: 1,
+            dataIndex: 'bandarNoteNumber',
+            text: "银票号",
+            flex: 2,
+            sortable: false
+        }, {
+            dataIndex: 'drawer',
+            text: "出票企业",
+            flex: 2,
+            sortable: false
+        }, {
+            dataIndex: 'type',
+            text: "银票类型",
+            flex: 2,
             sortable: false
         }, {
             dataIndex: 'amount',
             text: "金额",
-            flex: 1.5,
+            flex: 2,
             sortable: false
         }, {
+            dataIndex: 'drawDate',
+            text: "出票日",
+            flex: 2,
+            sortable: false,
+            renderer: function(value, p, r){
+                return Ext.Date.format(value, 'Y-m-d');
+            }
+        }, {
             dataIndex: 'expireDate',
-            text: "到期日期",
+            text: "到期日",
             flex: 2,
             sortable: false,
             renderer: function(value, p, r){
@@ -142,23 +189,13 @@ Ext.onReady(function(){
                 return "<font style='color:" + color + "'>" + valueStr + "</font>";
             }
         }, {
-            dataIndex: 'state',
-            text: "当前状态",
-            flex: 2,
-            sortable: false
-        }, {
-            dataIndex: 'bandarNoteNumber',
-            text: "银票号",
-            flex: 2,
-            sortable: false
-        }, {
-			dataIndex: 'id',
+            dataIndex: 'id',
             flex: 3,
             text: "操作",
             renderer: function(value, p, r){
-                return buildButton(value, "查看", "/query/discount/view.htm") +
-                buildButton(value, "修改", "/update/discount/modify.htm") +
-                buildButton(value, "删除", "/update/discount/delete.htm", {
+                return buildButton(value, "查看", "/query/bandarnote/view.htm") +
+                buildButton(value, "修改", "/update/bandarnote/modify.htm") +
+                buildButton(value, "删除", "/update/bandarnote/delete.htm", {
                     text: "确认删除此条记录吗？"
                 });
             },

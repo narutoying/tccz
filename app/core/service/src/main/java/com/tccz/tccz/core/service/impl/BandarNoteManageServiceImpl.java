@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tccz.tccz.common.dal.daointerface.BandarNoteDAO;
 import com.tccz.tccz.common.util.CommonResult;
+import com.tccz.tccz.common.util.ParaCheckUtil;
 import com.tccz.tccz.common.util.template.CommonManageTemplate;
 import com.tccz.tccz.common.util.template.callback.CommonManageCallback;
 import com.tccz.tccz.core.model.BandarNote;
+import com.tccz.tccz.core.model.result.LimitControlResult;
 import com.tccz.tccz.core.service.LimitService;
+import com.tccz.tccz.core.service.ObjectConvertor;
 import com.tccz.tccz.core.service.manage.BandarNoteManageService;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 
@@ -39,18 +42,32 @@ public class BandarNoteManageServiceImpl implements BandarNoteManageService {
 	 * @see com.tccz.tccz.core.service.manage.BandarNoteManageService#create(com.tccz.tccz.core.model.BandarNote)
 	 */
 	@Override
-	public CommonResult create(BandarNote bandarNote) {
-		CommonResult result = new CommonResult();
+	public CommonResult create(final BandarNote bandarNote) {
+		final CommonResult result = new CommonResult();
 		commonManageTemplate.manageWithTransaction(result,
 				new CommonManageCallback() {
 
 					@Override
 					public void doManage() {
-						
+						LimitControlResult controlResult = limitService
+								.isOverLimit(businessSideQueryService
+										.queryEnterpriseById(bandarNote
+												.getDrawer().getId()), null,
+										bandarNote.occupyMoney());
+						if (!controlResult.isOverLimit()) {
+							bandarNoteDAO.insert(ObjectConvertor
+									.convertToBandarNoteDO(bandarNote));
+							CommonResult.buildResult(result, true, "创建银票成功");
+						} else {
+							CommonResult.buildResult(result, false, "创建银票失败，"
+									+ controlResult.getResultString());
+						}
 					}
 
 					@Override
 					public void checkParameter() {
+						ParaCheckUtil.checkParaNotNull(bandarNote);
+						bandarNote.verifyData();
 					}
 				});
 		return result;
@@ -60,16 +77,48 @@ public class BandarNoteManageServiceImpl implements BandarNoteManageService {
 	 * @see com.tccz.tccz.core.service.manage.BandarNoteManageService#delete(int)
 	 */
 	@Override
-	public CommonResult delete(int bandarNoteId) {
-		return null;
+	public CommonResult delete(final int bandarNoteId) {
+		final CommonResult result = new CommonResult();
+		commonManageTemplate.manageWithTransaction(result,
+				new CommonManageCallback() {
+
+					@Override
+					public void doManage() {
+						bandarNoteDAO.delete(bandarNoteId);
+						CommonResult.buildResult(result, true, "银票成功");
+					}
+
+					@Override
+					public void checkParameter() {
+						ParaCheckUtil.checkParaNotNegative(bandarNoteId);
+					}
+				});
+		return result;
 	}
 
 	/**
 	 * @see com.tccz.tccz.core.service.manage.BandarNoteManageService#update(com.tccz.tccz.core.model.BandarNote)
 	 */
 	@Override
-	public CommonResult update(BandarNote bandarNote) {
-		return null;
+	public CommonResult update(final BandarNote bandarNote) {
+		final CommonResult result = new CommonResult();
+		commonManageTemplate.manageWithTransaction(result,
+				new CommonManageCallback() {
+
+					@Override
+					public void doManage() {
+						bandarNoteDAO.update(ObjectConvertor
+								.convertToBandarNoteDO(bandarNote));
+						CommonResult.buildResult(result, true, "银票成功");
+					}
+
+					@Override
+					public void checkParameter() {
+						ParaCheckUtil.checkParaNotNull(bandarNote);
+						bandarNote.verifyData();
+					}
+				});
+		return result;
 	}
 
 }

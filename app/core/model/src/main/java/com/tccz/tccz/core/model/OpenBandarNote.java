@@ -4,6 +4,8 @@
  */
 package com.tccz.tccz.core.model;
 
+import com.tccz.tccz.common.util.exception.CommonException;
+
 /**
  * 敞口银票
  * 
@@ -31,5 +33,21 @@ public class OpenBandarNote extends BandarNote {
 
 	public void setCloseMoney(Money closeMoney) {
 		this.closeMoney = closeMoney;
+	}
+
+	@Override
+	public Money occupyMoney() {
+		return openMoney.subtract(closeMoney);
+	}
+
+	@Override
+	public void verifyData() {
+		if (!amount.equals(margin.add(openMoney))) {
+			throw new CommonException("银票金额不等于保证金与敞口金额之和");
+		}
+		Money subtract = openMoney.subtract(closeMoney);
+		if (subtract.getCent() < 0) {
+			throw new CommonException("封敞口金额大于敞口金额，数据异常");
+		}
 	}
 }

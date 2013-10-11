@@ -67,4 +67,9 @@ public class FloatingLoan extends BaseBankBusinessEntity {
 		this.repaymentDate = repaymentDate;
 	}
 
+	@Override
+	public Money occupyMoney() {
+		return null;
+	}
+
 }
