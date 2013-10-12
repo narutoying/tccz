@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="GBK"?>
+<table sqlname="floating_loan">
+    
+    <operation name="getById">
+        <sql>
+            <![CDATA[
+			select * from floating_loan where id=?
+		]]>
+        </sql>
+    </operation>
+    
+    <operation name="getAll" multiplicity="many">
+        <sql>
+            <![CDATA[
+			select * from floating_loan
+		]]>
+        </sql>
+    </operation>
+    
+    <operation name="insert">
+        <sql>
+            <![CDATA[
+			insert into floating_loan
+			(loaner_id,
+			biz_side_type,
+			amount,
+			release_date,
+			create_time,
+			modify_time,
+			expire_date)
+			 values(?, ?, ?, ?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
+		]]>
+        </sql>
+    </operation>
+    
+    <operation name="delete">
+        <sql>
+            <![CDATA[
+			delete from floating_loan where id=?
+		]]>
+        </sql>
+    </operation>
+	
+    <operation name="update" paramtype="object">
+        <sql>
+            <![CDATA[
+			update floating_loan set loaner_id = ?,
+			biz_side_type = ?,
+			amount = ?,
+			release_date = ?,
+			expire_date = ?,
+			modify_time=CURRENT_TIMESTAMP where id=?
+		]]>
+        </sql>
+    </operation>
+    
+    <operation name="getByCondition" multiplicity="many" parameterClass="map" paging="true">
+        <extraparams>
+            <param name="loanerName" javatype="java.lang.String"/>
+            <param name="bizSideType" javatype="java.lang.String"/>
+            <param name="showExpire" javatype="java.lang.Boolean"/>
+            <param name="expireStart" javatype="java.util.Date"/>
+            <param name="expireEnd" javatype="java.util.Date"/>
+        </extraparams>
+        <sql>
+            <![CDATA[
+			select * from floating_loan
+		]]>
+        </sql>
+        <sqlmap>
+            <![CDATA[
+          select d.* from floating_loan d
+			<dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="bizSideType">
+					d.biz_side_type = #bizSideType#
+				</isNotEmpty>
+				<isEqual property="bizSideType" compareValue = "CORPORATE">
+					d.loaner_id in (select e.id from enterprise e where e.name = #loanerName#)
+				</isEqual>
+				<isEqual property="bizSideType" compareValue = "PRIVATE">
+					d.loaner_id in (select p.id from person p where p.name = #loanerName#)
+				</isEqual>
+				<isEqual prepend="and" property="showExpire" compareValue = "false">
+					 ${cdata-start}
+						d.expire_date >= CURRENT_DATE
+					 ${cdata-end}
+				</isEqual>
+				<isNotNull prepend="and" property="expireStart">
+					${cdata-start}
+						d.expire_date >= DATE(#expireStart#)
+					 ${cdata-end}
+				</isNotNull>
+				<isNotNull prepend="and" property="expireEnd">
+					${cdata-start}
+						d.expire_date <= DATE(#expireEnd#)
+					 ${cdata-end}
+				</isNotNull>
+			</dynamic>
+			order by id DESC
+				limit #pageNum#, #pageSize#
+		 ]]>
+        </sqlmap>
+    </operation>
+    
+    <operation name="getByExpireDate" multiplicity="many" parameterClass="map">
+        <extraparams>
+            <param name="loanerId" javatype="int"/>
+            <param name="expireStart" javatype="java.util.Date"/>
+            <param name="expireEnd" javatype="java.util.Date"/>
+        </extraparams>
+        <sql>
+            <![CDATA[
+			select * from floating_loan
+		]]>
+        </sql>
+        <sqlmap>
+            <![CDATA[
+          select d.* from floating_loan d where d.loaner_id = #loanerId# 
+				<isNotNull prepend=" and " property="expireStart">
+					 ${cdata-start}
+						d.expire_date >= DATE(#expireStart#)
+					 ${cdata-end}
+				</isNotNull>
+				<isNotNull prepend=" and " property="expireEnd">
+					 ${cdata-start}
+						d.expire_date <= DATE(#expireEnd#)
+					 ${cdata-end}
+				</isNotNull>
+			order by id DESC
+		 ]]>
+        </sqlmap>
+    </operation>
+    
+</table>

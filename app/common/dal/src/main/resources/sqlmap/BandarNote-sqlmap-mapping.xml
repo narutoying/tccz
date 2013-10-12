@@ -59,7 +59,7 @@
 
     <!-- mapped statement for IbatisBandarNoteDAO.insert -->
 	<insert id="MS-BANDAR-NOTE-INSERT">
-	insert /*MS-TCCZ-BANDAR-NOTE-INSERT*/ into bandar_note(bandar_note_number,enterprise_id,type,amount,draw_date,margin_amount,exposure_amount,exposure_close_amount,create_time,modify_time) values (#bandarNoteNumber#, #enterpriseId#, #type#, #amount#, #drawDate#, #marginAmount#, #exposureAmount#, #exposureCloseAmount#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+	insert /*MS-TCCZ-BANDAR-NOTE-INSERT*/ into bandar_note(bandar_note_number,enterprise_id,type,amount,draw_date,margin_amount,exposure_amount,exposure_close_amount,create_time,modify_time,expire_date) values (#bandarNoteNumber#, #enterpriseId#, #type#, #amount#, #drawDate#, #marginAmount#, #exposureAmount#, #exposureCloseAmount#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, #expireDate#)
     <selectKey resultClass="int" keyProperty="id">
 		select last_insert_id() as id
     </selectKey>
@@ -75,7 +75,7 @@
     <!-- mapped statement for IbatisBandarNoteDAO.update -->
     <update id="MS-BANDAR-NOTE-UPDATE">
     <![CDATA[
-        update /*MS-TCCZ-BANDAR-NOTE-UPDATE*/ bandar_note set bandar_note_number=#bandarNoteNumber#, enterprise_id=#enterpriseId#, type=#type#, amount=#amount#, draw_date=#drawDate#, margin_amount=#marginAmount#, exposure_amount=#exposureAmount#, exposure_close_amount=#exposureCloseAmount#, modify_time=CURRENT_TIMESTAMP where (id = #id#)
+        update /*MS-TCCZ-BANDAR-NOTE-UPDATE*/ bandar_note set bandar_note_number=#bandarNoteNumber#, enterprise_id=#enterpriseId#, type=#type#, amount=#amount#, draw_date=#drawDate#, margin_amount=#marginAmount#, exposure_amount=#exposureAmount#, exposure_close_amount=#exposureCloseAmount#, expire_date=#expireDate#, modify_time=CURRENT_TIMESTAMP where (id = #id#)
     ]]>
     </update>
 

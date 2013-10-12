@@ -16,18 +16,21 @@ import com.tccz.tccz.common.dal.dataobject.BandarNoteDO;
 import com.tccz.tccz.common.dal.dataobject.DiscountChangeDO;
 import com.tccz.tccz.common.dal.dataobject.DiscountDO;
 import com.tccz.tccz.common.dal.dataobject.EnterpriseDO;
+import com.tccz.tccz.common.dal.dataobject.FloatingLoanDO;
 import com.tccz.tccz.common.dal.dataobject.PersonDO;
 import com.tccz.tccz.common.util.exception.CommonException;
 import com.tccz.tccz.core.model.BandarNote;
 import com.tccz.tccz.core.model.Discount;
 import com.tccz.tccz.core.model.DiscountChange;
 import com.tccz.tccz.core.model.Enterprise;
+import com.tccz.tccz.core.model.FloatingLoan;
 import com.tccz.tccz.core.model.FullMarginBandarNote;
 import com.tccz.tccz.core.model.Money;
 import com.tccz.tccz.core.model.OpenBandarNote;
 import com.tccz.tccz.core.model.Person;
 import com.tccz.tccz.core.model.enums.BandarNoteType;
 import com.tccz.tccz.core.model.enums.DiscountState;
+import com.tccz.tccz.core.model.enums.LoanBizSideType;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 import com.tccz.tccz.core.service.query.DiscountQueryService;
 
@@ -160,7 +163,10 @@ public class ObjectConvertor {
 		BandarNoteType type = BandarNoteType.getByCode(data.getType());
 		BandarNote result = null;
 		if (type == BandarNoteType.OPEN) {
-			result = new OpenBandarNote();
+			OpenBandarNote tmpResult = new OpenBandarNote();
+			tmpResult.setOpenMoney(new Money(data.getExposureAmount()));
+			tmpResult.setCloseMoney(new Money(data.getExposureCloseAmount()));
+			result = tmpResult;
 		} else if (type == BandarNoteType.FULL_MARGIN) {
 			result = new FullMarginBandarNote();
 		} else {
@@ -181,6 +187,65 @@ public class ObjectConvertor {
 	}
 
 	public static BandarNoteDO convertToBandarNoteDO(BandarNote data) {
-		return null;
+		if (data == null) {
+			return null;
+		}
+		BandarNoteDO result = new BandarNoteDO();
+		result.setAmount(data.getAmount().getCent());
+		result.setBandarNoteNumber(data.getNumber());
+		result.setCreateTime(data.getCreateTime());
+		result.setDrawDate(data.getDrawDate());
+		result.setEnterpriseId(data.getDrawer().getId());
+		result.setExpireDate(data.getExpireDate());
+		result.setId(data.getId());
+		result.setMarginAmount(data.getMargin().getCent());
+		if (data instanceof OpenBandarNote) {
+			OpenBandarNote obn = (OpenBandarNote) data;
+			result.setExposureAmount(obn.getOpenMoney().getCent());
+			result.setExposureCloseAmount(obn.getCloseMoney().getCent());
+		}
+		result.setModifyTime(data.getModifyTime());
+		result.setType(data.getType().toString());
+		return result;
+	}
+
+	public static FloatingLoan convertToFloatingLoan(FloatingLoanDO data,
+			BusinessSideQueryService businessSideQueryService) {
+		if (data == null) {
+			return null;
+		}
+		FloatingLoan result = new FloatingLoan();
+		result.setAmount(new Money(data.getAmount()));
+		LoanBizSideType type = LoanBizSideType.getByCode(data.getBizSideType());
+		result.setBizSideType(type);
+		result.setCreateTime(data.getCreateTime());
+		result.setExpireDate(data.getExpireDate());
+		result.setId(data.getId());
+		if (type == LoanBizSideType.CORPORATE) {
+			result.setLoaner(businessSideQueryService.queryEnterpriseById(data
+					.getLoanerId()));
+		} else if (type == LoanBizSideType.PRIVATE) {
+			result.setLoaner(businessSideQueryService.queryPersonById(data
+					.getLoanerId()));
+		}
+		result.setModifyTime(data.getModifyTime());
+		result.setReleaseDate(data.getReleaseDate());
+		return result;
+	}
+
+	public static FloatingLoanDO convertToFloatingLoanDO(FloatingLoan data) {
+		if (data == null) {
+			return null;
+		}
+		FloatingLoanDO result = new FloatingLoanDO();
+		result.setAmount(data.getAmount().getCent());
+		result.setBizSideType(data.getBizSideType().toString());
+		result.setCreateTime(data.getCreateTime());
+		result.setExpireDate(data.getExpireDate());
+		result.setId(data.getId());
+		result.setLoanerId(data.getLoaner().getId());
+		result.setModifyTime(data.getModifyTime());
+		result.setReleaseDate(data.getReleaseDate());
+		return result;
 	}
 }

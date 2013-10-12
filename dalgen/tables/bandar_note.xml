@@ -20,7 +20,7 @@
     <operation name="insert">
         <sql>
             <![CDATA[
-			insert into bandar_note(bandar_note_number,enterprise_id,type,amount,draw_date,margin_amount,exposure_amount,exposure_close_amount,	create_time,modify_time) values(?, ?, ?, ?, ?, ?, ?, ?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+			insert into bandar_note(bandar_note_number,enterprise_id,type,amount,draw_date,margin_amount,exposure_amount,exposure_close_amount,	create_time,modify_time, expire_date) values(?, ?, ?, ?, ?, ?, ?, ?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
 		]]>
         </sql>
     </operation>
@@ -44,6 +44,7 @@
 			margin_amount = ?,
 			exposure_amount = ?,
 			exposure_close_amount = ?,
+			expire_date = ?,
 			modify_time=CURRENT_TIMESTAMP where id=?
 		]]>
         </sql>

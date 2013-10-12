@@ -121,49 +121,44 @@ public class BandarNoteController {
 		});
 	}
 
-	// @RequestMapping(value = "/update/" + QUERY_TYPE + "/delete.htm")
-	// public String delete(ModelMap modelMap, Integer itemId) {
-	// CommonResult result = discountManageService.deleteDiscount(itemId);
-	// return WebUtil.goPage(modelMap, result, new WebPageCallback() {
-	//
-	// @Override
-	// public String successPage() {
-	// return "redirect:" + QUERY_DISCOUNT_INDEX_HTM;
-	// }
-	// });
-	// }
-	//
-	// @RequestMapping("/update/" + QUERY_TYPE + "/modify.htm")
-	// public String goModify(ModelMap modelMap, Integer itemId) {
-	// Discount discount = discountQueryService.queryById(itemId);
-	// initModelMap(modelMap, OperationType.UPDATE, discount);
-	// modelMap.addAttribute("discount", discount);
-	// modelMap.addAttribute("itemId", itemId);
-	// return PREFIX + "one";
-	// }
-	//
-	// @RequestMapping(value = "/update/" + QUERY_TYPE + "/modify.htm", method =
-	// RequestMethod.POST)
-	// public String doModify(ModelMap modelMap, DiscountForm form) {
-	// CommonResult result = discountManageService
-	// .updateDiscount(buildDiscount(form));
-	// return WebUtil.goPage(modelMap, result, new WebPageCallback() {
-	//
-	// @Override
-	// public String successPage() {
-	// return "redirect:" + QUERY_DISCOUNT_INDEX_HTM;
-	// }
-	// });
-	// }
-	//
-	// @RequestMapping("/query/" + QUERY_TYPE + "/view.htm")
-	// public String view(ModelMap modelMap, Integer itemId) {
-	// Discount discount = discountQueryService.queryById(itemId);
-	// initModelMap(modelMap, OperationType.QUERY, discount);
-	// modelMap.addAttribute("discount", discount);
-	// modelMap.addAttribute("readOnly", true);
-	// return PREFIX + "one";
-	// }
+	@RequestMapping(value = "/update/" + QUERY_TYPE + "/delete.htm")
+	public String delete(ModelMap modelMap, Integer itemId) {
+		CommonResult result = bandarNoteManageService.delete(itemId);
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return "redirect:" + QUERY_INDEX_HTM;
+			}
+		});
+	}
+
+	@RequestMapping("/update/" + QUERY_TYPE + "/modify.htm")
+	public String goModify(ModelMap modelMap, Integer itemId) {
+		BandarNote item = bandarNoteQueryService.queryById(itemId);
+		initModelMap(modelMap, OperationType.UPDATE, item);
+		return PREFIX + "one";
+	}
+
+	@RequestMapping(value = "/update/" + QUERY_TYPE + "/modify.htm", method = RequestMethod.POST)
+	public String doModify(ModelMap modelMap, BandarNoteForm form) {
+		CommonResult result = bandarNoteManageService.update(buildDomain(form));
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return "redirect:" + QUERY_INDEX_HTM;
+			}
+		});
+	}
+
+	@RequestMapping("/query/" + QUERY_TYPE + "/view.htm")
+	public String view(ModelMap modelMap, Integer itemId) {
+		BandarNote item = bandarNoteQueryService.queryById(itemId);
+		initModelMap(modelMap, OperationType.QUERY, item);
+		modelMap.addAttribute("readOnly", true);
+		return PREFIX + "one";
+	}
 
 	private void initModelMap(ModelMap modelMap, OperationType operationType,
 			BandarNote item) {
@@ -185,7 +180,10 @@ public class BandarNoteController {
 			if (bandarNoteType == BandarNoteType.FULL_MARGIN) {
 				result = new FullMarginBandarNote();
 			} else if (bandarNoteType == BandarNoteType.OPEN) {
-				result = new OpenBandarNote();
+				OpenBandarNote tmp = new OpenBandarNote();
+				tmp.setOpenMoney(new Money(form.getOpenMoney()));
+				tmp.setCloseMoney(new Money(form.getCloseMoney()));
+				result = tmp;
 			}
 			if (result != null) {
 				Integer id = form.getId();

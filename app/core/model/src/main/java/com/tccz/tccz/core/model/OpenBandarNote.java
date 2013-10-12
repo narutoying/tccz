@@ -15,9 +15,9 @@ import com.tccz.tccz.common.util.exception.CommonException;
  */
 public class OpenBandarNote extends BandarNote {
 	/** 敞口金额 */
-	private Money openMoney;
+	private Money openMoney = new Money();
 	/** 封敞口金额 */
-	private Money closeMoney;
+	private Money closeMoney = new Money();
 
 	public Money getOpenMoney() {
 		return openMoney;

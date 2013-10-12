@@ -138,7 +138,7 @@ public class LimitServiceImpl implements LimitService {
 		if (!CollectionUtils.isEmpty(query)) {
 			for (FloatingLoan loan : query) {
 				if (loan.occupyLimit(calDate)) {
-					result.addTo(loan.getAmount());
+					result.addTo(loan.occupyMoney());
 				}
 			}
 		}
@@ -151,7 +151,7 @@ public class LimitServiceImpl implements LimitService {
 		if (!CollectionUtils.isEmpty(query)) {
 			for (BandarNote item : query) {
 				if (item.occupyLimit(calDate)) {
-					result.addTo(item.getAmount());
+					result.addTo(item.occupyMoney());
 				}
 			}
 		}
@@ -163,7 +163,7 @@ public class LimitServiceImpl implements LimitService {
 		if (!CollectionUtils.isEmpty(query)) {
 			for (Discount item : query) {
 				if (item.occupyLimit(calDate)) {
-					result.addTo(item.getAmount());
+					result.addTo(item.occupyMoney());
 				}
 			}
 		}

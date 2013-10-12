@@ -62,6 +62,10 @@ Ext.onReady(function(){
                     if (c.getValue() == null) {
                         c.setValue((item != null ? item.type : null));
                     }
+					setSpeicalFields(c.getValue());
+                },
+                select: function(){
+                    setSpeicalFields(this.getValue());
                 }
             }
         }, {
@@ -153,22 +157,24 @@ Ext.onReady(function(){
             minValue: 0
         }, {
             xtype: 'numberfield',
-            fieldLabel: '敞口金额',
+            fieldLabel: '敞口金额',// 敞口类型银票专有 
             afterLabelTextTpl: required,
+            id: 'openMoney',
             name: 'openMoney',
             readOnly: !canModify("openMoney"),
-            allowBlank: false,
-            value: (item != null ? item.openMoney.amount : null),
-            minValue: 0
+            value: (item != null && item.type=="OPEN" ? item.openMoney.amount : null),
+            minValue: 0,
+            hidden: true
         }, {
             xtype: 'numberfield',
-            fieldLabel: '封敞口金额',
+            fieldLabel: '封敞口金额',// 敞口类型银票专有
             afterLabelTextTpl: required,
+            id: 'closeMoney',
             name: 'closeMoney',
             readOnly: !canModify("closeMoney"),
-            allowBlank: false,
-            value: (item != null ? item.closeMoney.amount : null),
-            minValue: 0
+            value: (item != null && item.type=="OPEN" ? item.closeMoney.amount : null),
+            minValue: 0,
+            hidden: true
         }, {
             fieldLabel: '当前可用额度(元)',
             id: 'showAvailableLimit',
@@ -189,3 +195,18 @@ Ext.onReady(function(){
     }).render(document.body);
     
 });
+
+function setSpeicalFields(type){
+    if (type == "OPEN") {
+        Ext.getCmp("openMoney").show();
+        Ext.getCmp("closeMoney").show();
+        Ext.getCmp("openMoney").allowBlank = false;
+        Ext.getCmp("closeMoney").allowBlank = false;
+    }
+    else {
+        Ext.getCmp("openMoney").hide();
+        Ext.getCmp("closeMoney").hide();
+		Ext.getCmp("openMoney").allowBlank = true;
+        Ext.getCmp("closeMoney").allowBlank = true;
+    }
+}

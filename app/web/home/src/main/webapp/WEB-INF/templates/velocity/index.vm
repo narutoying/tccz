@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	var appName = "TCCZ";
+	var appName = "太仓民生村镇银行";
 	var rootUrl = "";
 		Ext.onReady(function () {
     Ext.create('Ext.container.Viewport', {
@@ -36,9 +36,14 @@
 // 此Menu可以是后台生成，通过AJAX请求加载到页面中的。
 var _menu = [
     {
-        id: "systemManage",
+        id: "bizManage",
         name: "业务管理",
         children: [
+			{
+                id: "bandarnoteManage",
+                name: "银票管理",
+                url: "$!contextPath/query/bandarnote/index.htm"
+            },
             {
                 id: "discountManage",
                 name: "贴现管理",
@@ -47,25 +52,20 @@ var _menu = [
         ]
     },
     {
-        id: "basicManage",
-        name: "系统管理",
+        id: "dataManage",
+        name: "数据管理",
         children: [
             {
-                id: "warehoseManage",
-                name: "库房管理",
-                //url: "http://www.baidu.com",
-                children: [
-                    {
-                        id: "physicsWarehoseManage",
-                        name: "物理库房管理",
-                        url: "http://www.baidu.com"
-                    },
-                    {
-                        id: "logicWarehoseManage",
-                        name: "逻辑库房管理",
-                        url: "http://www.baidu.com"
-                    }
-                ]
+                name: "企业信息管理",
+                url: "",
+            },
+			{
+                name: "个人信息管理",
+                url: "",
+            },
+			{
+                name: "台账管理",
+                url: "",
             }
         ]
     }

@@ -4,6 +4,8 @@
  */
 package com.tccz.tccz.core.model;
 
+import java.util.Date;
+
 import com.tccz.tccz.common.util.exception.CommonException;
 
 /**
@@ -22,7 +24,13 @@ public class FullMarginBandarNote extends BandarNote {
 	@Override
 	public void verifyData() {
 		if (!amount.equals(margin)) {
-			throw new CommonException("保证金与银票金额一致");
+			throw new CommonException("保证金[" + margin.toString() + "]需要与银票金额["
+					+ amount.toString() + "]一致");
 		}
+	}
+
+	@Override
+	public boolean occupyLimit(Date compareDate) {
+		return false;
 	}
 }

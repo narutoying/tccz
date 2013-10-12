@@ -6,7 +6,7 @@ package com.tccz.tccz.core.model;
 
 import java.util.Date;
 
-import com.tccz.tccz.core.model.enums.LoanType;
+import com.tccz.tccz.core.model.enums.LoanBizSideType;
 
 /**
  * 流贷
@@ -18,14 +18,12 @@ import com.tccz.tccz.core.model.enums.LoanType;
 public class FloatingLoan extends BaseBankBusinessEntity {
 	/** 贷款方 */
 	private BusinessSide loaner;
-	/** 贷款类型 */
-	private LoanType type;
+	/** 贷款业务方类型 */
+	private LoanBizSideType bizSideType;
 	/** 贷款金额 */
 	private Money amount;
 	/** 发放日 */
 	private Date releaseDate;
-	/** 还款日 */
-	private Date repaymentDate;
 
 	public BusinessSide getLoaner() {
 		return loaner;
@@ -33,14 +31,6 @@ public class FloatingLoan extends BaseBankBusinessEntity {
 
 	public void setLoaner(BusinessSide loaner) {
 		this.loaner = loaner;
-	}
-
-	public LoanType getType() {
-		return type;
-	}
-
-	public void setType(LoanType type) {
-		this.type = type;
 	}
 
 	public Money getAmount() {
@@ -59,17 +49,17 @@ public class FloatingLoan extends BaseBankBusinessEntity {
 		this.releaseDate = releaseDate;
 	}
 
-	public Date getRepaymentDate() {
-		return repaymentDate;
-	}
-
-	public void setRepaymentDate(Date repaymentDate) {
-		this.repaymentDate = repaymentDate;
-	}
-
 	@Override
 	public Money occupyMoney() {
-		return null;
+		return this.amount;
+	}
+
+	public LoanBizSideType getBizSideType() {
+		return bizSideType;
+	}
+
+	public void setBizSideType(LoanBizSideType bizSideType) {
+		this.bizSideType = bizSideType;
 	}
 
 }
