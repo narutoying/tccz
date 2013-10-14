@@ -6,7 +6,6 @@ package com.tccz.tccz.web.controller.floatingloan;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,15 +26,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.tccz.tccz.common.util.CommonResult;
 import com.tccz.tccz.common.util.DateUtil;
 import com.tccz.tccz.common.util.PageList;
-import com.tccz.tccz.core.model.BandarNote;
+import com.tccz.tccz.core.model.BusinessSide;
 import com.tccz.tccz.core.model.Enterprise;
-import com.tccz.tccz.core.model.FullMarginBandarNote;
+import com.tccz.tccz.core.model.FloatingLoan;
 import com.tccz.tccz.core.model.Money;
-import com.tccz.tccz.core.model.OpenBandarNote;
-import com.tccz.tccz.core.model.enums.BandarNoteType;
-import com.tccz.tccz.core.model.query.BandarNoteQueryCondition;
-import com.tccz.tccz.core.service.manage.BandarNoteManageService;
-import com.tccz.tccz.core.service.query.BandarNoteQueryService;
+import com.tccz.tccz.core.model.Person;
+import com.tccz.tccz.core.model.enums.LoanBizSideType;
+import com.tccz.tccz.core.model.query.FloatingLoanQueryCondition;
+import com.tccz.tccz.core.service.manage.FloatingLoanManageService;
+import com.tccz.tccz.core.service.query.FloatingLoanQueryService;
 import com.tccz.tccz.dal.util.Paginator;
 import com.tccz.tccz.web.enums.OperationType;
 import com.tccz.tccz.web.util.JSONUtil;
@@ -50,68 +49,74 @@ import com.tccz.tccz.web.util.WebUtil;
  *          narutoying09@gmail.com Exp $
  */
 @Controller
-public class BandarNoteController {
+public class FloatingLoanController {
 
-	private static final String QUERY_TYPE = "bandarnote";
+	private static final String QUERY_TYPE = "floatingloan";
+	private static final String PREFIX = "floatingloan/";
 	private static final String QUERY_INDEX_HTM = "/query/" + QUERY_TYPE
 			+ "/index.htm";
 
 	@Autowired
-	private BandarNoteManageService bandarNoteManageService;
+	private FloatingLoanQueryService floatingLoanQueryService;
 
 	@Autowired
-	private BandarNoteQueryService bandarNoteQueryService;
-
-	private static final String PREFIX = "bandarnote/";
+	private FloatingLoanManageService floatingLoanManageService;
 
 	@RequestMapping(QUERY_INDEX_HTM)
 	public String index(ModelMap modelMap) {
-		List<Map<String, String>> list = BandarNoteType.toList();
-		Map<String, String> element = new HashMap<String, String>();
-		element.put("code", "");
-		element.put("desc", "------全部类型------");
-		list.add(0, element);
+		List<Map<String, String>> list = LoanBizSideType.toList();
 		modelMap.addAttribute("types", JSONSerializer.toJSON(list));
 		return PREFIX + "index";
 	}
 
 	@RequestMapping(value = "/query/" + QUERY_TYPE + "/index.json", method = RequestMethod.GET)
 	public void indexJson(HttpServletResponse res, ModelMap map,
-			BandarNoteQueryCondition condition) {
-		PageList<BandarNote> queryByCondition = bandarNoteQueryService
+			FloatingLoanQueryCondition condition) {
+		PageList<FloatingLoan> queryByCondition = floatingLoanQueryService
 				.queryByCondition(condition);
-		List<BandarNote> dataList = queryByCondition.getDataList();
+		List<FloatingLoan> dataList = queryByCondition.getDataList();
 		JSONUtil.writeBackJsonWithConfig(res,
 				buildPageResultForm(dataList, queryByCondition.getPaginator()));
 	}
 
-	private PageResultForm buildPageResultForm(List<BandarNote> dataList,
+	private PageResultForm buildPageResultForm(List<FloatingLoan> dataList,
 			Paginator paginator) {
 		PageResultForm result = new PageResultForm();
 		result.setTotalCount(paginator.getItems());
-		for (BandarNote data : dataList) {
+		for (FloatingLoan data : dataList) {
 			PageItem item = new PageItem();
 			item.setId(data.getId());
 			item.setAmount(data.getAmount().toString());
 			item.setExpireDate(DateUtil.getDateString(data.getExpireDate()));
-			item.setBandarNoteNumber(data.getNumber());
-			item.setDrawDate(DateUtil.getDateString(data.getDrawDate()));
-			item.setDrawer(data.getDrawer().getName());
-			item.setType(data.getType().getDescription());
+			item.setBizSideType(data.getBizSideType().getDescription());
+			item.setLoanerName(data.getLoaner().getName());
+			item.setReleaseDate(DateUtil.getDateString(data.getReleaseDate()));
 			result.getItems().add(item);
 		}
 		return result;
 	}
 
 	@RequestMapping("/update/" + QUERY_TYPE + "/add.htm")
-	public String goAdd(ModelMap modelMap) {
-		initModelMap(modelMap, OperationType.ADD, null);
+	public String goAdd(ModelMap modelMap, String bizSideType) {
+		initModelMap(modelMap, OperationType.ADD, null,
+				LoanBizSideType.getByCode(bizSideType));
 		return PREFIX + "one";
 	}
 
+	// private String getTemplateName(LoanBizSideType loanBizSideType) {
+	// String vmName = "";
+	// if (loanBizSideType == LoanBizSideType.PRIVATE) {
+	// vmName = "personLoan";
+	// } else {
+	// vmName = "enterpriseLoan";
+	// }
+	// return vmName;
+	// }
+
 	@RequestMapping(value = "/update/" + QUERY_TYPE + "/add.htm", method = RequestMethod.POST)
-	public String doAdd(ModelMap modelMap, BandarNoteForm form) {
-		CommonResult result = bandarNoteManageService.create(buildDomain(form));
+	public String doAdd(ModelMap modelMap, FloatingLoanForm form) {
+		CommonResult result = floatingLoanManageService
+				.create(buildDomain(form));
 		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
 
 			@Override
@@ -123,7 +128,7 @@ public class BandarNoteController {
 
 	@RequestMapping(value = "/update/" + QUERY_TYPE + "/delete.htm")
 	public String delete(ModelMap modelMap, Integer itemId) {
-		CommonResult result = bandarNoteManageService.delete(itemId);
+		CommonResult result = floatingLoanManageService.delete(itemId);
 		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
 
 			@Override
@@ -135,14 +140,16 @@ public class BandarNoteController {
 
 	@RequestMapping("/update/" + QUERY_TYPE + "/modify.htm")
 	public String goModify(ModelMap modelMap, Integer itemId) {
-		BandarNote item = bandarNoteQueryService.queryById(itemId);
-		initModelMap(modelMap, OperationType.UPDATE, item);
+		FloatingLoan item = floatingLoanQueryService.queryById(itemId);
+		initModelMap(modelMap, OperationType.UPDATE, item,
+				item.getBizSideType());
 		return PREFIX + "one";
 	}
 
 	@RequestMapping(value = "/update/" + QUERY_TYPE + "/modify.htm", method = RequestMethod.POST)
-	public String doModify(ModelMap modelMap, BandarNoteForm form) {
-		CommonResult result = bandarNoteManageService.update(buildDomain(form));
+	public String doModify(ModelMap modelMap, FloatingLoanForm form) {
+		CommonResult result = floatingLoanManageService
+				.update(buildDomain(form));
 		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
 
 			@Override
@@ -154,53 +161,45 @@ public class BandarNoteController {
 
 	@RequestMapping("/query/" + QUERY_TYPE + "/view.htm")
 	public String view(ModelMap modelMap, Integer itemId) {
-		BandarNote item = bandarNoteQueryService.queryById(itemId);
-		initModelMap(modelMap, OperationType.QUERY, item);
+		FloatingLoan item = floatingLoanQueryService.queryById(itemId);
+		initModelMap(modelMap, OperationType.QUERY, item, item.getBizSideType());
 		modelMap.addAttribute("readOnly", true);
 		return PREFIX + "one";
 	}
 
 	private void initModelMap(ModelMap modelMap, OperationType operationType,
-			BandarNote item) {
+			FloatingLoan item, LoanBizSideType bizSideType) {
 		modelMap.addAttribute(OperationType.OPERATION, operationType.getCode());
 		modelMap.addAttribute(OperationType.OPERATION_DESC,
 				operationType.getDescription());
-		modelMap.addAttribute("types",
-				JSONSerializer.toJSON(BandarNoteType.toList()));
 		if (item != null) {
 			modelMap.addAttribute("item", JSONSerializer.toJSON(item));
 		}
+		modelMap.addAttribute("bizSideType", bizSideType);
 	}
 
-	private BandarNote buildDomain(BandarNoteForm form) {
-		BandarNote result = null;
-		String type = form.getType();
-		BandarNoteType bandarNoteType = BandarNoteType.getByCode(type);
-		if (bandarNoteType != null) {
-			if (bandarNoteType == BandarNoteType.FULL_MARGIN) {
-				result = new FullMarginBandarNote();
-			} else if (bandarNoteType == BandarNoteType.OPEN) {
-				OpenBandarNote tmp = new OpenBandarNote();
-				tmp.setOpenMoney(new Money(form.getOpenMoney()));
-				tmp.setCloseMoney(new Money(form.getCloseMoney()));
-				result = tmp;
-			}
-			if (result != null) {
-				Integer id = form.getId();
-				if (id != null) {
-					result.setId(id);
-				}
-				result.setAmount(new Money(form.getAmount()));
-				result.setDrawDate(form.getDrawDate());
-				Enterprise drawer = new Enterprise();
-				drawer.setId(form.getDrawerId());
-				result.setDrawer(drawer);
-				result.setExpireDate(form.getExpireDate());
-				result.setMargin(new Money(form.getMarginMoney()));
-				result.setNumber(form.getBandarNoteNumber());
-				result.setType(BandarNoteType.getByCode(form.getType()));
-			}
+	private FloatingLoan buildDomain(FloatingLoanForm form) {
+		FloatingLoan result = new FloatingLoan();
+		Integer id = form.getId();
+		if (id != null) {
+			result.setId(id);
 		}
+		result.setAmount(new Money(form.getAmount()));
+		result.setExpireDate(form.getExpireDate());
+		LoanBizSideType bizSideType = LoanBizSideType.getByCode(form
+				.getBizSideType());
+		result.setBizSideType(bizSideType);
+		BusinessSide loaner = null;
+		int loanerId = form.getLoanerId();
+		if (bizSideType == LoanBizSideType.PRIVATE) {
+			loaner = new Person();
+			loaner.setId(loanerId);
+		} else if (bizSideType == LoanBizSideType.CORPORATE) {
+			loaner = new Enterprise();
+			loaner.setId(loanerId);
+		}
+		result.setLoaner(loaner);
+		result.setReleaseDate(form.getReleaseDate());
 		return result;
 	}
 

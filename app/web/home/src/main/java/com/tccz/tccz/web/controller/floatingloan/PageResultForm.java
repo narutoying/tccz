@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 贴现分页查询结果
+ * 分页查询结果
  * 
  * @author narutoying09@gmail.com
  * @version $Id: DiscountResultForm.java, v 0.1 2013-9-20 上午12:36:21

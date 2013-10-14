@@ -4,7 +4,6 @@
  */
 package com.tccz.tccz.web.controller.floatingloan;
 
-
 /**
  * 
  * @author narutoying09@gmail.com
@@ -13,25 +12,39 @@ package com.tccz.tccz.web.controller.floatingloan;
  */
 public class PageItem {
 	private int id;
-	/** 银票号 */
-	private String bandarNoteNumber;
-	/** 出票方 */
-	private String drawer;
+	/** 贷款企业/人名 */
+	private String loanerName;
+	/** 贷款类型（业务方） */
+	private String bizSideType;
 	/** 金额 */
 	private String amount;
+	/** 发放日 */
+	private String releaseDate;
 	/** 到期日期 */
 	private String expireDate;
-	/** 银票类型 */
-	private String type;
-	/** 出票日 */
-	private String drawDate;
 
-	public String getBandarNoteNumber() {
-		return bandarNoteNumber;
+	public int getId() {
+		return id;
 	}
 
-	public void setBandarNoteNumber(String bandarNoteNumber) {
-		this.bandarNoteNumber = bandarNoteNumber;
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getLoanerName() {
+		return loanerName;
+	}
+
+	public void setLoanerName(String loanerName) {
+		this.loanerName = loanerName;
+	}
+
+	public String getBizSideType() {
+		return bizSideType;
+	}
+
+	public void setBizSideType(String bizSideType) {
+		this.bizSideType = bizSideType;
 	}
 
 	public String getAmount() {
@@ -42,6 +55,14 @@ public class PageItem {
 		this.amount = amount;
 	}
 
+	public String getReleaseDate() {
+		return releaseDate;
+	}
+
+	public void setReleaseDate(String releaseDate) {
+		this.releaseDate = releaseDate;
+	}
+
 	public String getExpireDate() {
 		return expireDate;
 	}
@@ -49,37 +70,4 @@ public class PageItem {
 	public void setExpireDate(String expireDate) {
 		this.expireDate = expireDate;
 	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getDrawer() {
-		return drawer;
-	}
-
-	public void setDrawer(String drawer) {
-		this.drawer = drawer;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public String getDrawDate() {
-		return drawDate;
-	}
-
-	public void setDrawDate(String drawDate) {
-		this.drawDate = drawDate;
-	}
-
 }

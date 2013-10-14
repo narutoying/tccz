@@ -16,12 +16,14 @@ import org.springframework.util.CollectionUtils;
 import com.tccz.tccz.common.util.exception.CommonException;
 import com.tccz.tccz.core.model.BandarNote;
 import com.tccz.tccz.core.model.BusinessSide;
+import com.tccz.tccz.core.model.Constants;
 import com.tccz.tccz.core.model.Discount;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.FloatingLoan;
 import com.tccz.tccz.core.model.Limit;
 import com.tccz.tccz.core.model.Money;
 import com.tccz.tccz.core.model.Person;
+import com.tccz.tccz.core.model.enums.BankBizType;
 import com.tccz.tccz.core.model.enums.LimitType;
 import com.tccz.tccz.core.model.result.LimitControlResult;
 import com.tccz.tccz.core.service.LimitService;
@@ -63,7 +65,7 @@ public class LimitServiceImpl implements LimitService {
 					// 个人只有流贷业务，无其他业务
 					if (limitType == LimitType.FLOATING_LOAN_USED) {
 						Map<String, Object> extraParams = new HashMap<String, Object>();
-						extraParams.put("isPerson", true);
+						extraParams.put(Constants.IS_PERSON, true);
 						money.addTo(calculteOccupiedMoneyForFL(
 								bankBizQueryService.query(FloatingLoan.class,
 										bizSideId, calDate, null, extraParams),
@@ -190,6 +192,27 @@ public class LimitServiceImpl implements LimitService {
 		}
 		result.setOverLimit(overLimit);
 		return result;
+	}
+
+	@Override
+	public Money calculateTotalLimit(BusinessSide businessSide) {
+		return null;
+	}
+
+	@Override
+	public Money calculateUsedLimit(BusinessSide businessSide) {
+		return null;
+	}
+
+	@Override
+	public Money calculateAvailableLimit(BusinessSide businessSide) {
+		return null;
+	}
+
+	@Override
+	public Money calculateDetailLimit(BusinessSide businessSide,
+			BankBizType type) {
+		return null;
 	}
 
 }

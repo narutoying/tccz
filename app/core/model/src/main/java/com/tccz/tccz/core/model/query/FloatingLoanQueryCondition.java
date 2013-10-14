@@ -7,6 +7,7 @@ package com.tccz.tccz.core.model.query;
 import java.util.Date;
 
 import com.tccz.tccz.common.util.PageUtil;
+import com.tccz.tccz.core.model.enums.LoanBizSideType;
 
 /**
  * 流贷查询条件
@@ -19,7 +20,7 @@ public class FloatingLoanQueryCondition {
 	/** 企业名称 */
 	private String loanerName;
 	/** 业务方类型 */
-	private String bizSideType;
+	private String bizSideType = LoanBizSideType.CORPORATE.toString();
 	private boolean showExpire = false;
 	/** 过期日期查询起始 */
 	private Date expireStart;

@@ -75,10 +75,14 @@
 					d.biz_side_type = #bizSideType#
 				</isNotEmpty>
 				<isEqual property="bizSideType" compareValue = "CORPORATE">
-					d.loaner_id in (select e.id from enterprise e where e.name = #loanerName#)
+					<isNotEmpty prepend="and" property="loanerName">
+						d.loaner_id in (select e.id from enterprise e where e.name = #loanerName#)
+					</isNotEmpty>
 				</isEqual>
 				<isEqual property="bizSideType" compareValue = "PRIVATE">
-					d.loaner_id in (select p.id from person p where p.name = #loanerName#)
+					<isNotEmpty prepend="and" property="loanerName">
+						d.loaner_id in (select p.id from person p where p.name = #loanerName#)
+					</isNotEmpty>
 				</isEqual>
 				<isEqual prepend="and" property="showExpire" compareValue = "false">
 					 ${cdata-start}
