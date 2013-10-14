@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tccz.tccz.common.dal.daointerface.EnterpriseDAO;
 import com.tccz.tccz.common.dal.daointerface.PersonDAO;
+import com.tccz.tccz.core.model.BusinessSide;
+import com.tccz.tccz.core.model.BusinessSideSet;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Person;
 import com.tccz.tccz.core.service.ObjectConvertor;
@@ -56,6 +58,11 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 	public List<Person> fuzzyQueryPersons(String fuzzyName) {
 		return ObjectConvertor.convertToPersonList(personDAO
 				.fuzzyQueryByName(fuzzyName));
+	}
+
+	@Override
+	public BusinessSideSet queryBusinessSideSet(BusinessSide businessSide) {
+		return null;
 	}
 
 }

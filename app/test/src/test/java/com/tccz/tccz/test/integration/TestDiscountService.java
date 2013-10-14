@@ -16,7 +16,6 @@ import com.tccz.tccz.core.model.Discount;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Money;
 import com.tccz.tccz.core.model.enums.DiscountState;
-import com.tccz.tccz.core.model.enums.LimitType;
 import com.tccz.tccz.core.model.query.DiscountQueryCondition;
 import com.tccz.tccz.core.service.LimitService;
 import com.tccz.tccz.core.service.manage.DiscountManageService;
@@ -60,8 +59,7 @@ public class TestDiscountService extends BaseTestCase {
 		// System.out.println(byExpireDate);
 		Enterprise proposer = new Enterprise(1, "香塘");
 		System.out.println("可用额度："
-				+ limitService.calculateLimit(proposer, null,
-						LimitType.AVAILABLE));
+				+ limitService.calculateAvailableLimit(proposer));
 		Discount discount = new Discount();
 		discount.setAmount(new Money("9999200"));
 		discount.setBandarNoteNumber("123456");

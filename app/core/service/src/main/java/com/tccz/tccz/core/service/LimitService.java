@@ -7,10 +7,8 @@ package com.tccz.tccz.core.service;
 import java.util.Date;
 
 import com.tccz.tccz.core.model.BusinessSide;
-import com.tccz.tccz.core.model.Limit;
 import com.tccz.tccz.core.model.Money;
 import com.tccz.tccz.core.model.enums.BankBizType;
-import com.tccz.tccz.core.model.enums.LimitType;
 import com.tccz.tccz.core.model.result.LimitControlResult;
 
 /**
@@ -21,20 +19,6 @@ import com.tccz.tccz.core.model.result.LimitControlResult;
  *          narutoying09@gmail.com Exp $
  */
 public interface LimitService {
-	/**
-	 * 计算额度 TODO 拆分、重构额度控制算法
-	 * 
-	 * @param businessSide
-	 *            业务方
-	 * @param calDate
-	 *            计算日期 本次计算会以该日期作为基准，精确到天。 若为NULL，则默认按照当前日期计算。
-	 * @param limitType
-	 *            计算额度的种类
-	 * @return
-	 */
-	Limit calculateLimit(BusinessSide businessSide, Date calDate,
-			LimitType limitType);
-
 	/**
 	 * 计算业务方总授信额度
 	 * <ol>

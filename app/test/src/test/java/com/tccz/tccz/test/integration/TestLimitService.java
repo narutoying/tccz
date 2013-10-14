@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tccz.tccz.core.model.BusinessSide;
 import com.tccz.tccz.core.model.Enterprise;
-import com.tccz.tccz.core.model.Limit;
 import com.tccz.tccz.core.model.Money;
-import com.tccz.tccz.core.model.enums.LimitType;
 import com.tccz.tccz.core.model.result.LimitControlResult;
 import com.tccz.tccz.core.service.LimitService;
 
@@ -31,8 +29,8 @@ public class TestLimitService extends BaseTestCase {
 		// 1. 计算额度
 		BusinessSide businessSide = new Enterprise();
 		businessSide.setId(1);
-		Limit calculateLimit = limitService.calculateLimit(businessSide, null,
-				LimitType.DISCOUNT_USED);
+		Money calculateLimit = limitService
+				.calculateAvailableLimit(businessSide);
 		System.out.println(calculateLimit);
 		// 2. 控制额度
 		LimitControlResult controlResult = limitService.isOverLimit(

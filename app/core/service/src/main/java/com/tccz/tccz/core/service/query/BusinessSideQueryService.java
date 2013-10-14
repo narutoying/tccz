@@ -6,6 +6,8 @@ package com.tccz.tccz.core.service.query;
 
 import java.util.List;
 
+import com.tccz.tccz.core.model.BusinessSide;
+import com.tccz.tccz.core.model.BusinessSideSet;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Person;
 
@@ -50,4 +52,13 @@ public interface BusinessSideQueryService {
 	 * @return
 	 */
 	List<Person> fuzzyQueryPersons(String fuzzyName);
+
+	/**
+	 * 查询一个业务方所属的集合
+	 * 
+	 * @param businessSide
+	 * @return
+	 */
+	BusinessSideSet queryBusinessSideSet(BusinessSide businessSide);
+
 }
