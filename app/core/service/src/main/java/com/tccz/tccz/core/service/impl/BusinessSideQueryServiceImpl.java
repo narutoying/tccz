@@ -52,4 +52,10 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 				enterpriseDAO.fuzzyQueryByName(fuzzyEnterpriseName), this);
 	}
 
+	@Override
+	public List<Person> fuzzyQueryPersons(String fuzzyName) {
+		return ObjectConvertor.convertToPersonList(personDAO
+				.fuzzyQueryByName(fuzzyName));
+	}
+
 }

@@ -43,4 +43,15 @@
     ]]>
     </select>
 
+    <!-- mapped statement for IbatisPersonDAO.fuzzyQueryByName -->
+    <select id="MS-PERSON-FUZZY-QUERY-BY-NAME" resultMap="RM-PERSON">
+        select /*MS-TCCZ-PERSON-FUZZY-QUERY-BY-NAME*/ * from person
+		  <dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="fuzzyName">
+					name like concat("%", #fuzzyName#, "%")
+				</isNotEmpty>
+			</dynamic>
+			order by id DESC
+    </select>
+
 </sqlMap>

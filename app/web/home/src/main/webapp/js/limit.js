@@ -2,6 +2,7 @@ function getAndDisplayAvailableLimit(bizSideType, bizSideId, renderTo){
     var result = 0;
     var url = null;
     if (bizSideType == "Person") {
+        url = getContextPath() + "/query/limit/queryForPerson.json";
     }
     else 
         if (bizSideType == "Enterprise") {

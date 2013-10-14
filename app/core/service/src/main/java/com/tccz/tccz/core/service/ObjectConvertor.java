@@ -248,4 +248,15 @@ public class ObjectConvertor {
 		result.setReleaseDate(data.getReleaseDate());
 		return result;
 	}
+
+	public static List<Person> convertToPersonList(
+			List<PersonDO> fuzzyQueryByName) {
+		List<Person> result = new ArrayList<Person>();
+		if (!CollectionUtils.isEmpty(fuzzyQueryByName)) {
+			for (PersonDO data : fuzzyQueryByName) {
+				result.add(convertToPerson(data));
+			}
+		}
+		return result;
+	}
 }

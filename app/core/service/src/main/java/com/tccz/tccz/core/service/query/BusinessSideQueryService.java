@@ -29,7 +29,8 @@ public interface BusinessSideQueryService {
 	/**
 	 * 模糊查询企业
 	 * 
-	 * @param fuzzyEnterpriseName 企业名
+	 * @param fuzzyEnterpriseName
+	 *            企业名
 	 * @return
 	 */
 	List<Enterprise> fuzzyQueryEnterprises(String fuzzyEnterpriseName);
@@ -41,4 +42,12 @@ public interface BusinessSideQueryService {
 	 * @return
 	 */
 	Person queryPersonById(int personId);
+
+	/**
+	 * 模糊查询个人
+	 * 
+	 * @param fuzzyName
+	 * @return
+	 */
+	List<Person> fuzzyQueryPersons(String fuzzyName);
 }

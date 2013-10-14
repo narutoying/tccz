@@ -95,8 +95,15 @@ Ext.onReady(function(){
             xtype: 'component',
             autoEl: {
                 tag: 'a',
-                href: getContextPath() + '/update/floatingloan/add.htm',
-                html: '新增流贷'
+                href: getContextPath() + '/update/floatingloan/add.htm?bizSideType=CORPORATE',
+                html: '新增企业流贷'
+            }
+        }, {
+            xtype: 'component',
+            autoEl: {
+                tag: 'a',
+                href: getContextPath() + '/update/floatingloan/add.htm?bizSideType=PRIVATE',
+                html: '新增个人流贷'
             }
         }, {
             text: '查询',
@@ -130,14 +137,14 @@ Ext.onReady(function(){
             }]
         },
         renderTo: 'queryResult',
-        title: '银票总览',
+        title: '流贷总览',
         // 表格列
         columns: [{
             dataIndex: 'loanerName',
             text: "贷款人",
             flex: 2,
             sortable: false
-        },  {
+        }, {
             dataIndex: 'bizSideType',
             text: "业务类别",
             flex: 2,
@@ -190,7 +197,7 @@ Ext.onReady(function(){
             text: "操作",
             renderer: function(value, p, r){
                 return buildButton(value, "查看", "/query/floatingloan/view.htm") +
-                buildButton(value, "修改", "/update/floatingloan/modify.htm") +
+                //                buildButton(value, "修改", "/update/floatingloan/modify.htm") +
                 buildButton(value, "删除", "/update/floatingloan/delete.htm", {
                     text: "确认删除此条记录吗？"
                 });

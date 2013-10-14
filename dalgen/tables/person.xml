@@ -9,4 +9,22 @@
         </sql>
     </operation>
     
+	<operation name="fuzzyQueryByName" multiplicity="many" parameterClass="map">
+		<extraparams>
+			<param name="fuzzyName" javatype="java.lang.String"/>
+		 </extraparams>
+		<sql><![CDATA[
+			select * from person
+		]]></sql>
+		<sqlmap><![CDATA[
+          select * from person
+		  <dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="fuzzyName">
+					name like concat("%", #fuzzyName#, "%")
+				</isNotEmpty>
+			</dynamic>
+			order by id DESC
+		 ]]></sqlmap>
+	</operation>
+	
 </table>

@@ -194,7 +194,7 @@ Ext.onReady(function(){
             text: "操作",
             renderer: function(value, p, r){
                 return buildButton(value, "查看", "/query/bandarnote/view.htm") +
-                buildButton(value, "修改", "/update/bandarnote/modify.htm") +
+                //                buildButton(value, "修改", "/update/bandarnote/modify.htm") +
                 buildButton(value, "删除", "/update/bandarnote/delete.htm", {
                     text: "确认删除此条记录吗？"
                 });

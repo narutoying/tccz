@@ -7,6 +7,7 @@ package com.tccz.tccz.common.dal.daointerface;
 // auto generated imports
 import com.tccz.tccz.common.dal.dataobject.PersonDO;
 import org.springframework.dao.DataAccessException;
+import java.util.List;
 
 /**
  * A dao interface provides methods to access database table <tt>person</tt>.
@@ -39,5 +40,21 @@ public interface PersonDAO {
 	 *	@throws DataAccessException
 	 */	 
     public PersonDO getById(int id) throws DataAccessException;
+
+	/**
+	 *  Query DB table <tt>person</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>select * from person</tt>
+	 *
+	 *	@param fuzzyName
+	 *	@return List<PersonDO>
+	 *	@throws DataAccessException
+	 */	 
+    public List<PersonDO> fuzzyQueryByName(String fuzzyName) throws DataAccessException;
 
 }

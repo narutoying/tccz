@@ -11,6 +11,8 @@ import com.tccz.tccz.common.dal.daointerface.PersonDAO;
 // auto generated imports
 import com.tccz.tccz.common.dal.dataobject.PersonDO;
 import org.springframework.dao.DataAccessException;
+import java.util.List;
+import com.tccz.tccz.common.dal.dataobject.PersonDO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +50,28 @@ public class IbatisPersonDAO extends SqlMapClientDaoSupport implements PersonDAO
     public PersonDO getById(int id) throws DataAccessException {
         Integer param = new Integer(id);
         return (PersonDO) getSqlMapClientTemplate().queryForObject("MS-PERSON-GET-BY-ID", param);
+
+    }
+
+	/**
+	 *  Query DB table <tt>person</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>select * from person</tt>
+	 *
+	 *	@param fuzzyName
+	 *	@return List<PersonDO>
+	 *	@throws DataAccessException
+	 */	 
+    public List<PersonDO> fuzzyQueryByName(String fuzzyName) throws DataAccessException {
+	    Map param = new HashMap();
+
+					        param.put("fuzzyName", fuzzyName);
+					        return getSqlMapClientTemplate().queryForList("MS-PERSON-FUZZY-QUERY-BY-NAME", param);
 
     }
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tccz.tccz.core.model.BusinessSide;
 import com.tccz.tccz.core.model.Enterprise;
+import com.tccz.tccz.core.model.Person;
 import com.tccz.tccz.core.model.enums.LimitType;
 import com.tccz.tccz.core.service.LimitService;
 import com.tccz.tccz.web.util.JSONUtil;
@@ -31,10 +32,20 @@ public class LimitController {
 	private LimitService limitService;
 
 	@RequestMapping(value = "/query/limit/queryForEnterprise.json", method = RequestMethod.GET)
-	public void indexJson(HttpServletResponse res, ModelMap map, Integer id) {
+	public void queryForEnterprise(HttpServletResponse res, ModelMap map,
+			Integer id) {
 		BusinessSide businessSide = new Enterprise();
 		businessSide.setId(id);
 		JSONUtil.writeBackJsonWithConfig(res, limitService.calculateLimit(
 				businessSide, null, LimitType.AVAILABLE));
 	}
+
+	@RequestMapping(value = "/query/limit/queryForPerson.json", method = RequestMethod.GET)
+	public void queryForPerson(HttpServletResponse res, ModelMap map, Integer id) {
+		BusinessSide businessSide = new Person();
+		businessSide.setId(id);
+		JSONUtil.writeBackJsonWithConfig(res, limitService.calculateLimit(
+				businessSide, null, LimitType.AVAILABLE));
+	}
+
 }

@@ -69,9 +69,9 @@ public class FloatingLoanManageServiceImpl implements FloatingLoanManageService 
 						if (!controlResult.isOverLimit()) {
 							floatingLoanDAO.insert(ObjectConvertor
 									.convertToFloatingLoanDO(floatingLoan));
-							CommonResult.buildResult(result, true, "创建银票成功");
+							CommonResult.buildResult(result, true, "创建流贷成功");
 						} else {
-							CommonResult.buildResult(result, false, "创建银票失败，"
+							CommonResult.buildResult(result, false, "创建流贷失败，"
 									+ controlResult.getResultString());
 						}
 					}
@@ -98,7 +98,7 @@ public class FloatingLoanManageServiceImpl implements FloatingLoanManageService 
 					@Override
 					public void doManage() {
 						floatingLoanDAO.delete(floatingLoanId);
-						CommonResult.buildResult(result, true, "创建银票成功");
+						CommonResult.buildResult(result, true, "创建流贷成功");
 					}
 
 					@Override
@@ -122,7 +122,7 @@ public class FloatingLoanManageServiceImpl implements FloatingLoanManageService 
 					public void doManage() {
 						floatingLoanDAO.update(ObjectConvertor
 								.convertToFloatingLoanDO(floatingLoan));
-						CommonResult.buildResult(result, true, "创建银票成功");
+						CommonResult.buildResult(result, true, "创建流贷成功");
 					}
 
 					@Override

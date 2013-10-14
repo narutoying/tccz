@@ -37,6 +37,10 @@ public interface LimitService {
 
 	/**
 	 * 计算业务方总授信额度
+	 * <ol>
+	 * <li>单户（定义：仅个人或法人+关联一家企业）：总额度为1000万</li>
+	 * <li>集团（定义：同一法人关联大于等于二家企业 + 法人）：总额度1500万</li>
+	 * </ol>
 	 * 
 	 * @param businessSide
 	 * @return
@@ -44,7 +48,14 @@ public interface LimitService {
 	Money calculateTotalLimit(BusinessSide businessSide);
 
 	/**
-	 * 计算业务方当前占用的授信额度
+	 * 计算业务方当前占用的授信额度<br/>
+	 * 以下业务种类将占用额度：<br/>
+	 * <ol>
+	 * <li>流贷（个人、企业）</li>
+	 * <li>银票（敞口部分）</li>
+	 * <li>贴现</li>
+	 * </ol>
+	 * 注：此处计算时需考虑单户和集团两种情况
 	 * 
 	 * @param businessSide
 	 * @return
@@ -52,7 +63,7 @@ public interface LimitService {
 	Money calculateUsedLimit(BusinessSide businessSide);
 
 	/**
-	 * 计算业务方当前可用的授信额度
+	 * 计算业务方当前可用的授信额度（计算结果 = 总额度 - 当前占用额度）
 	 * 
 	 * @param businessSide
 	 * @return
