@@ -84,9 +84,9 @@ public class FloatingLoanQueryServiceImpl implements FloatingLoanQueryService {
 	 */
 	@Override
 	public List<FloatingLoan> queryListByExpireDate(int bizSideId,
-			Date expireStart, Date expireEnd) {
+			String bizSideType, Date expireStart, Date expireEnd) {
 		return convertToDomains(floatingLoanDAO.getByExpireDate(bizSideId,
-				expireStart, expireEnd));
+				bizSideType, expireStart, expireEnd));
 	}
 
 }

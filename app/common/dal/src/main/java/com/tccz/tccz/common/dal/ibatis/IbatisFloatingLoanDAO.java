@@ -205,15 +205,17 @@ public class IbatisFloatingLoanDAO extends SqlMapClientDaoSupport implements Flo
 	 *  <tt>select * from floating_loan</tt>
 	 *
 	 *	@param loanerId
+	 *	@param bizSideType
 	 *	@param expireStart
 	 *	@param expireEnd
 	 *	@return List<FloatingLoanDO>
 	 *	@throws DataAccessException
 	 */	 
-    public List<FloatingLoanDO> getByExpireDate(int loanerId, Date expireStart, Date expireEnd) throws DataAccessException {
+    public List<FloatingLoanDO> getByExpireDate(int loanerId, String bizSideType, Date expireStart, Date expireEnd) throws DataAccessException {
         Map param = new HashMap();
 
         param.put("loanerId", new Integer(loanerId));
+        param.put("bizSideType", bizSideType);
         param.put("expireStart", expireStart);
         param.put("expireEnd", expireEnd);
 

@@ -151,6 +151,9 @@
     <!-- mapped statement for IbatisFloatingLoanDAO.getByExpireDate -->
     <select id="MS-FLOATING-LOAN-GET-BY-EXPIRE-DATE" resultMap="RM-FLOATING-LOAN">
         select /*MS-TCCZ-FLOATING-LOAN-GET-BY-EXPIRE-DATE*/ d.* from floating_loan d where d.loaner_id = #loanerId# 
+				<isNotEmpty prepend=" and " property="bizSideType">
+					 d.biz_side_type = #bizSideType#
+				</isNotEmpty>
 				<isNotNull prepend=" and " property="expireStart">
 					 <![CDATA[
 						d.expire_date >= DATE(#expireStart#)

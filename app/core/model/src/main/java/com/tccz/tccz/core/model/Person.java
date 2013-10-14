@@ -17,7 +17,7 @@ public class Person extends BusinessSide {
 	/*
 	 * 基本属性
 	 */
-	/** 该人作为法人代表的企业列表（一个人可用是多家企业的法人，此处只填充基本属性） */
+	/** 该人作为法人代表的企业列表（一个人可用是多家企业的法人） */
 	private List<Enterprise> ownEnterprises;
 	/*
 	 * 非基本属性

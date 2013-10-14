@@ -7,6 +7,7 @@ package com.tccz.tccz.core.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import com.tccz.tccz.common.dal.daointerface.EnterpriseDAO;
 import com.tccz.tccz.common.dal.daointerface.PersonDAO;
@@ -14,6 +15,7 @@ import com.tccz.tccz.core.model.BusinessSide;
 import com.tccz.tccz.core.model.BusinessSideSet;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Person;
+import com.tccz.tccz.core.model.enums.BusinessSideSetType;
 import com.tccz.tccz.core.service.ObjectConvertor;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 
@@ -36,8 +38,8 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 	 */
 	@Override
 	public Enterprise queryEnterpriseById(int enterpriseId) {
-		return ObjectConvertor.convertToEnterprise(
-				enterpriseDAO.getById(enterpriseId), this);
+		return ObjectConvertor.convertToEnterprise(enterpriseDAO
+				.getById(enterpriseId));
 	}
 
 	/**
@@ -45,24 +47,51 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 	 */
 	@Override
 	public Person queryPersonById(int personId) {
-		return ObjectConvertor.convertToPerson(personDAO.getById(personId));
+		return ObjectConvertor.convertToPerson(personDAO.getById(personId),
+				this);
 	}
 
 	@Override
 	public List<Enterprise> fuzzyQueryEnterprises(String fuzzyEnterpriseName) {
-		return ObjectConvertor.convertToEnterpriseList(
-				enterpriseDAO.fuzzyQueryByName(fuzzyEnterpriseName), this);
+		return ObjectConvertor.convertToEnterpriseList(enterpriseDAO
+				.fuzzyQueryByName(fuzzyEnterpriseName));
 	}
 
 	@Override
 	public List<Person> fuzzyQueryPersons(String fuzzyName) {
-		return ObjectConvertor.convertToPersonList(personDAO
-				.fuzzyQueryByName(fuzzyName));
+		return ObjectConvertor.convertToPersonList(
+				personDAO.fuzzyQueryByName(fuzzyName), this);
 	}
 
 	@Override
 	public BusinessSideSet queryBusinessSideSet(BusinessSide businessSide) {
-		return null;
+		BusinessSideSet result = new BusinessSideSet();
+		int bizSideId = businessSide.getId();
+		BusinessSideSetType type = null;
+		Person person = null;
+		List<Enterprise> enterprises = null;
+		if (businessSide instanceof Person) {
+			person = queryPersonById(bizSideId);
+			enterprises = person.getOwnEnterprises();
+		} else if (businessSide instanceof Enterprise) {
+			Enterprise enterprise = queryEnterpriseById(bizSideId);
+			person = enterprise.getLegalPerson();
+			enterprises = person.getOwnEnterprises();
+		}
+		if (!CollectionUtils.isEmpty(enterprises) && enterprises.size() > 1) {
+			type = BusinessSideSetType.UNITED;
+		} else {
+			type = BusinessSideSetType.SINGLE;
+		}
+		result.setType(type);
+		result.setPerson(person);
+		result.setEnterprises(enterprises);
+		return result;
 	}
 
+	@Override
+	public List<Enterprise> queryEnterprisesByLegalPerson(int legalPersonId) {
+		return ObjectConvertor.convertToEnterpriseList(enterpriseDAO
+				.getByLegalPersonId(legalPersonId));
+	}
 }

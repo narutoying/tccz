@@ -5,7 +5,6 @@
 package com.tccz.tccz.core.service.impl;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,12 +21,11 @@ import com.tccz.tccz.core.model.Constants;
 import com.tccz.tccz.core.model.Discount;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.FloatingLoan;
-import com.tccz.tccz.core.model.Limit;
 import com.tccz.tccz.core.model.Money;
 import com.tccz.tccz.core.model.Person;
 import com.tccz.tccz.core.model.enums.BankBizType;
 import com.tccz.tccz.core.model.enums.BusinessSideSetType;
-import com.tccz.tccz.core.model.enums.LimitType;
+import com.tccz.tccz.core.model.enums.LoanBizSideType;
 import com.tccz.tccz.core.model.result.LimitControlResult;
 import com.tccz.tccz.core.service.LimitService;
 import com.tccz.tccz.core.service.query.BankBizQueryService;
@@ -47,81 +45,89 @@ public class LimitServiceImpl implements LimitService {
 	@Autowired
 	private BusinessSideQueryService businessSideQueryService;
 
-	/**
-	 * @see com.tccz.tccz.core.service.LimitService#calculateLimit(com.tccz.tccz.core.model.BusinessSide,
-	 *      java.util.Date, com.tccz.tccz.core.model.enums.LimitType)
-	 */
-	private Limit calculateLimitOld(BusinessSide businessSide, Date calDate,
-			LimitType limitType) {
-		Limit result = new Limit();
-		result.setLimitType(limitType);
-		Money money = new Money();
-		result.setMoney(money);
-		int bizSideId = businessSide.getId();
-		if (bizSideId > 0) {
-			if (businessSide instanceof Person) {
-				// 个人只有流贷业务，无其他业务
-				if (limitType == LimitType.FLOATING_LOAN_USED) {
-					Map<String, Object> extraParams = new HashMap<String, Object>();
-					extraParams.put(Constants.IS_PERSON, true);
-					money.addTo(calculteOccupiedMoneyForFL(bankBizQueryService
-							.query(FloatingLoan.class, bizSideId, calDate,
-									null, extraParams), calDate));
-				}
-			} else if (businessSide instanceof Enterprise) {
-				if (limitType == LimitType.FLOATING_LOAN_USED) {
-					money.addTo(calculteOccupiedMoneyForFL(bankBizQueryService
-							.query(FloatingLoan.class, bizSideId, calDate,
-									null, null), calDate));
-				} else if (limitType == LimitType.BANDAR_NOTE_USED) {
-					money.addTo(calculteOccupiedMoneyForBN(bankBizQueryService
-							.query(BandarNote.class, bizSideId, calDate, null,
-									null), calDate));
-				} else if (limitType == LimitType.DISCOUNT_USED) {
-					money.addTo(calculteOccupiedMoneyForDC(bankBizQueryService
-							.query(Discount.class, bizSideId, calDate, null,
-									null), calDate));
-				}
-			} else {
-				throw new CommonException("不支持的业务方" + businessSide);
-			}
+	@Override
+	public Money calculateTotalLimit(BusinessSide businessSide) {
+		Money result = new Money();
+		BusinessSideSet businessSideSet = businessSideQueryService
+				.queryBusinessSideSet(businessSide);
+		BusinessSideSetType businessSideSetType = businessSideSet.getType();
+		if (businessSideSetType == BusinessSideSetType.SINGLE) {
+			result.setAmount(new BigDecimal("10000000"));
+		} else if (businessSideSetType == BusinessSideSetType.UNITED) {
+			result.setAmount(new BigDecimal("15000000"));
 		} else {
-			throw new CommonException("业务方id=" + bizSideId + "，需要大于0");
+			throw new CommonException("不支持的业务集合[" + businessSideSetType + "]");
 		}
 		return result;
 	}
 
-	/**
-	 * 计算可用额度
-	 * 
-	 * @param businessSide
-	 * @param calDate
-	 * @param limitType
-	 * @return
-	 */
-	private Limit getAvailableLimitOld(BusinessSide businessSide, Date calDate) {
-		Limit result = new Limit();
-		result.setLimitType(LimitType.AVAILABLE);
-		List<LimitType> ocuppyLimitTypes = ocuppyLimitTypes();
-		Money ocuppied = new Money();
-		for (LimitType type : ocuppyLimitTypes) {
-			ocuppied.addTo(calculateLimitOld(businessSide, calDate, type)
-					.getMoney());
-		}
-		result.setMoney(getTotalLimit().getMoney().subtract(ocuppied));
+	@Override
+	public Money calculateUsedLimit(BusinessSide businessSide) {
+		Money result = new Money();
+		BusinessSideSet businessSideSet = businessSideQueryService
+				.queryBusinessSideSet(businessSide);
+		// 计算个人业务所占额度
+		result.add(calculateUsedLimitForPerson(businessSideSet.getPerson()));
+		// 计算关联各企业业务所占额度
+		result.add(calculateUsedLimitForEnterprise(businessSideSet
+				.getEnterprises()));
 		return result;
 	}
 
-	/**
-	 * 计算总额度
-	 * 
-	 * @return
-	 */
-	private Limit getTotalLimit() {
-		Limit result = new Limit();
-		result.setLimitType(LimitType.COMPOSITE_CREDIT);
-		// TODO 后续从系统配置参数中获取
-		result.setMoney(new Money("10000000.00"));
+	private Money calculateUsedLimitForEnterprise(List<Enterprise> enterprises) {
+		if (!CollectionUtils.isEmpty(enterprises)) {
+			Money result = new Money();
+			for (Enterprise enterprise : enterprises) {
+				BankBizType[] bankBizTypes = BankBizType.values();
+				for (BankBizType type : bankBizTypes) {
+					result.add(calculateDetailLimit(enterprise, type));
+				}
+			}
+			return result;
+		} else {
+			return new Money();
+		}
+	}
+
+	private Money calculateUsedLimitForPerson(Person person) {
+		return calculateDetailLimit(person, BankBizType.FLOATING_LOAN);
+	}
+
+	@Override
+	public Money calculateAvailableLimit(BusinessSide businessSide) {
+		return calculateTotalLimit(businessSide).subtract(
+				calculateUsedLimit(businessSide));
+	}
+
+	@Override
+	public Money calculateDetailLimit(BusinessSide businessSide,
+			BankBizType type) {
+		Money result = new Money();
+		int bizSideId = businessSide.getId();
+		Date calDate = new Date();
+		if (businessSide instanceof Person) {
+			// 个人业务目前只有流贷
+			Map<String, Object> extraParams = new HashMap<String, Object>();
+			extraParams.put(Constants.LoanBizSideType, LoanBizSideType.PRIVATE);
+			return calculteOccupiedMoneyForFL(
+					bankBizQueryService.query(FloatingLoan.class,
+							businessSide.getId(), calDate, null, extraParams),
+					calDate);
+		} else {
+			if (type == BankBizType.FLOATING_LOAN) {
+				result = calculteOccupiedMoneyForFL(bankBizQueryService.query(
+						FloatingLoan.class, bizSideId, calDate, null, null),
+						calDate);
+			} else if (type == BankBizType.BANDAR_NOTE) {
+				result = calculteOccupiedMoneyForBN(bankBizQueryService.query(
+						BandarNote.class, bizSideId, calDate, null, null),
+						calDate);
+			} else if (type == BankBizType.DISCOUNT) {
+				result = calculteOccupiedMoneyForDC(bankBizQueryService.query(
+						Discount.class, bizSideId, calDate, null, null),
+						calDate);
+			}
+		}
 		return result;
 	}
 
@@ -163,11 +169,6 @@ public class LimitServiceImpl implements LimitService {
 		return result;
 	}
 
-	private List<LimitType> ocuppyLimitTypes() {
-		return Arrays.asList(LimitType.FLOATING_LOAN_USED,
-				LimitType.BANDAR_NOTE_USED, LimitType.DISCOUNT_USED);
-	}
-
 	@Override
 	public LimitControlResult isOverLimit(BusinessSide businessSide,
 			Date calDate, Money newAmount) {
@@ -183,56 +184,6 @@ public class LimitServiceImpl implements LimitService {
 		}
 		result.setOverLimit(overLimit);
 		return result;
-	}
-
-	@Override
-	public Money calculateTotalLimit(BusinessSide businessSide) {
-		Money result = new Money();
-		BusinessSideSet businessSideSet = businessSideQueryService
-				.queryBusinessSideSet(businessSide);
-		BusinessSideSetType businessSideSetType = businessSideSet.getType();
-		if (businessSideSetType == BusinessSideSetType.SINGLE) {
-			result.setAmount(new BigDecimal("10000000"));
-		} else if (businessSideSetType == BusinessSideSetType.UNITED) {
-			result.setAmount(new BigDecimal("15000000"));
-		} else {
-			throw new CommonException("不支持的业务集合[" + businessSideSetType + "]");
-		}
-		return result;
-	}
-
-	@Override
-	public Money calculateUsedLimit(BusinessSide businessSide) {
-		Money result = new Money();
-		BusinessSideSet businessSideSet = businessSideQueryService
-				.queryBusinessSideSet(businessSide);
-		Person person = businessSideSet.getPerson();
-		// 计算个人业务所占额度
-		result.add(calculateUsedLimitForPerson(person));
-		// 计算关联各企业业务所占额度
-		List<Enterprise> enterprises = businessSideSet.getEnterprises();
-		result.add(calculateUsedLimitForEnterprise(enterprises));
-		return result;
-	}
-
-	private Money calculateUsedLimitForEnterprise(List<Enterprise> enterprises) {
-		return null;
-	}
-
-	private Money calculateUsedLimitForPerson(Person person) {
-		return null;
-	}
-
-	@Override
-	public Money calculateAvailableLimit(BusinessSide businessSide) {
-		return calculateTotalLimit(businessSide).subtract(
-				calculateUsedLimit(businessSide));
-	}
-
-	@Override
-	public Money calculateDetailLimit(BusinessSide businessSide,
-			BankBizType type) {
-		return null;
 	}
 
 }

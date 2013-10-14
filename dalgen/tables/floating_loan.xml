@@ -109,6 +109,7 @@
     <operation name="getByExpireDate" multiplicity="many" parameterClass="map">
         <extraparams>
             <param name="loanerId" javatype="int"/>
+            <param name="bizSideType" javatype="java.lang.String"/>
             <param name="expireStart" javatype="java.util.Date"/>
             <param name="expireEnd" javatype="java.util.Date"/>
         </extraparams>
@@ -120,6 +121,9 @@
         <sqlmap>
             <![CDATA[
           select d.* from floating_loan d where d.loaner_id = #loanerId# 
+				<isNotEmpty prepend=" and " property="bizSideType">
+					 d.biz_side_type = #bizSideType#
+				</isNotEmpty>
 				<isNotNull prepend=" and " property="expireStart">
 					 ${cdata-start}
 						d.expire_date >= DATE(#expireStart#)

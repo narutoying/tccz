@@ -44,6 +44,13 @@
     ]]>
     </select>
 
+    <!-- mapped statement for IbatisEnterpriseDAO.getByLegalPersonId -->
+    <select id="MS-ENTERPRISE-GET-BY-LEGAL-PERSON-ID" resultMap="RM-ENTERPRISE">
+    <![CDATA[
+        select /*MS-TCCZ-ENTERPRISE-GET-BY-LEGAL-PERSON-ID*/ * from enterprise where (legal_person_id = #value#)
+    ]]>
+    </select>
+
     <!-- mapped statement for IbatisEnterpriseDAO.fuzzyQueryByName -->
     <select id="MS-ENTERPRISE-FUZZY-QUERY-BY-NAME" resultMap="RM-ENTERPRISE">
         select /*MS-TCCZ-ENTERPRISE-FUZZY-QUERY-BY-NAME*/ * from enterprise

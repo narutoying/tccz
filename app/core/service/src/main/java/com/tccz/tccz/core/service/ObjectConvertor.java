@@ -112,8 +112,7 @@ public class ObjectConvertor {
 		return result;
 	}
 
-	public static Enterprise convertToEnterprise(EnterpriseDO dataObject,
-			BusinessSideQueryService businessSideQueryService) {
+	public static Enterprise convertToEnterprise(EnterpriseDO dataObject) {
 		if (dataObject == null) {
 			return null;
 		}
@@ -121,27 +120,30 @@ public class ObjectConvertor {
 		result.setId(dataObject.getId());
 		result.setName(dataObject.getName());
 		result.setAccountNumber(dataObject.getAccountNumber());
-		result.setLegalPerson(businessSideQueryService
-				.queryPersonById(dataObject.getLegalPersonId()));
+		Person person = new Person();
+		person.setId(dataObject.getLegalPersonId());
+		result.setLegalPerson(person);
+		// result.setLegalPerson(businessSideQueryService
+		// .queryPersonById(dataObject.getLegalPersonId()));
 		result.setCreateTime(dataObject.getCreateTime());
 		result.setModifyTime(dataObject.getModifyTime());
 		return result;
 	}
 
 	public static List<Enterprise> convertToEnterpriseList(
-			List<EnterpriseDO> dataObjects,
-			BusinessSideQueryService businessSideQueryService) {
+			List<EnterpriseDO> dataObjects) {
 		if (CollectionUtils.isEmpty(dataObjects)) {
 			return Collections.emptyList();
 		}
 		List<Enterprise> result = new ArrayList<Enterprise>();
 		for (EnterpriseDO data : dataObjects) {
-			result.add(convertToEnterprise(data, businessSideQueryService));
+			result.add(convertToEnterprise(data));
 		}
 		return result;
 	}
 
-	public static Person convertToPerson(PersonDO dataObject) {
+	public static Person convertToPerson(PersonDO dataObject,
+			BusinessSideQueryService businessSideQueryService) {
 		if (dataObject == null) {
 			return null;
 		}
@@ -151,7 +153,8 @@ public class ObjectConvertor {
 		result.setAccountNumber(dataObject.getAccountNumber());
 		result.setCreateTime(dataObject.getCreateTime());
 		result.setModifyTime(dataObject.getModifyTime());
-		result.setOwnEnterprises(null);// TODO 填充企业列表
+		result.setOwnEnterprises(businessSideQueryService
+				.queryEnterprisesByLegalPerson(dataObject.getId()));
 		return result;
 	}
 
@@ -250,11 +253,12 @@ public class ObjectConvertor {
 	}
 
 	public static List<Person> convertToPersonList(
-			List<PersonDO> fuzzyQueryByName) {
+			List<PersonDO> fuzzyQueryByName,
+			BusinessSideQueryService businessSideQueryService) {
 		List<Person> result = new ArrayList<Person>();
 		if (!CollectionUtils.isEmpty(fuzzyQueryByName)) {
 			for (PersonDO data : fuzzyQueryByName) {
-				result.add(convertToPerson(data));
+				result.add(convertToPerson(data, businessSideQueryService));
 			}
 		}
 		return result;

@@ -7,6 +7,12 @@
 		]]></sql>
 	</operation>
 	
+	<operation name="getByLegalPersonId" multiplicity="many">
+		<sql><![CDATA[
+			select * from enterprise where legal_person_id = ?
+		]]></sql>
+	</operation>
+	
 	<operation name="fuzzyQueryByName" multiplicity="many" parameterClass="map">
 		<extraparams>
 			<param name="enterpriseName" javatype="java.lang.String"/>

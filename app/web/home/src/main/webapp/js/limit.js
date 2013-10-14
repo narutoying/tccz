@@ -9,7 +9,7 @@ function getAndDisplayAvailableLimit(bizSideType, bizSideId, renderTo){
             url = getContextPath() + "/query/limit/queryForEnterprise.json";
         }
     if (bizSideId <= 0) {
-        console.log("查询业务方额度id[" + bizSideId + "]不大于0");
+        //        console.log("查询业务方额度id[" + bizSideId + "]不大于0");
     }
     else {
         Ext.Ajax.request({
@@ -20,7 +20,7 @@ function getAndDisplayAvailableLimit(bizSideType, bizSideId, renderTo){
             },
             success: function(response){
                 var resObj = JSON.parse(response.responseText);
-                var amount = resObj.money.amount;
+                var amount = resObj.amount;
                 var renderToCmp = Ext.getCmp(renderTo);
                 renderToCmp.setValue(amount);
                 var color = "green";

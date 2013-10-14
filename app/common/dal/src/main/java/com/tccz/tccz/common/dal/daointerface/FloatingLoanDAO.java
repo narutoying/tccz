@@ -139,11 +139,12 @@ public interface FloatingLoanDAO {
 	 *  <tt>select * from floating_loan</tt>
 	 *
 	 *	@param loanerId
+	 *	@param bizSideType
 	 *	@param expireStart
 	 *	@param expireEnd
 	 *	@return List<FloatingLoanDO>
 	 *	@throws DataAccessException
 	 */	 
-    public List<FloatingLoanDO> getByExpireDate(int loanerId, Date expireStart, Date expireEnd) throws DataAccessException;
+    public List<FloatingLoanDO> getByExpireDate(int loanerId, String bizSideType, Date expireStart, Date expireEnd) throws DataAccessException;
 
 }

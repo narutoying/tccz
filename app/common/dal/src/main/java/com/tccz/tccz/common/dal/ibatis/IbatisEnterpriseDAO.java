@@ -61,6 +61,26 @@ public class IbatisEnterpriseDAO extends SqlMapClientDaoSupport implements Enter
    	 *  <tt></tt>
 	 *  <p>
 	 *  The sql statement for this operation is <br>
+	 *  <tt>select * from enterprise where (legal_person_id = ?)</tt>
+	 *
+	 *	@param legalPersonId
+	 *	@return List<EnterpriseDO>
+	 *	@throws DataAccessException
+	 */	 
+    public List<EnterpriseDO> getByLegalPersonId(int legalPersonId) throws DataAccessException {
+        Integer param = new Integer(legalPersonId);
+        return getSqlMapClientTemplate().queryForList("MS-ENTERPRISE-GET-BY-LEGAL-PERSON-ID", param);
+
+    }
+
+	/**
+	 *  Query DB table <tt>enterprise</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
 	 *  <tt>select * from enterprise</tt>
 	 *
 	 *	@param enterpriseName

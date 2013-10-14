@@ -12,8 +12,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tccz.tccz.core.model.BandarNote;
+import com.tccz.tccz.core.model.Constants;
 import com.tccz.tccz.core.model.Discount;
 import com.tccz.tccz.core.model.FloatingLoan;
+import com.tccz.tccz.core.model.enums.LoanBizSideType;
 import com.tccz.tccz.core.service.query.BandarNoteQueryService;
 import com.tccz.tccz.core.service.query.BankBizQueryService;
 import com.tccz.tccz.core.service.query.DiscountQueryService;
@@ -52,8 +54,14 @@ public class BankBizQueryServiceImpl implements BankBizQueryService {
 			return (List<T>) bandarNoteQueryService.queryListByExpireDate(
 					bizSideId, expireDateStart, expireDateEnd);
 		} else if (classType == FloatingLoan.class) {
+			Object object = null;
+			if (extraParams != null) {
+				object = extraParams.get(Constants.LoanBizSideType);
+			}
+			String bizSideType = (object == null ? LoanBizSideType.CORPORATE
+					.getCode() : ((LoanBizSideType) object).getCode());
 			return (List<T>) floatingLoanQueryService.queryListByExpireDate(
-					bizSideId, expireDateStart, expireDateEnd);
+					bizSideId, bizSideType, expireDateStart, expireDateEnd);
 		}
 		return Collections.emptyList();
 	}

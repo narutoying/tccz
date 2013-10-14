@@ -12,5 +12,5 @@ package com.tccz.tccz.core.model;
  *          narutoying09@gmail.com Exp $
  */
 public class Constants {
-	public static final String IS_PERSON = "isPerson";
+	public static final String LoanBizSideType = "LoanBizSideType";
 }

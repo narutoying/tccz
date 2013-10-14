@@ -44,6 +44,6 @@ public interface FloatingLoanQueryService {
 	 * @param expireEnd
 	 * @return
 	 */
-	List<FloatingLoan> queryListByExpireDate(int bizSideId, Date expireStart,
-			Date expireEnd);
+	List<FloatingLoan> queryListByExpireDate(int bizSideId, String bizSideType,
+			Date expireStart, Date expireEnd);
 }

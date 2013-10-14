@@ -26,7 +26,7 @@ public class Enterprise extends BusinessSide {
 	/*
 	 * 基本属性
 	 */
-	/** 企业法人 */
+	/** 企业法人，只填充id */
 	private Person legalPerson;
 	/*
 	 * 非基本属性

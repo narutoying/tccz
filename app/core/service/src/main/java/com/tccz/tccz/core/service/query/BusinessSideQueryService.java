@@ -38,6 +38,14 @@ public interface BusinessSideQueryService {
 	List<Enterprise> fuzzyQueryEnterprises(String fuzzyEnterpriseName);
 
 	/**
+	 * 查询指定法人所关联的企业列表
+	 * 
+	 * @param legalPersonId
+	 * @return
+	 */
+	List<Enterprise> queryEnterprisesByLegalPerson(int legalPersonId);
+
+	/**
 	 * 查询个人信息
 	 * 
 	 * @param personId
@@ -55,6 +63,10 @@ public interface BusinessSideQueryService {
 
 	/**
 	 * 查询一个业务方所属的集合
+	 * <ol>
+	 * <li>若businessSide为个人，则查询该人与其关联的企业</li>
+	 * <li>若businessSide为企业，则查询该企业、关联的法人及该法人关联的其他企业</li>
+	 * </ol>
 	 * 
 	 * @param businessSide
 	 * @return
