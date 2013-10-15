@@ -54,4 +54,26 @@
 			order by id DESC
     </select>
 
+    <!-- mapped statement for IbatisPersonDAO.fuzzyPageQueryByName -->
+    <select id="MS-PERSON-FUZZY-PAGE-QUERY-BY-NAME" resultMap="RM-PERSON">
+        select /*MS-TCCZ-PERSON-FUZZY-PAGE-QUERY-BY-NAME*/ * from person
+		  <dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="personName">
+					name like concat("%", #personName#, "%")
+				</isNotEmpty>
+			</dynamic>
+			order by id DESC limit #pageNum#, #pageSize#
+    </select>
+
+    <!-- mapped statement for IbatisPersonDAO.fuzzyPageQueryByName, needed by paging -->
+    <select id="MS-TCCZ-PERSON-FUZZY-PAGE-QUERY-BY-NAME-COUNT-FOR-PAGING" resultClass="int">
+        select /*MS-TCCZ-PERSON-FUZZY-PAGE-QUERY-BY-NAME-COUNT-FOR-PAGING*/ count(*) from person
+		  <dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="personName">
+					name like concat("%", #personName#, "%")
+				</isNotEmpty>
+			</dynamic>
+			
+    </select>
+
 </sqlMap>

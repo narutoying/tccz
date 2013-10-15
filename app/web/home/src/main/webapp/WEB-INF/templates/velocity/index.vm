@@ -25,7 +25,7 @@
             activeTab: 0,
             items: {
                 title: '首页',
-                html: '<iframe style="overflow:auto;width:100%; height:100%;" src="' + '' + '" frameborder="0"></iframe>'
+                html: '<iframe style="overflow:auto;width:100%; height:100%;" src="' + getContextPath() + "/query/limit/viewEnterprise.htm" + '" frameborder="0"></iframe>'
             }
         }]
     });
@@ -39,6 +39,11 @@ var _menu = [
         id: "bizManage",
         name: "业务管理",
         children: [
+			{
+                id: "floatingLoanManage",
+                name: "流贷管理",
+                url: "$!contextPath/query/floatingloan/index.htm"
+            },
 			{
                 id: "bandarnoteManage",
                 name: "银票管理",
@@ -57,7 +62,7 @@ var _menu = [
         children: [
             {
                 name: "企业信息管理",
-                url: "",
+                url: "$!contextPath/query/enterprise/index.htm",
             },
 			{
                 name: "个人信息管理",

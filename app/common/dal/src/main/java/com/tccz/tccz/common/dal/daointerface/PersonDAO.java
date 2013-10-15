@@ -8,6 +8,7 @@ package com.tccz.tccz.common.dal.daointerface;
 import com.tccz.tccz.common.dal.dataobject.PersonDO;
 import org.springframework.dao.DataAccessException;
 import java.util.List;
+import com.tccz.tccz.dal.util.PageList;
 
 /**
  * A dao interface provides methods to access database table <tt>person</tt>.
@@ -56,5 +57,23 @@ public interface PersonDAO {
 	 *	@throws DataAccessException
 	 */	 
     public List<PersonDO> fuzzyQueryByName(String fuzzyName) throws DataAccessException;
+
+	/**
+	 *  Query DB table <tt>person</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>select * from person</tt>
+	 *
+	 *	@param personName
+	 *	@param pageSize
+	 *	@param pageNum
+	 *	@return PageList
+	 *	@throws DataAccessException
+	 */	 
+    public PageList fuzzyPageQueryByName(String personName, int pageSize, int pageNum) throws DataAccessException;
 
 }

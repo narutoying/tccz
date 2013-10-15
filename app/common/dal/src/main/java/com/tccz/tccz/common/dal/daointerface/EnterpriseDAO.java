@@ -8,6 +8,7 @@ package com.tccz.tccz.common.dal.daointerface;
 import com.tccz.tccz.common.dal.dataobject.EnterpriseDO;
 import org.springframework.dao.DataAccessException;
 import java.util.List;
+import com.tccz.tccz.dal.util.PageList;
 
 /**
  * A dao interface provides methods to access database table <tt>enterprise</tt>.
@@ -72,5 +73,23 @@ public interface EnterpriseDAO {
 	 *	@throws DataAccessException
 	 */	 
     public List<EnterpriseDO> fuzzyQueryByName(String enterpriseName) throws DataAccessException;
+
+	/**
+	 *  Query DB table <tt>enterprise</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>select * from enterprise</tt>
+	 *
+	 *	@param enterpriseName
+	 *	@param pageSize
+	 *	@param pageNum
+	 *	@return PageList
+	 *	@throws DataAccessException
+	 */	 
+    public PageList fuzzyPageQueryByName(String enterpriseName, int pageSize, int pageNum) throws DataAccessException;
 
 }

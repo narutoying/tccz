@@ -62,4 +62,26 @@
 			order by id DESC
     </select>
 
+    <!-- mapped statement for IbatisEnterpriseDAO.fuzzyPageQueryByName -->
+    <select id="MS-ENTERPRISE-FUZZY-PAGE-QUERY-BY-NAME" resultMap="RM-ENTERPRISE">
+        select /*MS-TCCZ-ENTERPRISE-FUZZY-PAGE-QUERY-BY-NAME*/ * from enterprise
+		  <dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="enterpriseName">
+					name like concat("%", #enterpriseName#, "%")
+				</isNotEmpty>
+			</dynamic>
+			order by id DESC limit #pageNum#, #pageSize#
+    </select>
+
+    <!-- mapped statement for IbatisEnterpriseDAO.fuzzyPageQueryByName, needed by paging -->
+    <select id="MS-TCCZ-ENTERPRISE-FUZZY-PAGE-QUERY-BY-NAME-COUNT-FOR-PAGING" resultClass="int">
+        select /*MS-TCCZ-ENTERPRISE-FUZZY-PAGE-QUERY-BY-NAME-COUNT-FOR-PAGING*/ count(*) from enterprise
+		  <dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="enterpriseName">
+					name like concat("%", #enterpriseName#, "%")
+				</isNotEmpty>
+			</dynamic>
+			
+    </select>
+
 </sqlMap>

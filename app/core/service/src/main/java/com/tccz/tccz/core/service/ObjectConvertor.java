@@ -43,6 +43,8 @@ import com.tccz.tccz.core.service.query.DiscountQueryService;
  */
 public class ObjectConvertor {
 
+	private static BusinessSideQueryService businessSideQueryService;
+
 	public static DiscountDO convertToDiscountDO(Discount domain) {
 		if (domain == null) {
 			return null;
@@ -120,11 +122,11 @@ public class ObjectConvertor {
 		result.setId(dataObject.getId());
 		result.setName(dataObject.getName());
 		result.setAccountNumber(dataObject.getAccountNumber());
-		Person person = new Person();
-		person.setId(dataObject.getLegalPersonId());
-		result.setLegalPerson(person);
-		// result.setLegalPerson(businessSideQueryService
-		// .queryPersonById(dataObject.getLegalPersonId()));
+		// Person person = new Person();
+		// person.setId(dataObject.getLegalPersonId());
+		// result.setLegalPerson(person);
+		result.setLegalPerson(businessSideQueryService.queryPersonById(
+				dataObject.getLegalPersonId(), false));
 		result.setCreateTime(dataObject.getCreateTime());
 		result.setModifyTime(dataObject.getModifyTime());
 		return result;
@@ -143,6 +145,7 @@ public class ObjectConvertor {
 	}
 
 	public static Person convertToPerson(PersonDO dataObject,
+			boolean fillEnterprise,
 			BusinessSideQueryService businessSideQueryService) {
 		if (dataObject == null) {
 			return null;
@@ -153,8 +156,10 @@ public class ObjectConvertor {
 		result.setAccountNumber(dataObject.getAccountNumber());
 		result.setCreateTime(dataObject.getCreateTime());
 		result.setModifyTime(dataObject.getModifyTime());
-		result.setOwnEnterprises(businessSideQueryService
-				.queryEnterprisesByLegalPerson(dataObject.getId()));
+		if (fillEnterprise) {
+			result.setOwnEnterprises(businessSideQueryService
+					.queryEnterprisesByLegalPerson(dataObject.getId()));
+		}
 		return result;
 	}
 
@@ -228,8 +233,8 @@ public class ObjectConvertor {
 			result.setLoaner(businessSideQueryService.queryEnterpriseById(data
 					.getLoanerId()));
 		} else if (type == LoanBizSideType.PRIVATE) {
-			result.setLoaner(businessSideQueryService.queryPersonById(data
-					.getLoanerId()));
+			result.setLoaner(businessSideQueryService.queryPersonById(
+					data.getLoanerId(), false));
 		}
 		result.setModifyTime(data.getModifyTime());
 		result.setReleaseDate(data.getReleaseDate());
@@ -258,9 +263,14 @@ public class ObjectConvertor {
 		List<Person> result = new ArrayList<Person>();
 		if (!CollectionUtils.isEmpty(fuzzyQueryByName)) {
 			for (PersonDO data : fuzzyQueryByName) {
-				result.add(convertToPerson(data, businessSideQueryService));
+				result.add(convertToPerson(data, true, businessSideQueryService));
 			}
 		}
 		return result;
+	}
+
+	public void setBusinessSideQueryService(
+			BusinessSideQueryService businessSideQueryService) {
+		ObjectConvertor.businessSideQueryService = businessSideQueryService;
 	}
 }

@@ -12,8 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.tccz.tccz.common.util.PageUtil;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 import com.tccz.tccz.web.util.JSONUtil;
@@ -27,6 +29,8 @@ import com.tccz.tccz.web.util.JSONUtil;
 @Controller
 public class EnterpriseController {
 
+	private static final String PREFIX = "enterprise/";
+
 	@Autowired
 	private BusinessSideQueryService businessSideQueryService;
 
@@ -38,5 +42,20 @@ public class EnterpriseController {
 		resultMap.put("totalItems", enterprises.size());
 		resultMap.put("items", enterprises);
 		JSONUtil.writeBackJsonWithConfig(response, resultMap);
+	}
+
+	@RequestMapping("/query/enterprise/index.htm")
+	public String index(ModelMap modelMap, String fuzzyName,
+			Integer currentPage, Integer pageSize) {
+		if (currentPage == null) {
+			currentPage = 1;
+		}
+		if (pageSize == null) {
+			pageSize = PageUtil.PAGE_SIZE;
+		}
+		modelMap.addAttribute("pageList", businessSideQueryService
+				.fuzzyQueryEnterprisesPage(fuzzyName, currentPage, pageSize));
+		modelMap.addAttribute("fuzzyName", fuzzyName);
+		return PREFIX + "index";
 	}
 }

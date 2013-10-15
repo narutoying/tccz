@@ -14,14 +14,14 @@ import java.util.List;
  *          Exp $
  */
 public class Person extends BusinessSide {
-	/*
-	 * 基本属性
-	 */
-	/** 该人作为法人代表的企业列表（一个人可用是多家企业的法人） */
-	private List<Enterprise> ownEnterprises;
+
+	/** 身份证号 TODO 改造，替代现有id */
+	private String idCardNumber;
 	/*
 	 * 非基本属性
 	 */
+	/** 该人作为法人代表的企业列表（一个人可用是多家企业的法人） */
+	private List<Enterprise> ownEnterprises;
 	/** 总额度 */
 	private Limit wholeLimit;
 	/** 可用额度 */
@@ -59,5 +59,13 @@ public class Person extends BusinessSide {
 
 	public void setFloatingLoanUseLimit(Limit floatingLoanUseLimit) {
 		this.floatingLoanUseLimit = floatingLoanUseLimit;
+	}
+
+	public String getIdCardNumber() {
+		return idCardNumber;
+	}
+
+	public void setIdCardNumber(String idCardNumber) {
+		this.idCardNumber = idCardNumber;
 	}
 }

@@ -61,7 +61,7 @@ public class FloatingLoanManageServiceImpl implements FloatingLoanManageService 
 						} else if (bizSideType == LoanBizSideType.PRIVATE) {
 							businessSide = businessSideQueryService
 									.queryPersonById(floatingLoan.getLoaner()
-											.getId());
+											.getId(), false);
 						}
 						LimitControlResult controlResult = limitService
 								.isOverLimit(businessSide, null,

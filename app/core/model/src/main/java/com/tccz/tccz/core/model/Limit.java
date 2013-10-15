@@ -13,6 +13,7 @@ import com.tccz.tccz.core.model.enums.LimitType;
  * @version $Id: Limit.java, v 0.1 2013-9-11 上午9:18:08 narutoying09@gmail.com
  *          Exp $
  */
+@Deprecated
 public class Limit {
 
 	/** 额度类型 */

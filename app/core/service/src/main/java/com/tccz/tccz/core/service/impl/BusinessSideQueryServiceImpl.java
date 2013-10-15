@@ -11,6 +11,8 @@ import org.springframework.util.CollectionUtils;
 
 import com.tccz.tccz.common.dal.daointerface.EnterpriseDAO;
 import com.tccz.tccz.common.dal.daointerface.PersonDAO;
+import com.tccz.tccz.common.util.PageList;
+import com.tccz.tccz.common.util.PageUtil;
 import com.tccz.tccz.core.model.BusinessSide;
 import com.tccz.tccz.core.model.BusinessSideSet;
 import com.tccz.tccz.core.model.Enterprise;
@@ -46,9 +48,9 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 	 * @see com.tccz.tccz.core.service.query.BusinessSideQueryService#queryPersonById(int)
 	 */
 	@Override
-	public Person queryPersonById(int personId) {
+	public Person queryPersonById(int personId, boolean fillEnterprise) {
 		return ObjectConvertor.convertToPerson(personDAO.getById(personId),
-				this);
+				fillEnterprise, this);
 	}
 
 	@Override
@@ -71,11 +73,11 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 		Person person = null;
 		List<Enterprise> enterprises = null;
 		if (businessSide instanceof Person) {
-			person = queryPersonById(bizSideId);
+			person = queryPersonById(bizSideId, true);
 			enterprises = person.getOwnEnterprises();
 		} else if (businessSide instanceof Enterprise) {
 			Enterprise enterprise = queryEnterpriseById(bizSideId);
-			person = enterprise.getLegalPerson();
+			person = queryPersonById(enterprise.getLegalPerson().getId(), true);
 			enterprises = person.getOwnEnterprises();
 		}
 		if (!CollectionUtils.isEmpty(enterprises) && enterprises.size() > 1) {
@@ -93,5 +95,31 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 	public List<Enterprise> queryEnterprisesByLegalPerson(int legalPersonId) {
 		return ObjectConvertor.convertToEnterpriseList(enterpriseDAO
 				.getByLegalPersonId(legalPersonId));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public PageList<Enterprise> fuzzyQueryEnterprisesPage(
+			String enterpriseName, int page, int pageSize) {
+		PageList<Enterprise> result = new PageList<Enterprise>();
+		com.tccz.tccz.dal.util.PageList pageList = enterpriseDAO
+				.fuzzyPageQueryByName(enterpriseName, pageSize,
+						PageUtil.getOffset(pageSize, page));
+		result.setDataList(ObjectConvertor.convertToEnterpriseList(pageList));
+		result.setPaginator(pageList.getPaginator());
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public PageList<Person> fuzzyQueryPersonsPage(String personName, int page,
+			int pageSize) {
+		PageList<Person> result = new PageList<Person>();
+		com.tccz.tccz.dal.util.PageList pageList = personDAO
+				.fuzzyPageQueryByName(personName, pageSize,
+						PageUtil.getOffset(pageSize, page));
+		result.setDataList(ObjectConvertor.convertToPersonList(pageList, this));
+		result.setPaginator(pageList.getPaginator());
+		return result;
 	}
 }

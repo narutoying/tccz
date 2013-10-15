@@ -31,4 +31,22 @@
 		 ]]></sqlmap>
 	</operation>
 	
+	<operation name="fuzzyPageQueryByName" multiplicity="many" parameterClass="map" paging="true">
+		<extraparams>
+			<param name="enterpriseName" javatype="java.lang.String"/>
+		 </extraparams>
+		<sql><![CDATA[
+			select * from enterprise
+		]]></sql>
+		<sqlmap><![CDATA[
+          select * from enterprise
+		  <dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="enterpriseName">
+					name like concat("%", #enterpriseName#, "%")
+				</isNotEmpty>
+			</dynamic>
+			order by id DESC limit #pageNum#, #pageSize#
+		 ]]></sqlmap>
+	</operation>
+	
 </table>

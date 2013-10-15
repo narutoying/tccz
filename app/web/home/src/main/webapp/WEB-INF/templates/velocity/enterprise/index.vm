@@ -1,0 +1,50 @@
+#set($paginator = $pageList.paginator)
+<link rel="stylesheet" type="text/css" href="$!contextPath/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="$!contextPath/css/bootstrap-responsive.min.css">
+<style>
+	div#searchDiv {
+		padding: 10px;
+	}
+	
+	table#viewTable {
+		width: 80%;
+	}
+	div#mainContent {
+		padding: 10px;
+	}
+</style>
+<div id="mainContent">
+<h2>企业信息管理</h2>
+<div id="searchDiv">
+	<form id="queryForm" class="form-search" action="index.htm">
+    	#if($!paginator.page > 0)
+    	<input type="hidden" name="currentPage" value="$!paginator.page">
+        #else
+        	<input type="hidden" name="currentPage" value="1">
+    	#end
+      <div class="form-group">
+    	<input type="text" name="fuzzyName" value="$!fuzzyName" class="input-medium" placeholder="请输入企业名称"/>
+    	<button type="submit" class="btn btn-success">查询</button>
+      </div>
+    </form>
+</div>
+<div>
+	<table id="viewTable" class="table table-striped table-bordered table-hover">
+		<tr>
+			<th>企业名</th>
+			<th>企业法人</th>
+			<th>操作</th>
+		</tr>
+		#foreach($data in $pageList.dataList)
+			<tr>
+				<td>$!data.name</td>
+				<td>$!data.legalPerson.name</td>
+				<td>
+					
+				</td>
+			</tr>
+		#end
+	</table>
+</div>
+#pagingBar($paginator "queryForm") 
+</div>

@@ -12,7 +12,11 @@ import com.tccz.tccz.common.dal.daointerface.EnterpriseDAO;
 import com.tccz.tccz.common.dal.dataobject.EnterpriseDO;
 import org.springframework.dao.DataAccessException;
 import java.util.List;
+import com.tccz.tccz.dal.util.PageList;
 import com.tccz.tccz.common.dal.dataobject.EnterpriseDO;
+import java.util.Map;
+import java.util.HashMap;
+import com.tccz.tccz.dal.util.Paginator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -93,6 +97,47 @@ public class IbatisEnterpriseDAO extends SqlMapClientDaoSupport implements Enter
 					        param.put("enterpriseName", enterpriseName);
 					        return getSqlMapClientTemplate().queryForList("MS-ENTERPRISE-FUZZY-QUERY-BY-NAME", param);
 
+    }
+
+	/**
+	 *  Query DB table <tt>enterprise</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>select * from enterprise</tt>
+	 *
+	 *	@param enterpriseName
+	 *	@param pageSize
+	 *	@param pageNum
+	 *	@return PageList
+	 *	@throws DataAccessException
+	 */	 
+    public PageList fuzzyPageQueryByName(String enterpriseName, int pageSize, int pageNum) throws DataAccessException {
+        Map param = new HashMap();
+
+        param.put("enterpriseName", enterpriseName);
+        param.put("pageSize", new Integer(pageSize));
+        param.put("pageNum", new Integer(pageNum));
+
+        Paginator paginator = new Paginator();
+        paginator.setItemsPerPage(pageSize);
+        paginator.setPage(pageNum / pageSize + 1);
+
+        paginator.setItems(((Integer) getSqlMapClientTemplate().queryForObject("MS-TCCZ-ENTERPRISE-FUZZY-PAGE-QUERY-BY-NAME-COUNT-FOR-PAGING", param)).intValue());
+        
+        PageList  pageList = new PageList();
+        pageList.setPaginator(paginator);
+        
+        if (paginator.getBeginIndex() <= paginator.getItems()) {
+            param.put("startRow", new Integer(paginator.getBeginIndex()));
+            param.put("endRow", new Integer(paginator.getEndIndex()));
+            pageList.addAll(getSqlMapClientTemplate().queryForList("MS-ENTERPRISE-FUZZY-PAGE-QUERY-BY-NAME", param));
+        }
+        
+        return pageList;
     }
 
 }

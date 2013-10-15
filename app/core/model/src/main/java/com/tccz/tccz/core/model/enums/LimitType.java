@@ -11,6 +11,7 @@ package com.tccz.tccz.core.model.enums;
  * @version $Id: LimitCode.java, v 0.1 2013-9-11 上午9:22:32
  *          narutoying09@gmail.com Exp $
  */
+@Deprecated
 public enum LimitType {
 	/** 流动贷款占用额度 */
 	FLOATING_LOAN_USED("FLOATING_LOAN_USED", "流动贷款占用额度"),
