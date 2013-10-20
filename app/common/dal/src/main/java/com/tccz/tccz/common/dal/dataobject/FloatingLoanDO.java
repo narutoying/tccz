@@ -35,7 +35,7 @@ public class FloatingLoanDO {
 	/**
 	 * This property corresponds to db column <tt>loaner_id</tt>.
 	 */
-	private int loanerId;
+	private String loanerId;
 
 	/**
 	 * This property corresponds to db column <tt>biz_side_type</tt>.
@@ -92,7 +92,7 @@ public class FloatingLoanDO {
      *
      * @return property value of loanerId
      */
-	public int getLoanerId() {
+	public String getLoanerId() {
 		return loanerId;
 	}
 	
@@ -101,7 +101,7 @@ public class FloatingLoanDO {
 	 * 
 	 * @param loanerId value to be assigned to property loanerId
      */
-	public void setLoanerId(int loanerId) {
+	public void setLoanerId(String loanerId) {
 		this.loanerId = loanerId;
 	}
 

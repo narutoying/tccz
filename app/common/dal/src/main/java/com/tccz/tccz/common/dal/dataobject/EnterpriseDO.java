@@ -38,14 +38,14 @@ public class EnterpriseDO {
 	private String name;
 
 	/**
+	 * This property corresponds to db column <tt>institution_code</tt>.
+	 */
+	private String institutionCode;
+
+	/**
 	 * This property corresponds to db column <tt>account_number</tt>.
 	 */
 	private String accountNumber;
-
-	/**
-	 * This property corresponds to db column <tt>legal_person_id</tt>.
-	 */
-	private int legalPersonId;
 
 	/**
 	 * This property corresponds to db column <tt>create_time</tt>.
@@ -96,6 +96,24 @@ public class EnterpriseDO {
 	}
 
     /**
+     * Getter method for property <tt>institutionCode</tt>.
+     *
+     * @return property value of institutionCode
+     */
+	public String getInstitutionCode() {
+		return institutionCode;
+	}
+	
+	/**
+	 * Setter method for property <tt>institutionCode</tt>.
+	 * 
+	 * @param institutionCode value to be assigned to property institutionCode
+     */
+	public void setInstitutionCode(String institutionCode) {
+		this.institutionCode = institutionCode;
+	}
+
+    /**
      * Getter method for property <tt>accountNumber</tt>.
      *
      * @return property value of accountNumber
@@ -111,24 +129,6 @@ public class EnterpriseDO {
      */
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
-	}
-
-    /**
-     * Getter method for property <tt>legalPersonId</tt>.
-     *
-     * @return property value of legalPersonId
-     */
-	public int getLegalPersonId() {
-		return legalPersonId;
-	}
-	
-	/**
-	 * Setter method for property <tt>legalPersonId</tt>.
-	 * 
-	 * @param legalPersonId value to be assigned to property legalPersonId
-     */
-	public void setLegalPersonId(int legalPersonId) {
-		this.legalPersonId = legalPersonId;
 	}
 
     /**

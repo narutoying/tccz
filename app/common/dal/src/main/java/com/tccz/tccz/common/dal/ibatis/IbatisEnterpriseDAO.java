@@ -65,15 +65,35 @@ public class IbatisEnterpriseDAO extends SqlMapClientDaoSupport implements Enter
    	 *  <tt></tt>
 	 *  <p>
 	 *  The sql statement for this operation is <br>
-	 *  <tt>select * from enterprise where (legal_person_id = ?)</tt>
+	 *  <tt>select * from enterprise where (institution_code = ?)</tt>
 	 *
-	 *	@param legalPersonId
+	 *	@param institutionCode
+	 *	@return EnterpriseDO
+	 *	@throws DataAccessException
+	 */	 
+    public EnterpriseDO getEnterpriseByCode(String institutionCode) throws DataAccessException {
+
+        return (EnterpriseDO) getSqlMapClientTemplate().queryForObject("MS-ENTERPRISE-GET-ENTERPRISE-BY-CODE", institutionCode);
+
+    }
+
+	/**
+	 *  Query DB table <tt>enterprise</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>select e.* from enterprise</tt>
+	 *
+	 *	@param legalPersonIdCard
 	 *	@return List<EnterpriseDO>
 	 *	@throws DataAccessException
 	 */	 
-    public List<EnterpriseDO> getByLegalPersonId(int legalPersonId) throws DataAccessException {
-        Integer param = new Integer(legalPersonId);
-        return getSqlMapClientTemplate().queryForList("MS-ENTERPRISE-GET-BY-LEGAL-PERSON-ID", param);
+    public List<EnterpriseDO> getByLegalPersonIdCard(String legalPersonIdCard) throws DataAccessException {
+
+        return getSqlMapClientTemplate().queryForList("MS-ENTERPRISE-GET-BY-LEGAL-PERSON-ID-CARD", legalPersonIdCard);
 
     }
 
@@ -138,6 +158,72 @@ public class IbatisEnterpriseDAO extends SqlMapClientDaoSupport implements Enter
         }
         
         return pageList;
+    }
+
+	/**
+	 *  Insert one <tt>EnterpriseDO</tt> object to DB table <tt>enterprise</tt>, return primary key
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>insert into enterprise(name,institution_code,account_number,create_time,modify_time) values (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)</tt>
+	 *
+	 *	@param enterprise
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int insert(EnterpriseDO enterprise) throws DataAccessException {
+    	if (enterprise == null) {
+    		throw new IllegalArgumentException("Can't insert a null data object into db.");
+    	}
+    	
+        getSqlMapClientTemplate().insert("MS-ENTERPRISE-INSERT", enterprise);
+
+        return enterprise.getId();
+    }
+
+	/**
+	 *  Delete records from DB table <tt>enterprise</tt>.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>delete from enterprise where (institution_code = ?)</tt>
+	 *
+	 *	@param institutionCode
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int delete(String institutionCode) throws DataAccessException {
+
+        return getSqlMapClientTemplate().delete("MS-ENTERPRISE-DELETE", institutionCode);
+    }
+
+	/**
+	 *  Update DB table <tt>enterprise</tt>.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>update enterprise set name=?, institution_code=?, account_number=?, modify_time=CURRENT_TIMESTAMP where (institution_code = ?)</tt>
+	 *
+	 *	@param enterprise
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int update(EnterpriseDO enterprise) throws DataAccessException {
+    	if (enterprise == null) {
+    		throw new IllegalArgumentException("Can't update by a null data object.");
+    	}
+
+
+        return getSqlMapClientTemplate().update("MS-ENTERPRISE-UPDATE", enterprise);
     }
 
 }

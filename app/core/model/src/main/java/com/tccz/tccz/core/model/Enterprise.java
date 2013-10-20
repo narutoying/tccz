@@ -4,6 +4,11 @@
  */
 package com.tccz.tccz.core.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.tccz.tccz.core.model.enums.BusinessSideType;
+
 /**
  * 企业
  * 
@@ -12,6 +17,15 @@ package com.tccz.tccz.core.model;
  *          narutoying09@gmail.com Exp $
  */
 public class Enterprise extends BusinessSide {
+
+	/** 机构代码，唯一标识一家企业，替代id */
+	private String institutionCode;
+
+	/** 企业法人，一家企业有且仅有一个法人 */
+	private Person legalPerson;
+
+	/** 与企业直接关联的非法人 */
+	private List<Person> relationPersons = new ArrayList<Person>();
 
 	public Enterprise() {
 		super();
@@ -23,33 +37,6 @@ public class Enterprise extends BusinessSide {
 		this.name = name;
 	}
 
-	/*
-	 * 基本属性
-	 */
-	/** 企业法人，只填充id */
-	private Person legalPerson;
-	/*
-	 * 非基本属性
-	 */
-	/** 总额度 */
-	private Limit wholeLimit;
-	/** 可用额度 */
-	private Limit availableLimit;
-	/** 流贷已占用额度 */
-	private Limit floatingLoanUseLimit;
-	/** 银票已占用额度 */
-	private Limit bandarNoteUseLimit;
-	/** 贴现已占用额度 */
-	private Limit discountUseLimit;
-
-	public Limit getAvailableLimit() {
-		return availableLimit;
-	}
-
-	public void setAvailableLimit(Limit availableLimit) {
-		this.availableLimit = availableLimit;
-	}
-
 	public Person getLegalPerson() {
 		return legalPerson;
 	}
@@ -58,36 +45,61 @@ public class Enterprise extends BusinessSide {
 		this.legalPerson = legalPerson;
 	}
 
-	public Limit getWholeLimit() {
-		return wholeLimit;
+	public List<Person> getRelationPersons() {
+		return relationPersons;
 	}
 
-	public void setWholeLimit(Limit wholeLimit) {
-		this.wholeLimit = wholeLimit;
+	public void setRelationPersons(List<Person> relationPersons) {
+		this.relationPersons = relationPersons;
 	}
 
-	public Limit getFloatingLoanUseLimit() {
-		return floatingLoanUseLimit;
+	public String getInstitutionCode() {
+		return institutionCode;
 	}
 
-	public void setFloatingLoanUseLimit(Limit floatingLoanUseLimit) {
-		this.floatingLoanUseLimit = floatingLoanUseLimit;
+	public void setInstitutionCode(String institutionCode) {
+		this.institutionCode = institutionCode;
 	}
 
-	public Limit getBandarNoteUseLimit() {
-		return bandarNoteUseLimit;
+	@Override
+	public String getIdentifier() {
+		return institutionCode;
 	}
 
-	public void setBandarNoteUseLimit(Limit bandarNoteUseLimit) {
-		this.bandarNoteUseLimit = bandarNoteUseLimit;
+	@Override
+	public String setIdentifier(String identifier) {
+		return this.institutionCode = identifier;
 	}
 
-	public Limit getDiscountUseLimit() {
-		return discountUseLimit;
+	@Override
+	public String getBusinessSideType() {
+		return BusinessSideType.ENTERPRISE.getCode();
 	}
 
-	public void setDiscountUseLimit(Limit discountUseLimit) {
-		this.discountUseLimit = discountUseLimit;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((institutionCode == null) ? 0 : institutionCode.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Enterprise other = (Enterprise) obj;
+		if (institutionCode == null) {
+			if (other.institutionCode != null)
+				return false;
+		} else if (!institutionCode.equals(other.institutionCode))
+			return false;
+		return true;
 	}
 
 }

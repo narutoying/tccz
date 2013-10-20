@@ -62,7 +62,7 @@ Ext.onReady(function(){
                     if (c.getValue() == null) {
                         c.setValue((item != null ? item.type : null));
                     }
-					setSpeicalFields(c.getValue());
+                    setSpeicalFields(c.getValue());
                 },
                 select: function(){
                     setSpeicalFields(this.getValue());
@@ -98,15 +98,17 @@ Ext.onReady(function(){
                     name: 'name'
                 }, {
                     name: 'id'
+                }, {
+                    name: 'identifier'
                 }]
             }),
             readOnly: !canModify(null),
             displayField: 'name',
-            valueField: 'id',
+            valueField: 'identifier',
             queryParam: 'fuzzyName',
             listeners: {
                 render: function(c){
-                    var bizSideId = (item != null ? item.drawer.id : 0);
+                    var bizSideId = (item != null ? item.drawer.identifier : 0);
                     this.getStore().on('load', function(){
                         if (c.getValue() == null) {
                             c.setValue(bizSideId);
@@ -162,7 +164,7 @@ Ext.onReady(function(){
             id: 'openMoney',
             name: 'openMoney',
             readOnly: !canModify("openMoney"),
-            value: (item != null && item.type=="OPEN" ? item.openMoney.amount : null),
+            value: (item != null && item.type == "OPEN" ? item.openMoney.amount : null),
             minValue: 0,
             hidden: true
         }, {
@@ -172,7 +174,7 @@ Ext.onReady(function(){
             id: 'closeMoney',
             name: 'closeMoney',
             readOnly: !canModify("closeMoney"),
-            value: (item != null && item.type=="OPEN" ? item.closeMoney.amount : null),
+            value: (item != null && item.type == "OPEN" ? item.closeMoney.amount : null),
             minValue: 0,
             hidden: true
         }, {
@@ -206,7 +208,7 @@ function setSpeicalFields(type){
     else {
         Ext.getCmp("openMoney").hide();
         Ext.getCmp("closeMoney").hide();
-		Ext.getCmp("openMoney").allowBlank = true;
+        Ext.getCmp("openMoney").allowBlank = true;
         Ext.getCmp("closeMoney").allowBlank = true;
     }
 }

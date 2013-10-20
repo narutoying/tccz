@@ -86,7 +86,7 @@ public class IbatisDiscountDAO extends SqlMapClientDaoSupport implements Discoun
    	 *  <tt></tt>
 	 *  <p>
 	 *  The sql statement for this operation is <br>
-	 *  <tt>insert into discount(bandar_note_number,proposer_id,amount,state,expire_date,create_time,modify_time) values (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)</tt>
+	 *  <tt>insert into discount(bandar_note_number,institution_code,amount,state,expire_date,create_time,modify_time) values (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)</tt>
 	 *
 	 *	@param discount
 	 *	@return int
@@ -130,7 +130,7 @@ public class IbatisDiscountDAO extends SqlMapClientDaoSupport implements Discoun
    	 *  <tt></tt>
 	 *  <p>
 	 *  The sql statement for this operation is <br>
-	 *  <tt>update discount set bandar_note_number=?, proposer_id=?, amount=?, state=?, expire_date=?, modify_time=CURRENT_TIMESTAMP where (id = ?)</tt>
+	 *  <tt>update discount set bandar_note_number=?, institution_code=?, amount=?, state=?, expire_date=?, modify_time=CURRENT_TIMESTAMP where (id = ?)</tt>
 	 *
 	 *	@param discount
 	 *	@return int
@@ -202,16 +202,16 @@ public class IbatisDiscountDAO extends SqlMapClientDaoSupport implements Discoun
 	 *  The sql statement for this operation is <br>
 	 *  <tt>select * from discount</tt>
 	 *
-	 *	@param proposerId
+	 *	@param institutionCode
 	 *	@param expireStart
 	 *	@param expireEnd
 	 *	@return List<DiscountDO>
 	 *	@throws DataAccessException
 	 */	 
-    public List<DiscountDO> getByExpireDate(int proposerId, Date expireStart, Date expireEnd) throws DataAccessException {
+    public List<DiscountDO> getByExpireDate(String institutionCode, Date expireStart, Date expireEnd) throws DataAccessException {
         Map param = new HashMap();
 
-        param.put("proposerId", new Integer(proposerId));
+        param.put("institutionCode", institutionCode);
         param.put("expireStart", expireStart);
         param.put("expireEnd", expireEnd);
 

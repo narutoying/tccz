@@ -8,7 +8,15 @@
 		]]>
         </sql>
     </operation>
-    
+	
+	<operation name="getByIdCard" multiplicity="one">
+        <sql>
+            <![CDATA[
+			select * from person where id_card_number = ?
+		]]>
+        </sql>
+    </operation>
+	
 	<operation name="fuzzyQueryByName" multiplicity="many" parameterClass="map">
 		<extraparams>
 			<param name="fuzzyName" javatype="java.lang.String"/>

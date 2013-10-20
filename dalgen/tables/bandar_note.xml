@@ -20,7 +20,18 @@
     <operation name="insert">
         <sql>
             <![CDATA[
-			insert into bandar_note(bandar_note_number,enterprise_id,type,amount,draw_date,margin_amount,exposure_amount,exposure_close_amount,	create_time,modify_time, expire_date) values(?, ?, ?, ?, ?, ?, ?, ?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
+			insert into bandar_note(
+			bandar_note_number,
+			institution_code,
+			type,
+			amount,
+			draw_date,
+			margin_amount,
+			exposure_amount,
+			exposure_close_amount,
+			create_time,
+			modify_time, 
+			expire_date) values(?, ?, ?, ?, ?, ?, ?, ?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
 		]]>
         </sql>
     </operation>
@@ -37,7 +48,7 @@
         <sql>
             <![CDATA[
 			update bandar_note set bandar_note_number = ?,
-			enterprise_id = ?,
+			institution_code = ?,
 			type = ?,
 			amount = ?,
 			draw_date = ?,
@@ -69,7 +80,7 @@
           select d.* from bandar_note d
 			<dynamic prepend="WHERE">
 				<isNotEmpty prepend="and" property="enterpriseName">
-					d.enterprise_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+					d.institution_code in (select e.institution_code from enterprise e where e.name = #enterpriseName#)
 				</isNotEmpty>
 				<isNotEmpty prepend="and" property="bandarNoteNumber">
 					d.bandar_note_number = #bandarNoteNumber#
@@ -101,7 +112,7 @@
     
     <operation name="getByExpireDate" multiplicity="many" parameterClass="map">
         <extraparams>
-            <param name="enterpriseId" javatype="int"/>
+            <param name="institutionCode" javatype="java.lang.String"/>
             <param name="expireStart" javatype="java.util.Date"/>
             <param name="expireEnd" javatype="java.util.Date"/>
         </extraparams>
@@ -112,7 +123,7 @@
         </sql>
         <sqlmap>
             <![CDATA[
-          select d.* from bandar_note d where d.enterprise_id = #enterpriseId# 
+          select d.* from bandar_note d where d.institution_code = #institutionCode# 
 				<isNotNull prepend=" and " property="expireStart">
 					 ${cdata-start}
 						d.expire_date >= DATE(#expireStart#)

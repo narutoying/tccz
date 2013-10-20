@@ -44,6 +44,6 @@ public interface BandarNoteQueryService {
 	 * @param expireEnd
 	 * @return
 	 */
-	List<BandarNote> queryListByExpireDate(int bizSideId, Date expireStart,
+	List<BandarNote> queryListByExpireDate(String bizSideId, Date expireStart,
 			Date expireEnd);
 }

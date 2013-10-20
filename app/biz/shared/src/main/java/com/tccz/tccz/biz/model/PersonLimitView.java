@@ -24,8 +24,12 @@ public class PersonLimitView {
 	private Person person;
 	/** 所属业务方集合类型 */
 	private BusinessSideSetType businessSideSetType;
-	/** 关联企业 */
+	/** 法人企业 */
+	private List<Enterprise> ownEnterprises = new ArrayList<Enterprise>();
+	/** 关联企业（非法人） */
 	private List<Enterprise> associateEnterprises = new ArrayList<Enterprise>();
+	/** 关联个人（不含本人） */
+	private List<Person> associatePersons = new ArrayList<Person>();
 	/** 总额度 */
 	private Money totalLimit;
 	/** 可用额度 */
@@ -69,5 +73,21 @@ public class PersonLimitView {
 
 	public void setAvailableLimit(Money availableLimit) {
 		this.availableLimit = availableLimit;
+	}
+
+	public List<Person> getAssociatePersons() {
+		return associatePersons;
+	}
+
+	public void setAssociatePersons(List<Person> associatePersons) {
+		this.associatePersons = associatePersons;
+	}
+
+	public List<Enterprise> getOwnEnterprises() {
+		return ownEnterprises;
+	}
+
+	public void setOwnEnterprises(List<Enterprise> ownEnterprises) {
+		this.ownEnterprises = ownEnterprises;
 	}
 }

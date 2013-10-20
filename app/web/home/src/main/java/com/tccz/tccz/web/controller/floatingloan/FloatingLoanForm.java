@@ -15,7 +15,7 @@ import java.util.Date;
 public class FloatingLoanForm {
 	private Integer id;
 	private String bizSideType;
-	private int loanerId;
+	private String loanerId;
 	private String amount;
 	private Date releaseDate;
 	private Date expireDate;
@@ -34,14 +34,6 @@ public class FloatingLoanForm {
 
 	public void setBizSideType(String bizSideType) {
 		this.bizSideType = bizSideType;
-	}
-
-	public int getLoanerId() {
-		return loanerId;
-	}
-
-	public void setLoanerId(int loanerId) {
-		this.loanerId = loanerId;
 	}
 
 	public String getAmount() {
@@ -66,5 +58,13 @@ public class FloatingLoanForm {
 
 	public void setExpireDate(Date expireDate) {
 		this.expireDate = expireDate;
+	}
+
+	public String getLoanerId() {
+		return loanerId;
+	}
+
+	public void setLoanerId(String loanerId) {
+		this.loanerId = loanerId;
 	}
 }

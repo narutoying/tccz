@@ -49,11 +49,11 @@ public class BandarNoteManageServiceImpl implements BandarNoteManageService {
 
 					@Override
 					public void doManage() {
-						LimitControlResult controlResult = limitService
-								.isOverLimit(businessSideQueryService
-										.queryEnterpriseById(bandarNote
-												.getDrawer().getId()), null,
-										bandarNote.occupyMoney());
+						LimitControlResult controlResult = limitService.isOverLimit(
+								businessSideQueryService
+										.queryEnterpriseByInstitudeCode(bandarNote
+												.getDrawer().getIdentifier()),
+								null, bandarNote.occupyMoney());
 						if (!controlResult.isOverLimit()) {
 							bandarNoteDAO.insert(ObjectConvertor
 									.convertToBandarNoteDO(bandarNote));

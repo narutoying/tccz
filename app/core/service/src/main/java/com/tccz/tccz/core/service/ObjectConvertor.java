@@ -12,12 +12,14 @@ import net.sf.json.JSONSerializer;
 
 import org.springframework.util.CollectionUtils;
 
+import com.tccz.tccz.common.dal.daointerface.PersonEnterpriseRelationDAO;
 import com.tccz.tccz.common.dal.dataobject.BandarNoteDO;
 import com.tccz.tccz.common.dal.dataobject.DiscountChangeDO;
 import com.tccz.tccz.common.dal.dataobject.DiscountDO;
 import com.tccz.tccz.common.dal.dataobject.EnterpriseDO;
 import com.tccz.tccz.common.dal.dataobject.FloatingLoanDO;
 import com.tccz.tccz.common.dal.dataobject.PersonDO;
+import com.tccz.tccz.common.dal.dataobject.PersonEnterpriseRelationDO;
 import com.tccz.tccz.common.util.exception.CommonException;
 import com.tccz.tccz.core.model.BandarNote;
 import com.tccz.tccz.core.model.Discount;
@@ -31,6 +33,7 @@ import com.tccz.tccz.core.model.Person;
 import com.tccz.tccz.core.model.enums.BandarNoteType;
 import com.tccz.tccz.core.model.enums.DiscountState;
 import com.tccz.tccz.core.model.enums.LoanBizSideType;
+import com.tccz.tccz.core.model.enums.PersonEnterpriseRelationType;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 import com.tccz.tccz.core.service.query.DiscountQueryService;
 
@@ -45,6 +48,8 @@ public class ObjectConvertor {
 
 	private static BusinessSideQueryService businessSideQueryService;
 
+	private static PersonEnterpriseRelationDAO personEnterpriseRelationDAO;
+
 	public static DiscountDO convertToDiscountDO(Discount domain) {
 		if (domain == null) {
 			return null;
@@ -56,7 +61,7 @@ public class ObjectConvertor {
 		result.setCreateTime(domain.getCreateTime());
 		result.setExpireDate(domain.getExpireDate());
 		result.setModifyTime(domain.getModifyTime());
-		result.setProposerId(domain.getProposer().getId());
+		result.setInstitutionCode(domain.getProposer().getInstitutionCode());
 		result.setState(domain.getState().getCode());
 		return result;
 	}
@@ -84,7 +89,8 @@ public class ObjectConvertor {
 		result.setModifyTime(dataObject.getModifyTime());
 		if (businessSideQueryService != null) {
 			result.setProposer(businessSideQueryService
-					.queryEnterpriseById(dataObject.getProposerId()));
+					.queryEnterpriseByInstitudeCode(dataObject
+							.getInstitutionCode()));
 		}
 		result.setState(DiscountState.getByCode(dataObject.getState()));
 		return result;
@@ -122,13 +128,27 @@ public class ObjectConvertor {
 		result.setId(dataObject.getId());
 		result.setName(dataObject.getName());
 		result.setAccountNumber(dataObject.getAccountNumber());
-		// Person person = new Person();
-		// person.setId(dataObject.getLegalPersonId());
-		// result.setLegalPerson(person);
-		result.setLegalPerson(businessSideQueryService.queryPersonById(
-				dataObject.getLegalPersonId(), false));
+		String institutionCode = dataObject.getInstitutionCode();
+		result.setInstitutionCode(institutionCode);
 		result.setCreateTime(dataObject.getCreateTime());
 		result.setModifyTime(dataObject.getModifyTime());
+		List<Person> relationPersons = new ArrayList<Person>();
+		result.setRelationPersons(relationPersons);
+		List<PersonEnterpriseRelationDO> relationDOs = personEnterpriseRelationDAO
+				.getByCondition(institutionCode, null, null);
+		if (!CollectionUtils.isEmpty(relationDOs)) {
+			for (PersonEnterpriseRelationDO relation : relationDOs) {
+				PersonEnterpriseRelationType type = PersonEnterpriseRelationType
+						.getByCode(relation.getRelationType());
+				Person person = businessSideQueryService.queryPersonByIdCard(
+						relation.getPersonId(), false);
+				if (type == PersonEnterpriseRelationType.LEGAL) {
+					result.setLegalPerson(person);
+				} else if (type == PersonEnterpriseRelationType.NORMAL) {
+					relationPersons.add(person);
+				}
+			}
+		}
 		return result;
 	}
 
@@ -145,8 +165,7 @@ public class ObjectConvertor {
 	}
 
 	public static Person convertToPerson(PersonDO dataObject,
-			boolean fillEnterprise,
-			BusinessSideQueryService businessSideQueryService) {
+			boolean fillEnterprise) {
 		if (dataObject == null) {
 			return null;
 		}
@@ -156,9 +175,27 @@ public class ObjectConvertor {
 		result.setAccountNumber(dataObject.getAccountNumber());
 		result.setCreateTime(dataObject.getCreateTime());
 		result.setModifyTime(dataObject.getModifyTime());
-		if (fillEnterprise) {
-			result.setOwnEnterprises(businessSideQueryService
-					.queryEnterprisesByLegalPerson(dataObject.getId()));
+		result.setIdCardNumber(dataObject.getIdCardNumber());
+		List<PersonEnterpriseRelationDO> relations = personEnterpriseRelationDAO
+				.getByCondition(null, dataObject.getIdCardNumber(), null);
+		if (!CollectionUtils.isEmpty(relations) && fillEnterprise) {
+			List<Enterprise> ownEnterprises = new ArrayList<Enterprise>();
+			List<Enterprise> relationEnterprises = new ArrayList<Enterprise>();
+			result.setOwnEnterprises(ownEnterprises);
+			result.setRelationEnterprises(relationEnterprises);
+			for (PersonEnterpriseRelationDO relationDO : relations) {
+				PersonEnterpriseRelationType type = PersonEnterpriseRelationType
+						.getByCode(relationDO.getRelationType());
+				if (type == PersonEnterpriseRelationType.LEGAL) {
+					ownEnterprises.add(businessSideQueryService
+							.queryEnterpriseByInstitudeCode(relationDO
+									.getEnterpriseId()));
+				} else if (type == PersonEnterpriseRelationType.NORMAL) {
+					relationEnterprises.add(businessSideQueryService
+							.queryEnterpriseByInstitudeCode(relationDO
+									.getEnterpriseId()));
+				}
+			}
 		}
 		return result;
 	}
@@ -183,8 +220,8 @@ public class ObjectConvertor {
 		result.setAmount(new Money(data.getAmount()));
 		result.setCreateTime(data.getCreateTime());
 		result.setDrawDate(data.getDrawDate());
-		result.setDrawer(businessSideQueryService.queryEnterpriseById(data
-				.getEnterpriseId()));
+		result.setDrawer(businessSideQueryService
+				.queryEnterpriseByInstitudeCode(data.getInstitutionCode()));
 		result.setExpireDate(data.getExpireDate());
 		result.setId(data.getId());
 		result.setMargin(new Money(data.getMarginAmount()));
@@ -203,7 +240,7 @@ public class ObjectConvertor {
 		result.setBandarNoteNumber(data.getNumber());
 		result.setCreateTime(data.getCreateTime());
 		result.setDrawDate(data.getDrawDate());
-		result.setEnterpriseId(data.getDrawer().getId());
+		result.setInstitutionCode(data.getDrawer().getInstitutionCode());
 		result.setExpireDate(data.getExpireDate());
 		result.setId(data.getId());
 		result.setMarginAmount(data.getMargin().getCent());
@@ -230,10 +267,10 @@ public class ObjectConvertor {
 		result.setExpireDate(data.getExpireDate());
 		result.setId(data.getId());
 		if (type == LoanBizSideType.CORPORATE) {
-			result.setLoaner(businessSideQueryService.queryEnterpriseById(data
-					.getLoanerId()));
+			result.setLoaner(businessSideQueryService
+					.queryEnterpriseByInstitudeCode(data.getLoanerId()));
 		} else if (type == LoanBizSideType.PRIVATE) {
-			result.setLoaner(businessSideQueryService.queryPersonById(
+			result.setLoaner(businessSideQueryService.queryPersonByIdCard(
 					data.getLoanerId(), false));
 		}
 		result.setModifyTime(data.getModifyTime());
@@ -251,19 +288,18 @@ public class ObjectConvertor {
 		result.setCreateTime(data.getCreateTime());
 		result.setExpireDate(data.getExpireDate());
 		result.setId(data.getId());
-		result.setLoanerId(data.getLoaner().getId());
+		result.setLoanerId(data.getLoaner().getIdentifier());
 		result.setModifyTime(data.getModifyTime());
 		result.setReleaseDate(data.getReleaseDate());
 		return result;
 	}
 
 	public static List<Person> convertToPersonList(
-			List<PersonDO> fuzzyQueryByName,
-			BusinessSideQueryService businessSideQueryService) {
+			List<PersonDO> fuzzyQueryByName) {
 		List<Person> result = new ArrayList<Person>();
 		if (!CollectionUtils.isEmpty(fuzzyQueryByName)) {
 			for (PersonDO data : fuzzyQueryByName) {
-				result.add(convertToPerson(data, true, businessSideQueryService));
+				result.add(convertToPerson(data, false));
 			}
 		}
 		return result;
@@ -272,5 +308,24 @@ public class ObjectConvertor {
 	public void setBusinessSideQueryService(
 			BusinessSideQueryService businessSideQueryService) {
 		ObjectConvertor.businessSideQueryService = businessSideQueryService;
+	}
+
+	public void setPersonEnterpriseRelationDAO(
+			PersonEnterpriseRelationDAO personEnterpriseRelationDAO) {
+		ObjectConvertor.personEnterpriseRelationDAO = personEnterpriseRelationDAO;
+	}
+
+	public static EnterpriseDO convertToEnterpriseDO(Enterprise enterprise) {
+		if (enterprise == null) {
+			return null;
+		}
+		EnterpriseDO result = new EnterpriseDO();
+		result.setAccountNumber(enterprise.getAccountNumber());
+		result.setCreateTime(enterprise.getCreateTime());
+		result.setId(enterprise.getId());
+		result.setInstitutionCode(enterprise.getInstitutionCode());
+		result.setModifyTime(enterprise.getModifyTime());
+		result.setName(enterprise.getName());
+		return result;
 	}
 }

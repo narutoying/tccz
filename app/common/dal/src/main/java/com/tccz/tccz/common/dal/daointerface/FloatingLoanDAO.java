@@ -145,6 +145,6 @@ public interface FloatingLoanDAO {
 	 *	@return List<FloatingLoanDO>
 	 *	@throws DataAccessException
 	 */	 
-    public List<FloatingLoanDO> getByExpireDate(int loanerId, String bizSideType, Date expireStart, Date expireEnd) throws DataAccessException;
+    public List<FloatingLoanDO> getByExpireDate(String loanerId, String bizSideType, Date expireStart, Date expireEnd) throws DataAccessException;
 
 }

@@ -59,11 +59,11 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 
 					@Override
 					public void doManage() {
-						LimitControlResult controlResult = limitService
-								.isOverLimit(businessSideQueryService
-										.queryEnterpriseById(discount
-												.getProposer().getId()), null,
-										discount.occupyMoney());
+						LimitControlResult controlResult = limitService.isOverLimit(
+								businessSideQueryService
+										.queryEnterpriseByInstitudeCode(discount
+												.getProposer().getIdentifier()),
+								null, discount.occupyMoney());
 						if (!controlResult.isOverLimit()) {
 							int discountId = discountDAO.insert(ObjectConvertor
 									.convertToDiscountDO(discount));
@@ -154,12 +154,11 @@ public class DiscountManageServiceImpl implements DiscountManageService {
 		ParaCheckUtil.checkParaNotNull(discount.getAmount());
 		Enterprise proposer = discount.getProposer();
 		ParaCheckUtil.checkParaNotNull(proposer);
-		int proposerId = proposer.getId();
-		ParaCheckUtil.checkParaPositive(proposerId);
+		String identifier = proposer.getIdentifier();
 		Enterprise queryEnterpriseById = businessSideQueryService
-				.queryEnterpriseById(proposerId);
+				.queryEnterpriseByInstitudeCode(identifier);
 		if (queryEnterpriseById == null) {
-			throw new CommonException("不存在企业id=" + proposerId);
+			throw new CommonException("不存在企业[" + identifier + "]");
 		}
 		ParaCheckUtil.checkParaNotNull(discount.getState());
 	}

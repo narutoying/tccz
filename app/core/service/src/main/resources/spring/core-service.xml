@@ -32,6 +32,7 @@
 	<bean id="bandarNoteManageService" class="com.tccz.tccz.core.service.impl.BandarNoteManageServiceImpl" />
 	<bean id="floatingLoanQueryService" class="com.tccz.tccz.core.service.impl.FloatingLoanQueryServiceImpl" />
 	<bean id="floatingLoanManageService" class="com.tccz.tccz.core.service.impl.FloatingLoanManageServiceImpl" />
+	<bean id="businessSideManageService" class="com.tccz.tccz.core.service.impl.BusinessSideManageServiceImpl" />
 		
 </beans>
 

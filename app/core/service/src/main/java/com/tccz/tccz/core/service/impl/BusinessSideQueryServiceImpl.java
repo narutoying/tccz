@@ -4,13 +4,17 @@
  */
 package com.tccz.tccz.core.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
 import com.tccz.tccz.common.dal.daointerface.EnterpriseDAO;
 import com.tccz.tccz.common.dal.daointerface.PersonDAO;
+import com.tccz.tccz.common.dal.daointerface.PersonEnterpriseRelationDAO;
+import com.tccz.tccz.common.dal.dataobject.PersonEnterpriseRelationDO;
 import com.tccz.tccz.common.util.PageList;
 import com.tccz.tccz.common.util.PageUtil;
 import com.tccz.tccz.core.model.BusinessSide;
@@ -18,6 +22,7 @@ import com.tccz.tccz.core.model.BusinessSideSet;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Person;
 import com.tccz.tccz.core.model.enums.BusinessSideSetType;
+import com.tccz.tccz.core.model.enums.PersonEnterpriseRelationType;
 import com.tccz.tccz.core.service.ObjectConvertor;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 
@@ -29,29 +34,22 @@ import com.tccz.tccz.core.service.query.BusinessSideQueryService;
  */
 public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 
+	/** 辅助计算业务方结合Map */
+	private ThreadLocal<Map<BusinessSide, Boolean>> businessSideSetHelperMap = new ThreadLocal<Map<BusinessSide, Boolean>>() {
+		@Override
+		protected Map<BusinessSide, Boolean> initialValue() {
+			return new HashMap<BusinessSide, Boolean>();
+		}
+	};
+
 	@Autowired
 	private EnterpriseDAO enterpriseDAO;
 
 	@Autowired
 	private PersonDAO personDAO;
 
-	/**
-	 * @see com.tccz.tccz.core.service.query.BusinessSideQueryService#queryEnterpriseById(int)
-	 */
-	@Override
-	public Enterprise queryEnterpriseById(int enterpriseId) {
-		return ObjectConvertor.convertToEnterprise(enterpriseDAO
-				.getById(enterpriseId));
-	}
-
-	/**
-	 * @see com.tccz.tccz.core.service.query.BusinessSideQueryService#queryPersonById(int)
-	 */
-	@Override
-	public Person queryPersonById(int personId, boolean fillEnterprise) {
-		return ObjectConvertor.convertToPerson(personDAO.getById(personId),
-				fillEnterprise, this);
-	}
+	@Autowired
+	private PersonEnterpriseRelationDAO personEnterpriseRelationDAO;
 
 	@Override
 	public List<Enterprise> fuzzyQueryEnterprises(String fuzzyEnterpriseName) {
@@ -61,40 +59,96 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 
 	@Override
 	public List<Person> fuzzyQueryPersons(String fuzzyName) {
-		return ObjectConvertor.convertToPersonList(
-				personDAO.fuzzyQueryByName(fuzzyName), this);
+		return ObjectConvertor.convertToPersonList(personDAO
+				.fuzzyQueryByName(fuzzyName));
 	}
 
 	@Override
 	public BusinessSideSet queryBusinessSideSet(BusinessSide businessSide) {
-		BusinessSideSet result = new BusinessSideSet();
-		int bizSideId = businessSide.getId();
+		BusinessSideSet recursiveQueryBusinessSideSet = recursiveQueryBusinessSideSet(businessSide);
 		BusinessSideSetType type = null;
-		Person person = null;
-		List<Enterprise> enterprises = null;
+		if (recursiveQueryBusinessSideSet != null) {
+			List<Enterprise> enterprises = recursiveQueryBusinessSideSet
+					.getEnterprises();
+			if (!CollectionUtils.isEmpty(enterprises) && enterprises.size() > 1) {
+				type = BusinessSideSetType.UNITED;
+			} else {
+				type = BusinessSideSetType.SINGLE;
+			}
+			recursiveQueryBusinessSideSet.setType(type);
+		}
+		businessSideSetHelperMap.remove();
+		return recursiveQueryBusinessSideSet;
+	}
+
+	private BusinessSideSet recursiveQueryBusinessSideSet(
+			BusinessSide businessSide) {
+		/*
+		 * 算法描述：
+		 * 
+		 * a) 若businessSide为个人，则将其本身、直接关联的法人企业与非法人企业加入结果集， 然后继续递归地将这些企业的集合加入结果集；
+		 * 
+		 * b) 若businessSide为企业，则将其本身、直接关联的法人与非法人加入结果集， 然后继续递归地将这些个人的集合加入结果集；
+		 * 
+		 * 注：businessSideSetHelperMap用于标记计算过程中某业务方是否已经被包含在结果集，以免重复计算甚至无限递归
+		 */
+		if (businessSide == null) {
+			return null;
+		}
+		if (isQueryed(businessSide)) {
+			return null;
+		}
+		BusinessSideSet result = new BusinessSideSet();
+		String bizSideId = businessSide.getIdentifier();
 		if (businessSide instanceof Person) {
-			person = queryPersonById(bizSideId, true);
-			enterprises = person.getOwnEnterprises();
+			Person person = queryPersonByIdCard(bizSideId, true);
+			result.getPersons().add(person);
+			setQueryed(person);
+			List<Enterprise> ownEnterprises = person.getOwnEnterprises();
+			for (Enterprise enterprise : ownEnterprises) {
+				result.combine(recursiveQueryBusinessSideSet(enterprise));
+			}
+			List<Enterprise> relationEnterprises = person
+					.getRelationEnterprises();
+			for (Enterprise enterprise : relationEnterprises) {
+				result.combine(recursiveQueryBusinessSideSet(enterprise));
+			}
 		} else if (businessSide instanceof Enterprise) {
-			Enterprise enterprise = queryEnterpriseById(bizSideId);
-			person = queryPersonById(enterprise.getLegalPerson().getId(), true);
-			enterprises = person.getOwnEnterprises();
+			Enterprise enterprise = queryEnterpriseByInstitudeCode(bizSideId);
+			result.getEnterprises().add(enterprise);
+			setQueryed(enterprise);
+			Person legalPerson = enterprise.getLegalPerson();
+			result.combine(recursiveQueryBusinessSideSet(legalPerson));
+			List<Person> relationPersons = enterprise.getRelationPersons();
+			if (!CollectionUtils.isEmpty(relationPersons)) {
+				for (Person relationPerson : relationPersons) {
+					result.combine(recursiveQueryBusinessSideSet(relationPerson));
+				}
+			}
 		}
-		if (!CollectionUtils.isEmpty(enterprises) && enterprises.size() > 1) {
-			type = BusinessSideSetType.UNITED;
-		} else {
-			type = BusinessSideSetType.SINGLE;
-		}
-		result.setType(type);
-		result.setPerson(person);
-		result.setEnterprises(enterprises);
 		return result;
 	}
 
+	private void setQueryed(BusinessSide businessSide) {
+		Map<BusinessSide, Boolean> map = businessSideSetHelperMap.get();
+		map.put(businessSide, true);
+	}
+
+	private boolean isQueryed(BusinessSide businessSide) {
+		Map<BusinessSide, Boolean> map = businessSideSetHelperMap.get();
+		Boolean exist = map.get(businessSide);
+		if (exist != null && exist == true) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	@Override
-	public List<Enterprise> queryEnterprisesByLegalPerson(int legalPersonId) {
+	public List<Enterprise> queryEnterprisesByLegalPerson(
+			String legalPersonIdCard) {
 		return ObjectConvertor.convertToEnterpriseList(enterpriseDAO
-				.getByLegalPersonId(legalPersonId));
+				.getByLegalPersonIdCard(legalPersonIdCard));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -118,8 +172,34 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 		com.tccz.tccz.dal.util.PageList pageList = personDAO
 				.fuzzyPageQueryByName(personName, pageSize,
 						PageUtil.getOffset(pageSize, page));
-		result.setDataList(ObjectConvertor.convertToPersonList(pageList, this));
+		result.setDataList(ObjectConvertor.convertToPersonList(pageList));
 		result.setPaginator(pageList.getPaginator());
 		return result;
+	}
+
+	@Override
+	public Enterprise queryEnterpriseByInstitudeCode(String institudeCode) {
+		return ObjectConvertor.convertToEnterprise(enterpriseDAO
+				.getEnterpriseByCode(institudeCode));
+	}
+
+	@Override
+	public Person queryPersonByIdCard(String personIdCard,
+			boolean fillEnterprise) {
+		return ObjectConvertor.convertToPerson(
+				personDAO.getByIdCard(personIdCard), fillEnterprise);
+	}
+
+	@Override
+	public Person queryLegalPerson(String institutionCode,
+			boolean fillEnterprise) {
+		List<PersonEnterpriseRelationDO> list = personEnterpriseRelationDAO
+				.getByCondition(institutionCode, null,
+						PersonEnterpriseRelationType.LEGAL.name());
+		if (!CollectionUtils.isEmpty(list) && list.size() == 1) {
+			return queryPersonByIdCard(list.get(0).getPersonId(),
+					fillEnterprise);
+		}
+		return null;
 	}
 }

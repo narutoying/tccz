@@ -7,10 +7,24 @@
 		]]></sql>
 	</operation>
 	
-	<operation name="getByLegalPersonId" multiplicity="many">
+	<operation name="getEnterpriseByCode" multiplicity="one">
 		<sql><![CDATA[
-			select * from enterprise where legal_person_id = ?
+			select * from enterprise where institution_code = ?
 		]]></sql>
+	</operation>
+	
+	<operation name="getByLegalPersonIdCard" multiplicity="many">
+		<extraparams>
+			<param name="legalPersonIdCard" javatype="java.lang.String"/>
+		 </extraparams>
+		<sql><![CDATA[
+			select e.* from enterprise
+		]]></sql>
+		<sqlmap><![CDATA[
+          select e.* from enterprise e where e.institution_code in
+			 (select r.enterprise_id from person_enterprise_relation r where r.person_id = #legalPersonIdCard# and 
+			 relation_type = "LEGAL")
+		 ]]></sqlmap>
 	</operation>
 	
 	<operation name="fuzzyQueryByName" multiplicity="many" parameterClass="map">
@@ -47,6 +61,35 @@
 			</dynamic>
 			order by id DESC limit #pageNum#, #pageSize#
 		 ]]></sqlmap>
+	</operation>
+	
+	<operation name="insert">
+		<sql><![CDATA[
+			insert into enterprise(
+			name,
+			institution_code,
+			account_number,
+			create_time,
+			modify_time) values(
+			?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		]]></sql>
+	</operation>
+	
+	<operation name="delete">
+		<sql><![CDATA[
+			delete from enterprise where institution_code = ?
+		]]></sql>
+	</operation>
+	
+	<operation name="update" paramtype="object">
+		<sql><![CDATA[
+			update enterprise set
+			name = ?,
+			institution_code = ?,
+			account_number = ?,
+			modify_time = CURRENT_TIMESTAMP
+			where institution_code = ?
+		]]></sql>
 	</operation>
 	
 </table>

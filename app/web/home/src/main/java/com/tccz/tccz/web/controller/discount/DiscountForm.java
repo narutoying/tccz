@@ -13,12 +13,12 @@ import java.util.Date;
  *          narutoying09@gmail.com Exp $
  */
 public class DiscountForm {
-	
+
 	private Integer id;
 
 	private String bandarNoteNumber;
 
-	private int proposerId;
+	private String proposerId;
 
 	private String amount;
 
@@ -40,14 +40,6 @@ public class DiscountForm {
 
 	public void setBandarNoteNumber(String bandarNoteNumber) {
 		this.bandarNoteNumber = bandarNoteNumber;
-	}
-
-	public int getProposerId() {
-		return proposerId;
-	}
-
-	public void setProposerId(int proposerId) {
-		this.proposerId = proposerId;
 	}
 
 	public String getAmount() {
@@ -72,6 +64,14 @@ public class DiscountForm {
 
 	public void setExpireDate(Date expireDate) {
 		this.expireDate = expireDate;
+	}
+
+	public String getProposerId() {
+		return proposerId;
+	}
+
+	public void setProposerId(String proposerId) {
+		this.proposerId = proposerId;
 	}
 
 }

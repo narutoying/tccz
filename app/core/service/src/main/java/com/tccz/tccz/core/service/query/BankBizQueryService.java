@@ -31,7 +31,7 @@ public interface BankBizQueryService {
 	 *            其他参数
 	 * @return
 	 */
-	<T> List<T> query(Class<T> classType, Integer bizSideId,
+	<T> List<T> query(Class<T> classType, String bizSideId,
 			Date expireDateStart, Date expireDateEnd,
 			Map<String, Object> extraParams);
 }

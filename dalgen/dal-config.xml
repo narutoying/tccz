@@ -31,4 +31,5 @@
 	<include table="tables/person.xml" />
 	<include table="tables/bandar_note.xml" />
 	<include table="tables/floating_loan.xml" />
+	<include table="tables/person_enterprise_relation.xml" />
 </tables>

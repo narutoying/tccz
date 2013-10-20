@@ -26,7 +26,7 @@
     <!-- result maps for database table floating_loan -->
     <resultMap id="RM-FLOATING-LOAN" class="com.tccz.tccz.common.dal.dataobject.FloatingLoanDO">
         <result property="id" column="id" javaType="int" jdbcType="int unsigned" nullValue="0"/>
-        <result property="loanerId" column="loaner_id" javaType="int" jdbcType="int" nullValue="0"/>
+        <result property="loanerId" column="loaner_id" javaType="java.lang.String" jdbcType="varchar"/>
         <result property="bizSideType" column="biz_side_type" javaType="java.lang.String" jdbcType="char"/>
         <result property="amount" column="amount" javaType="long" jdbcType="bigint" nullValue="0"/>
         <result property="releaseDate" column="release_date" javaType="java.util.Date" jdbcType="DATETIME"/>
@@ -84,12 +84,12 @@
 				</isNotEmpty>
 				<isEqual property="bizSideType" compareValue = "CORPORATE">
 					<isNotEmpty prepend="and" property="loanerName">
-						d.loaner_id in (select e.id from enterprise e where e.name = #loanerName#)
+						d.loaner_id in (select e.institution_code from enterprise e where e.name = #loanerName#)
 					</isNotEmpty>
 				</isEqual>
 				<isEqual property="bizSideType" compareValue = "PRIVATE">
 					<isNotEmpty prepend="and" property="loanerName">
-						d.loaner_id in (select p.id from person p where p.name = #loanerName#)
+						d.loaner_id in (select p.id_card_number from person p where p.name = #loanerName#)
 					</isNotEmpty>
 				</isEqual>
 				<isEqual prepend="and" property="showExpire" compareValue = "false">
@@ -121,12 +121,12 @@
 				</isNotEmpty>
 				<isEqual property="bizSideType" compareValue = "CORPORATE">
 					<isNotEmpty prepend="and" property="loanerName">
-						d.loaner_id in (select e.id from enterprise e where e.name = #loanerName#)
+						d.loaner_id in (select e.institution_code from enterprise e where e.name = #loanerName#)
 					</isNotEmpty>
 				</isEqual>
 				<isEqual property="bizSideType" compareValue = "PRIVATE">
 					<isNotEmpty prepend="and" property="loanerName">
-						d.loaner_id in (select p.id from person p where p.name = #loanerName#)
+						d.loaner_id in (select p.id_card_number from person p where p.name = #loanerName#)
 					</isNotEmpty>
 				</isEqual>
 				<isEqual prepend="and" property="showExpire" compareValue = "false">

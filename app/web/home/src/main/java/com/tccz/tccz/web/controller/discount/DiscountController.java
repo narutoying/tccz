@@ -179,7 +179,7 @@ public class DiscountController {
 		result.setBandarNoteNumber(form.getBandarNoteNumber());
 		result.setExpireDate(form.getExpireDate());
 		Enterprise proposer = new Enterprise();
-		proposer.setId(form.getProposerId());
+		proposer.setIdentifier(form.getProposerId());
 		result.setProposer(proposer);
 		result.setState(DiscountState.getByCode(form.getState()));
 		return result;

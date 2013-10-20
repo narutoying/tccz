@@ -20,7 +20,7 @@ public class BandarNoteForm {
 
 	private String type;
 
-	private int drawerId;
+	private String drawerId;
 
 	private String amount;
 
@@ -56,14 +56,6 @@ public class BandarNoteForm {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public int getDrawerId() {
-		return drawerId;
-	}
-
-	public void setDrawerId(int drawerId) {
-		this.drawerId = drawerId;
 	}
 
 	public String getAmount() {
@@ -112,6 +104,14 @@ public class BandarNoteForm {
 
 	public void setCloseMoney(String closeMoney) {
 		this.closeMoney = closeMoney;
+	}
+
+	public String getDrawerId() {
+		return drawerId;
+	}
+
+	public void setDrawerId(String drawerId) {
+		this.drawerId = drawerId;
 	}
 
 }

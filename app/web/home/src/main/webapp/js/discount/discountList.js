@@ -83,7 +83,7 @@ Ext.onReady(function(){
     
     // 渲染分页表格
     var grid = Ext.create('Ext.grid.Panel', {
-        width: 700,
+        width: 900,
         margin: '10 10 10 10',
         store: store,
         disableSelection: true,
@@ -152,7 +152,7 @@ Ext.onReady(function(){
             flex: 2,
             sortable: false
         }, {
-			dataIndex: 'id',
+            dataIndex: 'id',
             flex: 3,
             text: "操作",
             renderer: function(value, p, r){

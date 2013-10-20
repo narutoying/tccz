@@ -15,7 +15,14 @@
 	
 	<operation name="insert">
 		<sql><![CDATA[
-			insert into discount(bandar_note_number, proposer_id, amount, state, expire_date, create_time, modify_time)
+			insert into discount(
+			bandar_note_number, 
+			institution_code, 
+			amount,
+			state, 
+			expire_date, 
+			create_time, 
+			modify_time)
 			 values(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 		]]></sql>
 	</operation>
@@ -28,7 +35,7 @@
 	
 	<operation name="update" paramtype="object">
 		<sql><![CDATA[
-			update discount set bandar_note_number=?, proposer_id=?, amount=?, state=?, expire_date=?, modify_time=CURRENT_TIMESTAMP where id=?
+			update discount set bandar_note_number=?, institution_code=?, amount=?, state=?, expire_date=?, modify_time=CURRENT_TIMESTAMP where id=?
 		]]></sql>
 	</operation>
 	
@@ -46,7 +53,7 @@
           select d.* from discount d
 			<dynamic prepend="WHERE">
 				<isNotEmpty prepend="and" property="enterpriseName">
-					d.proposer_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+					d.institution_code in (select e.institution_code from enterprise e where e.name = #enterpriseName#)
 				</isNotEmpty>
 				<isNotEmpty prepend="and" property="bandarNoteNumber">
 					d.bandar_note_number = #bandarNoteNumber#
@@ -66,7 +73,7 @@
 	
 	<operation name="getByExpireDate" multiplicity="many" parameterClass="map">
 		<extraparams>
-			<param name="proposerId" javatype="int"/>
+			<param name="institutionCode" javatype="java.lang.String"/>
 			<param name="expireStart" javatype="java.util.Date"/>
 			<param name="expireEnd" javatype="java.util.Date"/>
 		 </extraparams>
@@ -74,7 +81,7 @@
 			select * from discount
 		]]></sql>
 		<sqlmap><![CDATA[
-          select d.* from discount d where d.proposer_id = #proposerId# 
+          select d.* from discount d where d.institution_code = #institutionCode# 
 				<isNotNull prepend=" and " property="expireStart">
 					 ${cdata-start}
 						d.expire_date >= DATE(#expireStart#)

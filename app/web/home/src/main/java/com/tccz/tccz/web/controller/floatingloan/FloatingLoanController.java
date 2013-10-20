@@ -63,9 +63,15 @@ public class FloatingLoanController {
 	private FloatingLoanManageService floatingLoanManageService;
 
 	@RequestMapping(QUERY_INDEX_HTM)
-	public String index(ModelMap modelMap) {
+	public String index(ModelMap modelMap, String bizSideType) {
 		List<Map<String, String>> list = LoanBizSideType.toList();
 		modelMap.addAttribute("types", JSONSerializer.toJSON(list));
+		LoanBizSideType loanBizSideType = LoanBizSideType
+				.getByCode(bizSideType);
+		if (loanBizSideType == null) {
+			bizSideType = LoanBizSideType.CORPORATE.getCode();
+		}
+		modelMap.addAttribute("bizSideType", bizSideType);
 		return PREFIX + "index";
 	}
 
@@ -103,27 +109,25 @@ public class FloatingLoanController {
 		return PREFIX + "one";
 	}
 
-	// private String getTemplateName(LoanBizSideType loanBizSideType) {
-	// String vmName = "";
-	// if (loanBizSideType == LoanBizSideType.PRIVATE) {
-	// vmName = "personLoan";
-	// } else {
-	// vmName = "enterpriseLoan";
-	// }
-	// return vmName;
-	// }
-
 	@RequestMapping(value = "/update/" + QUERY_TYPE + "/add.htm", method = RequestMethod.POST)
 	public String doAdd(ModelMap modelMap, FloatingLoanForm form) {
-		CommonResult result = floatingLoanManageService
-				.create(buildDomain(form));
+		final FloatingLoan domain = buildDomain(form);
+		CommonResult result = floatingLoanManageService.create(domain);
 		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
 
 			@Override
 			public String successPage() {
-				return "redirect:" + QUERY_INDEX_HTM;
+				return buildQueryIndexRedirectHtmUrl(domain.getBizSideType());
 			}
 		});
+	}
+
+	private String buildQueryIndexRedirectHtmUrl(LoanBizSideType bizSideType) {
+		return buildQueryIndexRedirectHtmUrl(bizSideType.getCode());
+	}
+
+	private String buildQueryIndexRedirectHtmUrl(String bizSideType) {
+		return "redirect:" + QUERY_INDEX_HTM + "?bizSideType=" + bizSideType;
 	}
 
 	@RequestMapping(value = "/update/" + QUERY_TYPE + "/delete.htm")
@@ -148,13 +152,13 @@ public class FloatingLoanController {
 
 	@RequestMapping(value = "/update/" + QUERY_TYPE + "/modify.htm", method = RequestMethod.POST)
 	public String doModify(ModelMap modelMap, FloatingLoanForm form) {
-		CommonResult result = floatingLoanManageService
-				.update(buildDomain(form));
+		final FloatingLoan domain = buildDomain(form);
+		CommonResult result = floatingLoanManageService.update(domain);
 		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
 
 			@Override
 			public String successPage() {
-				return "redirect:" + QUERY_INDEX_HTM;
+				return buildQueryIndexRedirectHtmUrl(domain.getBizSideType());
 			}
 		});
 	}
@@ -190,13 +194,13 @@ public class FloatingLoanController {
 				.getBizSideType());
 		result.setBizSideType(bizSideType);
 		BusinessSide loaner = null;
-		int loanerId = form.getLoanerId();
+		String loanerId = form.getLoanerId();
 		if (bizSideType == LoanBizSideType.PRIVATE) {
 			loaner = new Person();
-			loaner.setId(loanerId);
+			loaner.setIdentifier(loanerId);
 		} else if (bizSideType == LoanBizSideType.CORPORATE) {
 			loaner = new Enterprise();
-			loaner.setId(loanerId);
+			loaner.setIdentifier(loanerId);
 		}
 		result.setLoaner(loaner);
 		result.setReleaseDate(form.getReleaseDate());

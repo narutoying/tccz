@@ -125,15 +125,17 @@ function getBizSideCombobox(){
                     name: 'name'
                 }, {
                     name: 'id'
+                }, {
+                    name: 'identifier'
                 }]
             }),
             readOnly: !canModify(null),
             displayField: 'name',
-            valueField: 'id',
+            valueField: 'identifier',
             queryParam: 'fuzzyName',
             listeners: {
                 render: function(c){
-                    var bizSideId = (item != null ? item.loaner.id : 0);
+                    var bizSideId = (item != null ? item.loaner.identifier : 0);
                     this.getStore().on('load', function(){
                         if (c.getValue() == null) {
                             c.setValue(bizSideId);
@@ -180,19 +182,21 @@ function getBizSideCombobox(){
                         name: 'name'
                     }, {
                         name: 'id'
+                    }, {
+                        name: 'identifier'
                     }]
                 }),
                 readOnly: !canModify(null),
                 displayField: 'name',
-                valueField: 'id',
+                valueField: 'identifier',
                 queryParam: 'fuzzyName',
                 listeners: {
                     render: function(c){
-                        var bizSideId = (item != null ? item.loaner.id : 0);
+                        var bizSideId = (item != null ? item.loaner.identifier : 0);
                         this.getStore().on('load', function(){
                             if (c.getValue() == null) {
                                 c.setValue(bizSideId);
-                                // 显示企业可用额度
+                                // 显示可用额度
                                 getAndDisplayAvailableLimit("Person", bizSideId, "showAvailableLimit");
                             }
                         }, this); //初始化显示

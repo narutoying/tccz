@@ -56,15 +56,17 @@ Ext.onReady(function(){
                     name: 'name'
                 }, {
                     name: 'id'
+                }, {
+                    name: 'identifier'
                 }]
             }),
             readOnly: !canModify(null),
             displayField: 'name',
-            valueField: 'id',
+            valueField: 'identifier',
             queryParam: 'fuzzyName',
             listeners: {
                 render: function(c){
-                    var bizSideId = (item != null ? item.proposer.id : 0);
+                    var bizSideId = (item != null ? item.proposer.identifier : 0);
                     this.getStore().on('load', function(){
                         if (c.getValue() == null) {
                             c.setValue(bizSideId);

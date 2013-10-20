@@ -76,12 +76,12 @@
 				</isNotEmpty>
 				<isEqual property="bizSideType" compareValue = "CORPORATE">
 					<isNotEmpty prepend="and" property="loanerName">
-						d.loaner_id in (select e.id from enterprise e where e.name = #loanerName#)
+						d.loaner_id in (select e.institution_code from enterprise e where e.name = #loanerName#)
 					</isNotEmpty>
 				</isEqual>
 				<isEqual property="bizSideType" compareValue = "PRIVATE">
 					<isNotEmpty prepend="and" property="loanerName">
-						d.loaner_id in (select p.id from person p where p.name = #loanerName#)
+						d.loaner_id in (select p.id_card_number from person p where p.name = #loanerName#)
 					</isNotEmpty>
 				</isEqual>
 				<isEqual prepend="and" property="showExpire" compareValue = "false">
@@ -108,7 +108,7 @@
     
     <operation name="getByExpireDate" multiplicity="many" parameterClass="map">
         <extraparams>
-            <param name="loanerId" javatype="int"/>
+            <param name="loanerId" javatype="java.lang.String"/>
             <param name="bizSideType" javatype="java.lang.String"/>
             <param name="expireStart" javatype="java.util.Date"/>
             <param name="expireEnd" javatype="java.util.Date"/>

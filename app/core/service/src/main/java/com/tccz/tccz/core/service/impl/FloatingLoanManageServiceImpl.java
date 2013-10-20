@@ -56,12 +56,12 @@ public class FloatingLoanManageServiceImpl implements FloatingLoanManageService 
 						BusinessSide businessSide = null;
 						if (bizSideType == LoanBizSideType.CORPORATE) {
 							businessSide = businessSideQueryService
-									.queryEnterpriseById(floatingLoan
-											.getLoaner().getId());
+									.queryEnterpriseByInstitudeCode(floatingLoan
+											.getLoaner().getIdentifier());
 						} else if (bizSideType == LoanBizSideType.PRIVATE) {
 							businessSide = businessSideQueryService
-									.queryPersonById(floatingLoan.getLoaner()
-											.getId(), false);
+									.queryPersonByIdCard(floatingLoan
+											.getLoaner().getIdentifier(), false);
 						}
 						LimitControlResult controlResult = limitService
 								.isOverLimit(businessSide, null,

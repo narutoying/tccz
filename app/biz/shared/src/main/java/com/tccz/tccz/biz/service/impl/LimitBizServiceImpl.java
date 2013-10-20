@@ -60,12 +60,16 @@ public class LimitBizServiceImpl implements LimitBizService {
 				EnterpriseLimitView view = new EnterpriseLimitView();
 				BusinessSideSet businessSideSet = businessSideQueryService
 						.queryBusinessSideSet(data);
+				data.setLegalPerson(businessSideQueryService.queryLegalPerson(
+						data.getInstitutionCode(), false));
 				view.setEnterprise(data);
 				List<Enterprise> enterprises = businessSideSet.getEnterprises();
 				enterprises.remove(data);
 				view.setAssociateEnterprises(enterprises);
+				List<Person> persons = businessSideSet.getPersons();
+				persons.remove(data.getLegalPerson());
+				view.setAssociatePersons(persons);
 				view.setBusinessSideSetType(businessSideSet.getType());
-				view.setLegalPerson(businessSideSet.getPerson());
 				view.setTotalLimit(limitService.calculateTotalLimit(data));
 				view.setAvailableLimit(limitService
 						.calculateAvailableLimit(data));
@@ -96,16 +100,24 @@ public class LimitBizServiceImpl implements LimitBizService {
 	private List<PersonLimitView> buildPersonDataList(List<Person> dataList) {
 		List<PersonLimitView> result = new ArrayList<PersonLimitView>();
 		if (!CollectionUtils.isEmpty(dataList)) {
-			for (Person data : dataList) {
+			for (Person person : dataList) {
 				PersonLimitView item = new PersonLimitView();
 				BusinessSideSet businessSideSet = businessSideQueryService
-						.queryBusinessSideSet(data);
-				item.setAssociateEnterprises(businessSideSet.getEnterprises());
+						.queryBusinessSideSet(person);
+				List<Enterprise> ownEnterprises = businessSideQueryService
+						.queryEnterprisesByLegalPerson(person.getIdCardNumber());
+				item.setOwnEnterprises(ownEnterprises);
+				List<Enterprise> enterprises = businessSideSet.getEnterprises();
+				enterprises.removeAll(ownEnterprises);
+				item.setAssociateEnterprises(enterprises);
+				List<Person> persons = businessSideSet.getPersons();
+				persons.remove(person);
+				item.setAssociatePersons(persons);
 				item.setBusinessSideSetType(businessSideSet.getType());
-				item.setPerson(data);
+				item.setPerson(person);
 				item.setAvailableLimit(limitService
-						.calculateAvailableLimit(data));
-				item.setTotalLimit(limitService.calculateTotalLimit(data));
+						.calculateAvailableLimit(person));
+				item.setTotalLimit(limitService.calculateTotalLimit(person));
 				result.add(item);
 			}
 		}

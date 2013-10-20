@@ -27,7 +27,7 @@
     <resultMap id="RM-DISCOUNT" class="com.tccz.tccz.common.dal.dataobject.DiscountDO">
         <result property="id" column="id" javaType="int" jdbcType="int unsigned" nullValue="0"/>
         <result property="bandarNoteNumber" column="bandar_note_number" javaType="java.lang.String" jdbcType="varchar"/>
-        <result property="proposerId" column="proposer_id" javaType="int" jdbcType="int" nullValue="0"/>
+        <result property="institutionCode" column="institution_code" javaType="java.lang.String" jdbcType="varchar"/>
         <result property="amount" column="amount" javaType="long" jdbcType="bigint" nullValue="0"/>
         <result property="state" column="state" javaType="java.lang.String" jdbcType="char"/>
         <result property="expireDate" column="expire_date" javaType="java.util.Date" jdbcType="DATETIME"/>
@@ -55,7 +55,7 @@
 
     <!-- mapped statement for IbatisDiscountDAO.insert -->
 	<insert id="MS-DISCOUNT-INSERT">
-	insert /*MS-TCCZ-DISCOUNT-INSERT*/ into discount(bandar_note_number,proposer_id,amount,state,expire_date,create_time,modify_time) values (#bandarNoteNumber#, #proposerId#, #amount#, #state#, #expireDate#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+	insert /*MS-TCCZ-DISCOUNT-INSERT*/ into discount(bandar_note_number,institution_code,amount,state,expire_date,create_time,modify_time) values (#bandarNoteNumber#, #institutionCode#, #amount#, #state#, #expireDate#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     <selectKey resultClass="int" keyProperty="id">
 		select last_insert_id() as id
     </selectKey>
@@ -71,7 +71,7 @@
     <!-- mapped statement for IbatisDiscountDAO.update -->
     <update id="MS-DISCOUNT-UPDATE">
     <![CDATA[
-        update /*MS-TCCZ-DISCOUNT-UPDATE*/ discount set bandar_note_number=#bandarNoteNumber#, proposer_id=#proposerId#, amount=#amount#, state=#state#, expire_date=#expireDate#, modify_time=CURRENT_TIMESTAMP where (id = #id#)
+        update /*MS-TCCZ-DISCOUNT-UPDATE*/ discount set bandar_note_number=#bandarNoteNumber#, institution_code=#institutionCode#, amount=#amount#, state=#state#, expire_date=#expireDate#, modify_time=CURRENT_TIMESTAMP where (id = #id#)
     ]]>
     </update>
 
@@ -80,7 +80,7 @@
         select /*MS-TCCZ-DISCOUNT-GET-BY-CONDITION*/ d.* from discount d
 			<dynamic prepend="WHERE">
 				<isNotEmpty prepend="and" property="enterpriseName">
-					d.proposer_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+					d.institution_code in (select e.institution_code from enterprise e where e.name = #enterpriseName#)
 				</isNotEmpty>
 				<isNotEmpty prepend="and" property="bandarNoteNumber">
 					d.bandar_note_number = #bandarNoteNumber#
@@ -102,7 +102,7 @@
         select /*MS-TCCZ-DISCOUNT-GET-BY-CONDITION-COUNT-FOR-PAGING*/ count(*) from discount d
 			<dynamic prepend="WHERE">
 				<isNotEmpty prepend="and" property="enterpriseName">
-					d.proposer_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+					d.institution_code in (select e.institution_code from enterprise e where e.name = #enterpriseName#)
 				</isNotEmpty>
 				<isNotEmpty prepend="and" property="bandarNoteNumber">
 					d.bandar_note_number = #bandarNoteNumber#
@@ -118,7 +118,7 @@
 
     <!-- mapped statement for IbatisDiscountDAO.getByExpireDate -->
     <select id="MS-DISCOUNT-GET-BY-EXPIRE-DATE" resultMap="RM-DISCOUNT">
-        select /*MS-TCCZ-DISCOUNT-GET-BY-EXPIRE-DATE*/ d.* from discount d where d.proposer_id = #proposerId# 
+        select /*MS-TCCZ-DISCOUNT-GET-BY-EXPIRE-DATE*/ d.* from discount d where d.institution_code = #institutionCode# 
 				<isNotNull prepend=" and " property="expireStart">
 					 <![CDATA[
 						d.expire_date >= DATE(#expireStart#)

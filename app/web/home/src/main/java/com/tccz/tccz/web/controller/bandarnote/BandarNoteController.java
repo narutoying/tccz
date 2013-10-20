@@ -193,7 +193,7 @@ public class BandarNoteController {
 				result.setAmount(new Money(form.getAmount()));
 				result.setDrawDate(form.getDrawDate());
 				Enterprise drawer = new Enterprise();
-				drawer.setId(form.getDrawerId());
+				drawer.setIdentifier(form.getDrawerId());
 				result.setDrawer(drawer);
 				result.setExpireDate(form.getExpireDate());
 				result.setMargin(new Money(form.getMarginMoney()));

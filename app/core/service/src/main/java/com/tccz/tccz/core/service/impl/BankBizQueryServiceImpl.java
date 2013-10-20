@@ -44,7 +44,7 @@ public class BankBizQueryServiceImpl implements BankBizQueryService {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> query(Class<T> classType, Integer bizSideId,
+	public <T> List<T> query(Class<T> classType, String bizSideId,
 			Date expireDateStart, Date expireDateEnd,
 			Map<String, Object> extraParams) {
 		if (classType == Discount.class) {

@@ -50,6 +50,22 @@ public interface PersonDAO {
    	 *  <tt></tt>
 	 *  <p>
 	 *  The sql statement for this operation is <br>
+	 *  <tt>select * from person where (id_card_number = ?)</tt>
+	 *
+	 *	@param idCardNumber
+	 *	@return PersonDO
+	 *	@throws DataAccessException
+	 */	 
+    public PersonDO getByIdCard(String idCardNumber) throws DataAccessException;
+
+	/**
+	 *  Query DB table <tt>person</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
 	 *  <tt>select * from person</tt>
 	 *
 	 *	@param fuzzyName

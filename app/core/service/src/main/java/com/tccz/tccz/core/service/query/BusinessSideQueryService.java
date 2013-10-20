@@ -22,12 +22,12 @@ import com.tccz.tccz.core.model.Person;
 public interface BusinessSideQueryService {
 
 	/**
-	 * 查询企业信息
+	 * 按照机构号查询企业
 	 * 
-	 * @param enterpriseId
+	 * @param institudeCode
 	 * @return
 	 */
-	Enterprise queryEnterpriseById(int enterpriseId);
+	Enterprise queryEnterpriseByInstitudeCode(String institudeCode);
 
 	/**
 	 * 模糊查询企业
@@ -44,7 +44,7 @@ public interface BusinessSideQueryService {
 	 * @param legalPersonId
 	 * @return
 	 */
-	List<Enterprise> queryEnterprisesByLegalPerson(int legalPersonId);
+	List<Enterprise> queryEnterprisesByLegalPerson(String legalPersonIdCard);
 
 	/**
 	 * 模糊、分页查询企业列表
@@ -56,14 +56,22 @@ public interface BusinessSideQueryService {
 			int page, int pageSize);
 
 	/**
-	 * 查询个人信息
+	 * 通过身份证号查询个人信息
 	 * 
-	 * @param personId
+	 * @param personIdCard
 	 * @param fillEnterprise
-	 *            是否填充企业信息
 	 * @return
 	 */
-	Person queryPersonById(int personId, boolean fillEnterprise);
+	Person queryPersonByIdCard(String personIdCard, boolean fillEnterprise);
+
+	/**
+	 * 查询企业法人信息
+	 * 
+	 * @param institutionCode
+	 * @param fillEnterprise
+	 * @return
+	 */
+	Person queryLegalPerson(String institutionCode, boolean fillEnterprise);
 
 	/**
 	 * 模糊查询个人
@@ -85,8 +93,8 @@ public interface BusinessSideQueryService {
 	/**
 	 * 查询一个业务方所属的集合
 	 * <ol>
-	 * <li>若businessSide为个人，则查询该人与其关联的企业</li>
-	 * <li>若businessSide为企业，则查询该企业、关联的法人及该法人关联的其他企业</li>
+	 * <li>若businessSide为个人，则集合范围包括：该个人、直接关联企业、直接法人企业以及间接关联人/企业</li>
+	 * <li>若businessSide为企业，则查询该企业、直接关联法人及该法人直接/间接关联的其他企业、个人</li>
 	 * </ol>
 	 * 
 	 * @param businessSide

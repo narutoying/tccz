@@ -27,8 +27,8 @@
     <resultMap id="RM-ENTERPRISE" class="com.tccz.tccz.common.dal.dataobject.EnterpriseDO">
         <result property="id" column="id" javaType="int" jdbcType="int unsigned" nullValue="0"/>
         <result property="name" column="name" javaType="java.lang.String" jdbcType="varchar"/>
+        <result property="institutionCode" column="institution_code" javaType="java.lang.String" jdbcType="varchar"/>
         <result property="accountNumber" column="account_number" javaType="java.lang.String" jdbcType="varchar"/>
-        <result property="legalPersonId" column="legal_person_id" javaType="int" jdbcType="int" nullValue="0"/>
         <result property="createTime" column="create_time" javaType="java.util.Date" jdbcType="datetime"/>
         <result property="modifyTime" column="modify_time" javaType="java.util.Date" jdbcType="datetime"/>
     </resultMap>
@@ -44,11 +44,18 @@
     ]]>
     </select>
 
-    <!-- mapped statement for IbatisEnterpriseDAO.getByLegalPersonId -->
-    <select id="MS-ENTERPRISE-GET-BY-LEGAL-PERSON-ID" resultMap="RM-ENTERPRISE">
+    <!-- mapped statement for IbatisEnterpriseDAO.getEnterpriseByCode -->
+    <select id="MS-ENTERPRISE-GET-ENTERPRISE-BY-CODE" resultMap="RM-ENTERPRISE">
     <![CDATA[
-        select /*MS-TCCZ-ENTERPRISE-GET-BY-LEGAL-PERSON-ID*/ * from enterprise where (legal_person_id = #value#)
+        select /*MS-TCCZ-ENTERPRISE-GET-ENTERPRISE-BY-CODE*/ * from enterprise where (institution_code = #value#)
     ]]>
+    </select>
+
+    <!-- mapped statement for IbatisEnterpriseDAO.getByLegalPersonIdCard -->
+    <select id="MS-ENTERPRISE-GET-BY-LEGAL-PERSON-ID-CARD" resultMap="RM-ENTERPRISE">
+        select /*MS-TCCZ-ENTERPRISE-GET-BY-LEGAL-PERSON-ID-CARD*/ e.* from enterprise e where e.institution_code in
+			 (select r.enterprise_id from person_enterprise_relation r where r.person_id = #legalPersonIdCard# and 
+			 relation_type = "LEGAL")
     </select>
 
     <!-- mapped statement for IbatisEnterpriseDAO.fuzzyQueryByName -->
@@ -83,5 +90,27 @@
 			</dynamic>
 			
     </select>
+
+    <!-- mapped statement for IbatisEnterpriseDAO.insert -->
+	<insert id="MS-ENTERPRISE-INSERT">
+	insert /*MS-TCCZ-ENTERPRISE-INSERT*/ into enterprise(name,institution_code,account_number,create_time,modify_time) values (#name#, #institutionCode#, #accountNumber#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    <selectKey resultClass="int" keyProperty="id">
+		select last_insert_id() as id
+    </selectKey>
+	</insert>
+
+    <!-- mapped statement for IbatisEnterpriseDAO.delete -->
+    <delete id="MS-ENTERPRISE-DELETE">
+    <![CDATA[
+        delete /*MS-TCCZ-ENTERPRISE-DELETE*/ from enterprise where (institution_code = #value#)
+    ]]>
+    </delete>
+
+    <!-- mapped statement for IbatisEnterpriseDAO.update -->
+    <update id="MS-ENTERPRISE-UPDATE">
+    <![CDATA[
+        update /*MS-TCCZ-ENTERPRISE-UPDATE*/ enterprise set name=#name#, institution_code=#institutionCode#, account_number=#accountNumber#, modify_time=CURRENT_TIMESTAMP where (institution_code = #institutionCode2#)
+    ]]>
+    </update>
 
 </sqlMap>

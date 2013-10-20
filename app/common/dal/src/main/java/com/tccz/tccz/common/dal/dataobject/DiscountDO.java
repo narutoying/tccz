@@ -38,9 +38,9 @@ public class DiscountDO {
 	private String bandarNoteNumber;
 
 	/**
-	 * This property corresponds to db column <tt>proposer_id</tt>.
+	 * This property corresponds to db column <tt>institution_code</tt>.
 	 */
-	private int proposerId;
+	private String institutionCode;
 
 	/**
 	 * This property corresponds to db column <tt>amount</tt>.
@@ -106,21 +106,21 @@ public class DiscountDO {
 	}
 
     /**
-     * Getter method for property <tt>proposerId</tt>.
+     * Getter method for property <tt>institutionCode</tt>.
      *
-     * @return property value of proposerId
+     * @return property value of institutionCode
      */
-	public int getProposerId() {
-		return proposerId;
+	public String getInstitutionCode() {
+		return institutionCode;
 	}
 	
 	/**
-	 * Setter method for property <tt>proposerId</tt>.
+	 * Setter method for property <tt>institutionCode</tt>.
 	 * 
-	 * @param proposerId value to be assigned to property proposerId
+	 * @param institutionCode value to be assigned to property institutionCode
      */
-	public void setProposerId(int proposerId) {
-		this.proposerId = proposerId;
+	public void setInstitutionCode(String institutionCode) {
+		this.institutionCode = institutionCode;
 	}
 
     /**

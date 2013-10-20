@@ -49,12 +49,12 @@ public interface DiscountQueryService {
 	/**
 	 * 查询
 	 * 
-	 * @param proposerId
+	 * @param bizSideId
 	 * @param expireStart
 	 * @param expireEnd
 	 * @return
 	 */
-	List<Discount> queryDiscounts(int proposerId, Date expireStart,
+	List<Discount> queryDiscounts(String bizSideId, Date expireStart,
 			Date expireEnd);
 
 }

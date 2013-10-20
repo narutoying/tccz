@@ -11,4 +11,5 @@
     <sqlMap resource="sqlmap/Enterprise-sqlmap-mapping.xml"/>
     <sqlMap resource="sqlmap/FloatingLoan-sqlmap-mapping.xml"/>
     <sqlMap resource="sqlmap/Person-sqlmap-mapping.xml"/>
+    <sqlMap resource="sqlmap/PersonEnterpriseRelation-sqlmap-mapping.xml"/>
 </sqlMapConfig>

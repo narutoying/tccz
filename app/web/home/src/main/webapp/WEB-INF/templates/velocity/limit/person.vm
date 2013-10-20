@@ -34,6 +34,7 @@
 		<tr>
 			<th>个人名</th>
 			<th>集合类型</th>
+			<th>法人企业</th>
 			<th>关联企业</th>
 			<th>总额度</th>
 			<th>可用额度</th>
@@ -42,6 +43,11 @@
 			<tr>
 				<td>$!view.person.name</td>
 				<td>$!view.businessSideSetType.description</td>
+				<td>
+					#foreach($e in $view.ownEnterprises)
+						$e.name &nbsp;
+					#end
+				</td>
 				<td>
 					#foreach($e in $view.associateEnterprises)
 						$e.name &nbsp;

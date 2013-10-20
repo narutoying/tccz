@@ -19,10 +19,22 @@ import com.tccz.tccz.core.model.enums.BusinessSideSetType;
 public class BusinessSideSet {
 	/** 集合类型 */
 	private BusinessSideSetType type;
-	/** 个人 */
-	private Person person;
-	/** 个人（法人）所关联的企业 */
+	/** 关联个人 */
+	private List<Person> persons = new ArrayList<Person>();
+	/** 关联企业 */
 	private List<Enterprise> enterprises = new ArrayList<Enterprise>();
+
+	/**
+	 * 整合进其他的集合
+	 * 
+	 * @param set
+	 */
+	public void combine(BusinessSideSet set) {
+		if (set != null) {
+			this.persons.addAll(set.getPersons());
+			this.enterprises.addAll(set.getEnterprises());
+		}
+	}
 
 	public BusinessSideSetType getType() {
 		return type;
@@ -32,19 +44,19 @@ public class BusinessSideSet {
 		this.type = type;
 	}
 
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
-	}
-
 	public List<Enterprise> getEnterprises() {
 		return enterprises;
 	}
 
 	public void setEnterprises(List<Enterprise> enterprises) {
 		this.enterprises = enterprises;
+	}
+
+	public List<Person> getPersons() {
+		return persons;
+	}
+
+	public void setPersons(List<Person> persons) {
+		this.persons = persons;
 	}
 }

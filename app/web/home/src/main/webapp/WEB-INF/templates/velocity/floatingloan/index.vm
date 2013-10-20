@@ -3,6 +3,9 @@
 	function getTypes() {
 		return $types;
 	}
+	function getLoanBizSideType() {
+		return "$!bizSideType";
+	}
 </script>
 <div id="queryForm"></div>
 <div id="queryResult"></div>

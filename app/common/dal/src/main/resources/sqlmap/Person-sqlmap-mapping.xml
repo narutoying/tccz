@@ -27,6 +27,7 @@
     <resultMap id="RM-PERSON" class="com.tccz.tccz.common.dal.dataobject.PersonDO">
         <result property="id" column="id" javaType="int" jdbcType="int unsigned" nullValue="0"/>
         <result property="name" column="name" javaType="java.lang.String" jdbcType="varchar"/>
+        <result property="idCardNumber" column="id_card_number" javaType="java.lang.String" jdbcType="varchar"/>
         <result property="accountNumber" column="account_number" javaType="java.lang.String" jdbcType="varchar"/>
         <result property="createTime" column="create_time" javaType="java.util.Date" jdbcType="datetime"/>
         <result property="modifyTime" column="modify_time" javaType="java.util.Date" jdbcType="datetime"/>
@@ -40,6 +41,13 @@
     <select id="MS-PERSON-GET-BY-ID" resultMap="RM-PERSON">
     <![CDATA[
         select /*MS-TCCZ-PERSON-GET-BY-ID*/ * from person where (id = #value#)
+    ]]>
+    </select>
+
+    <!-- mapped statement for IbatisPersonDAO.getByIdCard -->
+    <select id="MS-PERSON-GET-BY-ID-CARD" resultMap="RM-PERSON">
+    <![CDATA[
+        select /*MS-TCCZ-PERSON-GET-BY-ID-CARD*/ * from person where (id_card_number = #value#)
     ]]>
     </select>
 

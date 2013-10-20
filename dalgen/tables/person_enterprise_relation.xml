@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="GBK"?>
+<table sqlname="person_enterprise_relation">
+	
+	<operation name="insert">
+		<sql><![CDATA[
+			insert into person_enterprise_relation(
+			person_id,
+			enterprise_id,
+			relation_type) values(
+			?, ?, ?)
+		]]></sql>
+	</operation>
+	
+	<operation name="deleteByEnterpriseId">
+		<sql><![CDATA[
+			delete from person_enterprise_relation where enterprise_id = ?
+		]]></sql>
+	</operation>
+    
+    <operation name="getById" multiplicity="one">
+        <sql>
+            <![CDATA[
+			select * from person_enterprise_relation where id = ?
+		]]>
+        </sql>
+    </operation>
+    
+	<operation name="getByCondition" multiplicity="many" parameterClass="map">
+		<extraparams>
+			<param name="enterpriseId" javatype="java.lang.String"/>
+			<param name="personId" javatype="java.lang.String"/>
+			<param name="relationType" javatype="java.lang.String"/>
+		 </extraparams>
+		<sql><![CDATA[
+			select * from person_enterprise_relation
+		]]></sql>
+		<sqlmap><![CDATA[
+          select * from person_enterprise_relation
+		  <dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="enterpriseId">
+					enterprise_id = #enterpriseId#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="personId">
+					person_id = #personId#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="relationType">
+					relation_type = #relationType#
+				</isNotEmpty>
+			</dynamic>
+			order by id DESC
+		 ]]></sqlmap>
+	</operation>
+	
+</table>

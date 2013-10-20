@@ -40,17 +40,18 @@ public class LimitController {
 
 	@RequestMapping(value = QUERY_HTM_PREFIX + "queryForEnterprise.json", method = RequestMethod.GET)
 	public void queryForEnterprise(HttpServletResponse res, ModelMap map,
-			Integer id) {
+			String identifier) {
 		BusinessSide businessSide = new Enterprise();
-		businessSide.setId(id);
+		businessSide.setIdentifier(identifier);
 		JSONUtil.writeBackJsonWithConfig(res,
 				limitService.calculateAvailableLimit(businessSide));
 	}
 
 	@RequestMapping(value = QUERY_HTM_PREFIX + "queryForPerson.json", method = RequestMethod.GET)
-	public void queryForPerson(HttpServletResponse res, ModelMap map, Integer id) {
+	public void queryForPerson(HttpServletResponse res, ModelMap map,
+			String identifier) {
 		BusinessSide businessSide = new Person();
-		businessSide.setId(id);
+		businessSide.setIdentifier(identifier);
 		JSONUtil.writeBackJsonWithConfig(res,
 				limitService.calculateAvailableLimit(businessSide));
 	}

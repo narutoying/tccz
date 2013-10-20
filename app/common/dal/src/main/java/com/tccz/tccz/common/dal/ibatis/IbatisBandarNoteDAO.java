@@ -86,7 +86,7 @@ public class IbatisBandarNoteDAO extends SqlMapClientDaoSupport implements Banda
    	 *  <tt></tt>
 	 *  <p>
 	 *  The sql statement for this operation is <br>
-	 *  <tt>insert into bandar_note(bandar_note_number,enterprise_id,type,amount,draw_date,margin_amount,exposure_amount,exposure_close_amount,create_time,modify_time,expire_date) values (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)</tt>
+	 *  <tt>insert into bandar_note(bandar_note_number,institution_code,type,amount,draw_date,margin_amount,exposure_amount,exposure_close_amount,create_time,modify_time,expire_date) values (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)</tt>
 	 *
 	 *	@param bandarNote
 	 *	@return int
@@ -130,7 +130,7 @@ public class IbatisBandarNoteDAO extends SqlMapClientDaoSupport implements Banda
    	 *  <tt></tt>
 	 *  <p>
 	 *  The sql statement for this operation is <br>
-	 *  <tt>update bandar_note set bandar_note_number=?, enterprise_id=?, type=?, amount=?, draw_date=?, margin_amount=?, exposure_amount=?, exposure_close_amount=?, expire_date=?, modify_time=CURRENT_TIMESTAMP where (id = ?)</tt>
+	 *  <tt>update bandar_note set bandar_note_number=?, institution_code=?, type=?, amount=?, draw_date=?, margin_amount=?, exposure_amount=?, exposure_close_amount=?, expire_date=?, modify_time=CURRENT_TIMESTAMP where (id = ?)</tt>
 	 *
 	 *	@param bandarNote
 	 *	@return int
@@ -206,16 +206,16 @@ public class IbatisBandarNoteDAO extends SqlMapClientDaoSupport implements Banda
 	 *  The sql statement for this operation is <br>
 	 *  <tt>select * from bandar_note</tt>
 	 *
-	 *	@param enterpriseId
+	 *	@param institutionCode
 	 *	@param expireStart
 	 *	@param expireEnd
 	 *	@return List<BandarNoteDO>
 	 *	@throws DataAccessException
 	 */	 
-    public List<BandarNoteDO> getByExpireDate(int enterpriseId, Date expireStart, Date expireEnd) throws DataAccessException {
+    public List<BandarNoteDO> getByExpireDate(String institutionCode, Date expireStart, Date expireEnd) throws DataAccessException {
         Map param = new HashMap();
 
-        param.put("enterpriseId", new Integer(enterpriseId));
+        param.put("institutionCode", institutionCode);
         param.put("expireStart", expireStart);
         param.put("expireEnd", expireEnd);
 

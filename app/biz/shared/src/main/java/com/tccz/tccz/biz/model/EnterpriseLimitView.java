@@ -22,12 +22,12 @@ import com.tccz.tccz.core.model.enums.BusinessSideSetType;
 public class EnterpriseLimitView {
 	/** 企业 */
 	private Enterprise enterprise;
-	/** 法人 */
-	private Person legalPerson;
 	/** 所属业务方集合类型 */
 	private BusinessSideSetType businessSideSetType;
-	/** 关联企业 */
+	/** 关联企业（不含本企业） */
 	private List<Enterprise> associateEnterprises = new ArrayList<Enterprise>();
+	/** 关联个人（不含本企业法人） */
+	private List<Person> associatePersons = new ArrayList<Person>();
 	/** 总额度 */
 	private Money totalLimit;
 	/** 可用额度 */
@@ -39,14 +39,6 @@ public class EnterpriseLimitView {
 
 	public void setEnterprise(Enterprise enterprise) {
 		this.enterprise = enterprise;
-	}
-
-	public Person getLegalPerson() {
-		return legalPerson;
-	}
-
-	public void setLegalPerson(Person legalPerson) {
-		this.legalPerson = legalPerson;
 	}
 
 	public BusinessSideSetType getBusinessSideSetType() {
@@ -79,5 +71,13 @@ public class EnterpriseLimitView {
 
 	public void setAvailableLimit(Money availableLimit) {
 		this.availableLimit = availableLimit;
+	}
+
+	public List<Person> getAssociatePersons() {
+		return associatePersons;
+	}
+
+	public void setAssociatePersons(List<Person> associatePersons) {
+		this.associatePersons = associatePersons;
 	}
 }

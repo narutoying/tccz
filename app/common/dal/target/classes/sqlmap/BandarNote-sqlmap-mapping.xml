@@ -27,7 +27,7 @@
     <resultMap id="RM-BANDAR-NOTE" class="com.tccz.tccz.common.dal.dataobject.BandarNoteDO">
         <result property="id" column="id" javaType="int" jdbcType="int unsigned" nullValue="0"/>
         <result property="bandarNoteNumber" column="bandar_note_number" javaType="java.lang.String" jdbcType="varchar"/>
-        <result property="enterpriseId" column="enterprise_id" javaType="int" jdbcType="int" nullValue="0"/>
+        <result property="institutionCode" column="institution_code" javaType="java.lang.String" jdbcType="varchar"/>
         <result property="type" column="type" javaType="java.lang.String" jdbcType="char"/>
         <result property="amount" column="amount" javaType="long" jdbcType="bigint" nullValue="0"/>
         <result property="drawDate" column="draw_date" javaType="java.util.Date" jdbcType="DATETIME"/>
@@ -59,7 +59,7 @@
 
     <!-- mapped statement for IbatisBandarNoteDAO.insert -->
 	<insert id="MS-BANDAR-NOTE-INSERT">
-	insert /*MS-TCCZ-BANDAR-NOTE-INSERT*/ into bandar_note(bandar_note_number,enterprise_id,type,amount,draw_date,margin_amount,exposure_amount,exposure_close_amount,create_time,modify_time,expire_date) values (#bandarNoteNumber#, #enterpriseId#, #type#, #amount#, #drawDate#, #marginAmount#, #exposureAmount#, #exposureCloseAmount#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, #expireDate#)
+	insert /*MS-TCCZ-BANDAR-NOTE-INSERT*/ into bandar_note(bandar_note_number,institution_code,type,amount,draw_date,margin_amount,exposure_amount,exposure_close_amount,create_time,modify_time,expire_date) values (#bandarNoteNumber#, #institutionCode#, #type#, #amount#, #drawDate#, #marginAmount#, #exposureAmount#, #exposureCloseAmount#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, #expireDate#)
     <selectKey resultClass="int" keyProperty="id">
 		select last_insert_id() as id
     </selectKey>
@@ -75,7 +75,7 @@
     <!-- mapped statement for IbatisBandarNoteDAO.update -->
     <update id="MS-BANDAR-NOTE-UPDATE">
     <![CDATA[
-        update /*MS-TCCZ-BANDAR-NOTE-UPDATE*/ bandar_note set bandar_note_number=#bandarNoteNumber#, enterprise_id=#enterpriseId#, type=#type#, amount=#amount#, draw_date=#drawDate#, margin_amount=#marginAmount#, exposure_amount=#exposureAmount#, exposure_close_amount=#exposureCloseAmount#, expire_date=#expireDate#, modify_time=CURRENT_TIMESTAMP where (id = #id#)
+        update /*MS-TCCZ-BANDAR-NOTE-UPDATE*/ bandar_note set bandar_note_number=#bandarNoteNumber#, institution_code=#institutionCode#, type=#type#, amount=#amount#, draw_date=#drawDate#, margin_amount=#marginAmount#, exposure_amount=#exposureAmount#, exposure_close_amount=#exposureCloseAmount#, expire_date=#expireDate#, modify_time=CURRENT_TIMESTAMP where (id = #id#)
     ]]>
     </update>
 
@@ -84,7 +84,7 @@
         select /*MS-TCCZ-BANDAR-NOTE-GET-BY-CONDITION*/ d.* from bandar_note d
 			<dynamic prepend="WHERE">
 				<isNotEmpty prepend="and" property="enterpriseName">
-					d.enterprise_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+					d.institution_code in (select e.institution_code from enterprise e where e.name = #enterpriseName#)
 				</isNotEmpty>
 				<isNotEmpty prepend="and" property="bandarNoteNumber">
 					d.bandar_note_number = #bandarNoteNumber#
@@ -117,7 +117,7 @@
         select /*MS-TCCZ-BANDAR-NOTE-GET-BY-CONDITION-COUNT-FOR-PAGING*/ count(*) from bandar_note d
 			<dynamic prepend="WHERE">
 				<isNotEmpty prepend="and" property="enterpriseName">
-					d.enterprise_id in (select e.id from enterprise e where e.name = #enterpriseName#)
+					d.institution_code in (select e.institution_code from enterprise e where e.name = #enterpriseName#)
 				</isNotEmpty>
 				<isNotEmpty prepend="and" property="bandarNoteNumber">
 					d.bandar_note_number = #bandarNoteNumber#
@@ -146,7 +146,7 @@
 
     <!-- mapped statement for IbatisBandarNoteDAO.getByExpireDate -->
     <select id="MS-BANDAR-NOTE-GET-BY-EXPIRE-DATE" resultMap="RM-BANDAR-NOTE">
-        select /*MS-TCCZ-BANDAR-NOTE-GET-BY-EXPIRE-DATE*/ d.* from bandar_note d where d.enterprise_id = #enterpriseId# 
+        select /*MS-TCCZ-BANDAR-NOTE-GET-BY-EXPIRE-DATE*/ d.* from bandar_note d where d.institution_code = #institutionCode# 
 				<isNotNull prepend=" and " property="expireStart">
 					 <![CDATA[
 						d.expire_date >= DATE(#expireStart#)

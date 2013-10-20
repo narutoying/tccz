@@ -67,9 +67,9 @@ public class LimitServiceImpl implements LimitService {
 		BusinessSideSet businessSideSet = businessSideQueryService
 				.queryBusinessSideSet(businessSide);
 		// 计算个人业务所占额度
-		result.add(calculateUsedLimitForPerson(businessSideSet.getPerson()));
+		result.addTo(calculateUsedLimitForPerson(businessSideSet.getPersons()));
 		// 计算关联各企业业务所占额度
-		result.add(calculateUsedLimitForEnterprise(businessSideSet
+		result.addTo(calculateUsedLimitForEnterprise(businessSideSet
 				.getEnterprises()));
 		return result;
 	}
@@ -80,7 +80,7 @@ public class LimitServiceImpl implements LimitService {
 			for (Enterprise enterprise : enterprises) {
 				BankBizType[] bankBizTypes = BankBizType.values();
 				for (BankBizType type : bankBizTypes) {
-					result.add(calculateDetailLimit(enterprise, type));
+					result.addTo(calculateDetailLimit(enterprise, type));
 				}
 			}
 			return result;
@@ -89,8 +89,15 @@ public class LimitServiceImpl implements LimitService {
 		}
 	}
 
-	private Money calculateUsedLimitForPerson(Person person) {
-		return calculateDetailLimit(person, BankBizType.FLOATING_LOAN);
+	private Money calculateUsedLimitForPerson(List<Person> list) {
+		Money result = new Money();
+		if (!CollectionUtils.isEmpty(list)) {
+			for (Person person : list) {
+				result.addTo(calculateDetailLimit(person,
+						BankBizType.FLOATING_LOAN));
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -103,29 +110,31 @@ public class LimitServiceImpl implements LimitService {
 	public Money calculateDetailLimit(BusinessSide businessSide,
 			BankBizType type) {
 		Money result = new Money();
-		int bizSideId = businessSide.getId();
-		Date calDate = new Date();
-		if (businessSide instanceof Person) {
-			// 个人业务目前只有流贷
-			Map<String, Object> extraParams = new HashMap<String, Object>();
-			extraParams.put(Constants.LoanBizSideType, LoanBizSideType.PRIVATE);
-			return calculteOccupiedMoneyForFL(
-					bankBizQueryService.query(FloatingLoan.class,
-							businessSide.getId(), calDate, null, extraParams),
-					calDate);
-		} else {
-			if (type == BankBizType.FLOATING_LOAN) {
-				result = calculteOccupiedMoneyForFL(bankBizQueryService.query(
-						FloatingLoan.class, bizSideId, calDate, null, null),
-						calDate);
-			} else if (type == BankBizType.BANDAR_NOTE) {
-				result = calculteOccupiedMoneyForBN(bankBizQueryService.query(
-						BandarNote.class, bizSideId, calDate, null, null),
-						calDate);
-			} else if (type == BankBizType.DISCOUNT) {
-				result = calculteOccupiedMoneyForDC(bankBizQueryService.query(
-						Discount.class, bizSideId, calDate, null, null),
-						calDate);
+		if (businessSide != null) {
+			String bizSideId = businessSide.getIdentifier();
+			Date calDate = new Date();
+			if (businessSide instanceof Person) {
+				// 个人业务目前只有流贷
+				Map<String, Object> extraParams = new HashMap<String, Object>();
+				extraParams.put(Constants.LoanBizSideType,
+						LoanBizSideType.PRIVATE);
+				return calculteOccupiedMoneyForFL(bankBizQueryService.query(
+						FloatingLoan.class, bizSideId, calDate, null,
+						extraParams), calDate);
+			} else {
+				if (type == BankBizType.FLOATING_LOAN) {
+					result = calculteOccupiedMoneyForFL(
+							bankBizQueryService.query(FloatingLoan.class,
+									bizSideId, calDate, null, null), calDate);
+				} else if (type == BankBizType.BANDAR_NOTE) {
+					result = calculteOccupiedMoneyForBN(
+							bankBizQueryService.query(BandarNote.class,
+									bizSideId, calDate, null, null), calDate);
+				} else if (type == BankBizType.DISCOUNT) {
+					result = calculteOccupiedMoneyForDC(
+							bankBizQueryService.query(Discount.class,
+									bizSideId, calDate, null, null), calDate);
+				}
 			}
 		}
 		return result;

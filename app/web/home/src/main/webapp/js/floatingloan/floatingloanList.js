@@ -81,7 +81,7 @@ Ext.onReady(function(){
             listeners: {
                 render: function(c){
                     if (c.getValue() == null) {
-                        c.setValue("CORPORATE");
+                        c.setValue(getLoanBizSideType());
                     }
                 }
             }
@@ -211,5 +211,6 @@ Ext.onReady(function(){
         })
     });
     // 默认显示第一页
+    store.getProxy().setExtraParam("bizSideType", getLoanBizSideType());
     store.loadPage(1);
 });

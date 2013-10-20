@@ -14,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tccz.tccz.common.util.PageUtil;
 import com.tccz.tccz.core.model.Enterprise;
+import com.tccz.tccz.core.service.manage.BusinessSideManageService;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 import com.tccz.tccz.web.util.JSONUtil;
 
@@ -33,6 +35,9 @@ public class EnterpriseController {
 
 	@Autowired
 	private BusinessSideQueryService businessSideQueryService;
+
+	@Autowired
+	private BusinessSideManageService businessSideManageService;
 
 	@RequestMapping("/query/enterprise/fuzzyQuery.json")
 	public void fuzzyQuery(String fuzzyName, HttpServletResponse response) {
@@ -58,4 +63,50 @@ public class EnterpriseController {
 		modelMap.addAttribute("fuzzyName", fuzzyName);
 		return PREFIX + "index";
 	}
+
+	@RequestMapping("/update/enterprise/add.htm")
+	public String goAdd(ModelMap modelMap) {
+		return PREFIX + "";
+	}
+
+	@RequestMapping(value = "/update/enterprise/add.htm", method = RequestMethod.POST)
+	public String doAdd(ModelMap modelMap) {
+		return PREFIX + "";
+	}
+
+	@RequestMapping("/update/enterprise/delete.htm")
+	public String delete(ModelMap modelMap) {
+		return PREFIX + "";
+	}
+
+	@RequestMapping("/update/enterprise/modify.htm")
+	public String goModify(ModelMap modelMap) {
+		return PREFIX + "";
+	}
+
+	@RequestMapping(value = "/update/enterprise/modify.htm", method = RequestMethod.POST)
+	public String doModify(ModelMap modelMap) {
+		return PREFIX + "";
+	}
+
+	@RequestMapping("/query/enterprise/view.htm")
+	public String view(ModelMap modelMap) {
+		return PREFIX + "";
+	}
+
+	@RequestMapping("/query/enterprise/associatePerson.htm")
+	public String goAssociatePerson(ModelMap modelMap) {
+		return PREFIX + "";
+	}
+
+	@RequestMapping("/query/enterprise/associatePerson.htm")
+	public String doAssociatePerson(ModelMap modelMap) {
+		return PREFIX + "";
+	}
+
+	@RequestMapping("/query/enterprise/deleteAssociatePerson.htm")
+	public String deleteAssociatePerson(ModelMap modelMap) {
+		return PREFIX + "";
+	}
+
 }

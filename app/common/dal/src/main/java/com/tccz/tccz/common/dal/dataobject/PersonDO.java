@@ -38,6 +38,11 @@ public class PersonDO {
 	private String name;
 
 	/**
+	 * This property corresponds to db column <tt>id_card_number</tt>.
+	 */
+	private String idCardNumber;
+
+	/**
 	 * This property corresponds to db column <tt>account_number</tt>.
 	 */
 	private String accountNumber;
@@ -88,6 +93,24 @@ public class PersonDO {
      */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+    /**
+     * Getter method for property <tt>idCardNumber</tt>.
+     *
+     * @return property value of idCardNumber
+     */
+	public String getIdCardNumber() {
+		return idCardNumber;
+	}
+	
+	/**
+	 * Setter method for property <tt>idCardNumber</tt>.
+	 * 
+	 * @param idCardNumber value to be assigned to property idCardNumber
+     */
+	public void setIdCardNumber(String idCardNumber) {
+		this.idCardNumber = idCardNumber;
 	}
 
     /**

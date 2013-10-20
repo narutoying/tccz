@@ -83,7 +83,7 @@ public class BandarNoteQueryServiceImpl implements BandarNoteQueryService {
 	 *      java.util.Date, java.util.Date)
 	 */
 	@Override
-	public List<BandarNote> queryListByExpireDate(int bizSideId,
+	public List<BandarNote> queryListByExpireDate(String bizSideId,
 			Date expireStart, Date expireEnd) {
 		return convertToDomains(bandarNoteDAO.getByExpireDate(bizSideId,
 				expireStart, expireEnd));

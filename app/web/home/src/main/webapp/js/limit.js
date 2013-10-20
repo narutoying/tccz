@@ -16,7 +16,7 @@ function getAndDisplayAvailableLimit(bizSideType, bizSideId, renderTo){
             url: url,
             method: 'GET',
             params: {
-                id: bizSideId
+                identifier: bizSideId
             },
             success: function(response){
                 var resObj = JSON.parse(response.responseText);

@@ -13,6 +13,12 @@ package com.tccz.tccz.core.model;
  */
 public abstract class BusinessSide extends BaseEntity {
 
+	public abstract String getIdentifier();
+
+	public abstract String setIdentifier(String identifier);
+
+	public abstract String getBusinessSideType();
+
 	/** 企业名 */
 	protected String name;
 	/** 账户号 */

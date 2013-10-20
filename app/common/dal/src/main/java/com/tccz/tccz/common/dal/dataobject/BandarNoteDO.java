@@ -38,9 +38,9 @@ public class BandarNoteDO {
 	private String bandarNoteNumber;
 
 	/**
-	 * This property corresponds to db column <tt>enterprise_id</tt>.
+	 * This property corresponds to db column <tt>institution_code</tt>.
 	 */
-	private int enterpriseId;
+	private String institutionCode;
 
 	/**
 	 * This property corresponds to db column <tt>type</tt>.
@@ -126,21 +126,21 @@ public class BandarNoteDO {
 	}
 
     /**
-     * Getter method for property <tt>enterpriseId</tt>.
+     * Getter method for property <tt>institutionCode</tt>.
      *
-     * @return property value of enterpriseId
+     * @return property value of institutionCode
      */
-	public int getEnterpriseId() {
-		return enterpriseId;
+	public String getInstitutionCode() {
+		return institutionCode;
 	}
 	
 	/**
-	 * Setter method for property <tt>enterpriseId</tt>.
+	 * Setter method for property <tt>institutionCode</tt>.
 	 * 
-	 * @param enterpriseId value to be assigned to property enterpriseId
+	 * @param institutionCode value to be assigned to property institutionCode
      */
-	public void setEnterpriseId(int enterpriseId) {
-		this.enterpriseId = enterpriseId;
+	public void setInstitutionCode(String institutionCode) {
+		this.institutionCode = institutionCode;
 	}
 
     /**

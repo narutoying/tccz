@@ -83,9 +83,9 @@ public class DiscountQueryServiceImpl implements DiscountQueryService {
 	}
 
 	@Override
-	public List<Discount> queryDiscounts(int proposerId, Date expireStart,
+	public List<Discount> queryDiscounts(String bizSideId, Date expireStart,
 			Date expireEnd) {
-		return convertToDomains(discountDAO.getByExpireDate(proposerId,
+		return convertToDomains(discountDAO.getByExpireDate(bizSideId,
 				expireStart, expireEnd));
 	}
 }
