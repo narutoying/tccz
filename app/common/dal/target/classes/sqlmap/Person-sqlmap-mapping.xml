@@ -37,6 +37,28 @@
     <!-- ============================================= -->
     <!-- mapped statements for IbatisPersonDAO -->
     <!-- ============================================= -->
+    <!-- mapped statement for IbatisPersonDAO.insert -->
+	<insert id="MS-PERSON-INSERT">
+	insert /*MS-TCCZ-PERSON-INSERT*/ into person(name,id_card_number,account_number,create_time,modify_time) values (#name#, #idCardNumber#, #accountNumber#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    <selectKey resultClass="int" keyProperty="id">
+		select last_insert_id() as id
+    </selectKey>
+	</insert>
+
+    <!-- mapped statement for IbatisPersonDAO.update -->
+    <update id="MS-PERSON-UPDATE">
+    <![CDATA[
+        update /*MS-TCCZ-PERSON-UPDATE*/ person set name=#name#, account_number=#accountNumber#, modify_time=CURRENT_TIMESTAMP where (id_card_number = #idCardNumber#)
+    ]]>
+    </update>
+
+    <!-- mapped statement for IbatisPersonDAO.delete -->
+    <delete id="MS-PERSON-DELETE">
+    <![CDATA[
+        delete /*MS-TCCZ-PERSON-DELETE*/ from person where (id_card_number = #value#)
+    ]]>
+    </delete>
+
     <!-- mapped statement for IbatisPersonDAO.getById -->
     <select id="MS-PERSON-GET-BY-ID" resultMap="RM-PERSON">
     <![CDATA[
@@ -70,7 +92,7 @@
 					name like concat("%", #personName#, "%")
 				</isNotEmpty>
 			</dynamic>
-			order by id DESC limit #pageNum#, #pageSize#
+			order by id DESC, modify_time DESC limit #pageNum#, #pageSize#
     </select>
 
     <!-- mapped statement for IbatisPersonDAO.fuzzyPageQueryByName, needed by paging -->

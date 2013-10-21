@@ -50,6 +50,20 @@
     ]]>
     </delete>
 
+    <!-- mapped statement for IbatisPersonEnterpriseRelationDAO.deleteByEnterpriseAndPersonId -->
+    <delete id="MS-PERSON-ENTERPRISE-RELATION-DELETE-BY-ENTERPRISE-AND-PERSON-ID">
+    <![CDATA[
+        delete /*MS-TCCZ-PERSON-ENTERPRISE-RELATION-DELETE-BY-ENTERPRISE-AND-PERSON-ID*/ from person_enterprise_relation where ((person_id = #personId#) AND (enterprise_id = #enterpriseId#))
+    ]]>
+    </delete>
+
+    <!-- mapped statement for IbatisPersonEnterpriseRelationDAO.updateByEnterpriseAndType -->
+    <update id="MS-PERSON-ENTERPRISE-RELATION-UPDATE-BY-ENTERPRISE-AND-TYPE">
+    <![CDATA[
+        update /*MS-TCCZ-PERSON-ENTERPRISE-RELATION-UPDATE-BY-ENTERPRISE-AND-TYPE*/ person_enterprise_relation set person_id=#personId# where ((enterprise_id = #enterpriseId#) AND (relation_type = #relationType#))
+    ]]>
+    </update>
+
     <!-- mapped statement for IbatisPersonEnterpriseRelationDAO.getById -->
     <select id="MS-PERSON-ENTERPRISE-RELATION-GET-BY-ID" resultMap="RM-PERSON-ENTERPRISE-RELATION">
     <![CDATA[

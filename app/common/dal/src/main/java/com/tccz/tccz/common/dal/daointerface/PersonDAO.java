@@ -27,6 +27,54 @@ import com.tccz.tccz.dal.util.PageList;
  */
 public interface PersonDAO {
 	/**
+	 *  Insert one <tt>PersonDO</tt> object to DB table <tt>person</tt>, return primary key
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>insert into person(name,id_card_number,account_number,create_time,modify_time) values (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)</tt>
+	 *
+	 *	@param person
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int insert(PersonDO person) throws DataAccessException;
+
+	/**
+	 *  Update DB table <tt>person</tt>.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>update person set name=?, account_number=?, modify_time=CURRENT_TIMESTAMP where (id_card_number = ?)</tt>
+	 *
+	 *	@param person
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int update(PersonDO person) throws DataAccessException;
+
+	/**
+	 *  Delete records from DB table <tt>person</tt>.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>delete from person where (id_card_number = ?)</tt>
+	 *
+	 *	@param idCardNumber
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int delete(String idCardNumber) throws DataAccessException;
+
+	/**
 	 *  Query DB table <tt>person</tt> for records.
 	 *
    	 *  <p>

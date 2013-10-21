@@ -38,6 +38,72 @@ import java.util.Map;
  */
 public class IbatisPersonDAO extends SqlMapClientDaoSupport implements PersonDAO {
 	/**
+	 *  Insert one <tt>PersonDO</tt> object to DB table <tt>person</tt>, return primary key
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>insert into person(name,id_card_number,account_number,create_time,modify_time) values (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)</tt>
+	 *
+	 *	@param person
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int insert(PersonDO person) throws DataAccessException {
+    	if (person == null) {
+    		throw new IllegalArgumentException("Can't insert a null data object into db.");
+    	}
+    	
+        getSqlMapClientTemplate().insert("MS-PERSON-INSERT", person);
+
+        return person.getId();
+    }
+
+	/**
+	 *  Update DB table <tt>person</tt>.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>update person set name=?, account_number=?, modify_time=CURRENT_TIMESTAMP where (id_card_number = ?)</tt>
+	 *
+	 *	@param person
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int update(PersonDO person) throws DataAccessException {
+    	if (person == null) {
+    		throw new IllegalArgumentException("Can't update by a null data object.");
+    	}
+
+
+        return getSqlMapClientTemplate().update("MS-PERSON-UPDATE", person);
+    }
+
+	/**
+	 *  Delete records from DB table <tt>person</tt>.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>delete from person where (id_card_number = ?)</tt>
+	 *
+	 *	@param idCardNumber
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int delete(String idCardNumber) throws DataAccessException {
+
+        return getSqlMapClientTemplate().delete("MS-PERSON-DELETE", idCardNumber);
+    }
+
+	/**
 	 *  Query DB table <tt>person</tt> for records.
 	 *
    	 *  <p>

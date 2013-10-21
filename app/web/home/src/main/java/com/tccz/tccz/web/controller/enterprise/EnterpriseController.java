@@ -10,17 +10,23 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONSerializer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.tccz.tccz.common.util.CommonResult;
 import com.tccz.tccz.common.util.PageUtil;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.service.manage.BusinessSideManageService;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
+import com.tccz.tccz.web.enums.OperationType;
 import com.tccz.tccz.web.util.JSONUtil;
+import com.tccz.tccz.web.util.WebPageCallback;
+import com.tccz.tccz.web.util.WebUtil;
 
 /**
  * 
@@ -66,47 +72,117 @@ public class EnterpriseController {
 
 	@RequestMapping("/update/enterprise/add.htm")
 	public String goAdd(ModelMap modelMap) {
-		return PREFIX + "";
+		initModelMap(modelMap, OperationType.ADD, null);
+		return PREFIX + "one";
 	}
 
 	@RequestMapping(value = "/update/enterprise/add.htm", method = RequestMethod.POST)
-	public String doAdd(ModelMap modelMap) {
-		return PREFIX + "";
+	public String doAdd(ModelMap modelMap, EnterpriseForm form) {
+		CommonResult result = businessSideManageService.createEnterprise(form
+				.convertToDomain());
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return buildQueryIndexRedirectHtmUrl();
+			}
+		});
+	}
+
+	private String buildQueryIndexRedirectHtmUrl() {
+		return "redirect:/query/enterprise/index.htm";
 	}
 
 	@RequestMapping("/update/enterprise/delete.htm")
-	public String delete(ModelMap modelMap) {
-		return PREFIX + "";
+	public String delete(ModelMap modelMap, String identifier) {
+		CommonResult result = businessSideManageService
+				.deleteEnterprise(identifier);
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return buildQueryIndexRedirectHtmUrl();
+			}
+		});
 	}
 
 	@RequestMapping("/update/enterprise/modify.htm")
-	public String goModify(ModelMap modelMap) {
-		return PREFIX + "";
+	public String goModify(ModelMap modelMap, String identifier) {
+		initModelMap(modelMap, OperationType.UPDATE,
+				businessSideQueryService
+						.queryEnterpriseByInstitudeCode(identifier));
+		return PREFIX + "one";
 	}
 
 	@RequestMapping(value = "/update/enterprise/modify.htm", method = RequestMethod.POST)
-	public String doModify(ModelMap modelMap) {
-		return PREFIX + "";
+	public String doModify(ModelMap modelMap, EnterpriseForm form) {
+		CommonResult result = businessSideManageService.updateEnterprse(form
+				.convertToDomain());
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return buildQueryIndexRedirectHtmUrl();
+			}
+		});
 	}
 
 	@RequestMapping("/query/enterprise/view.htm")
-	public String view(ModelMap modelMap) {
-		return PREFIX + "";
+	public String view(ModelMap modelMap, String identifier) {
+		initModelMap(modelMap, OperationType.QUERY,
+				businessSideQueryService
+						.queryEnterpriseByInstitudeCode(identifier));
+		return PREFIX + "one";
 	}
 
-	@RequestMapping("/query/enterprise/associatePerson.htm")
-	public String goAssociatePerson(ModelMap modelMap) {
-		return PREFIX + "";
+	@RequestMapping("/update/enterprise/associatePerson.htm")
+	public String goAssociatePerson(ModelMap modelMap, String identifier) {
+		modelMap.addAttribute("item", businessSideQueryService
+				.queryEnterpriseByInstitudeCode(identifier));
+		return PREFIX + "associate";
 	}
 
-	@RequestMapping("/query/enterprise/associatePerson.htm")
-	public String doAssociatePerson(ModelMap modelMap) {
-		return PREFIX + "";
+	@RequestMapping(value = "/update/enterprise/associatePerson.htm", method = RequestMethod.POST)
+	public String doAssociatePerson(ModelMap modelMap,
+			final String enterpriseId, String personId) {
+		CommonResult result = businessSideManageService
+				.associatePersonToEnterprise(enterpriseId, personId);
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return buildAssociateRedirectHtmUrl(enterpriseId);
+			}
+		});
 	}
 
-	@RequestMapping("/query/enterprise/deleteAssociatePerson.htm")
-	public String deleteAssociatePerson(ModelMap modelMap) {
-		return PREFIX + "";
+	protected String buildAssociateRedirectHtmUrl(String identifier) {
+		return "redirect:/update/enterprise/associatePerson.htm?identifier="
+				+ identifier;
+	}
+
+	@RequestMapping("/update/enterprise/deleteAssociatePerson.htm")
+	public String deleteAssociatePerson(ModelMap modelMap,
+			final String enterpriseId, String personId) {
+		CommonResult result = businessSideManageService
+				.deleteAssociatePersonToEnterprise(enterpriseId, personId);
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return buildAssociateRedirectHtmUrl(enterpriseId);
+			}
+		});
+	}
+
+	private void initModelMap(ModelMap modelMap, OperationType operationType,
+			Enterprise item) {
+		modelMap.addAttribute(OperationType.OPERATION, operationType.getCode());
+		modelMap.addAttribute(OperationType.OPERATION_DESC,
+				operationType.getDescription());
+		if (item != null) {
+			modelMap.addAttribute("item", JSONSerializer.toJSON(item));
+		}
 	}
 
 }

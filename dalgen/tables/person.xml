@@ -1,5 +1,38 @@
 <?xml version="1.0" encoding="GBK"?>
 <table sqlname="person">
+	
+    <operation name="insert">
+        <sql>
+            <![CDATA[
+			insert into person(
+			name,
+			id_card_number,
+			account_number,
+			create_time,
+			modify_time) values(?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		]]>
+        </sql>
+    </operation>
+	
+	<operation name="update" paramtype="object">
+        <sql>
+            <![CDATA[
+			update person set
+			name = ?,
+			account_number = ?,
+			modify_time = CURRENT_TIMESTAMP
+			where id_card_number = ?
+		]]>
+        </sql>
+    </operation>
+	
+	<operation name="delete">
+        <sql>
+            <![CDATA[
+			delete from person where id_card_number = ?
+		]]>
+        </sql>
+    </operation>
     
     <operation name="getById" multiplicity="one">
         <sql>
@@ -49,7 +82,7 @@
 					name like concat("%", #personName#, "%")
 				</isNotEmpty>
 			</dynamic>
-			order by id DESC limit #pageNum#, #pageSize#
+			order by id DESC, modify_time DESC limit #pageNum#, #pageSize#
 		 ]]></sqlmap>
 	</operation>
 	

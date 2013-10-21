@@ -1,0 +1,82 @@
+<link rel="stylesheet" type="text/css" href="$!contextPath/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="$!contextPath/css/bootstrap-responsive.min.css">
+<style>
+	#viewTable {
+		width: 500px;
+	}
+</style>
+<script type="text/javascript">
+Ext.onReady(function(){
+	Ext.create('Ext.form.ComboBox', {
+        fieldLabel: '个人列表',
+        afterLabelTextTpl: required,
+        allowBlank: false,
+        forceSelection: true,
+        queryMode: 'remote',
+        triggerAction: 'query',
+        minChars: 0,
+        listConfig: {
+            getInnerTpl: function(df){
+                return '{[values.name.replace(this.field.getRawValue(), "<b>" + this.field.getRawValue() + "</b>")]}';
+            }
+        },
+        name: 'personIdExt',
+        store: new Ext.data.Store({
+            proxy: {
+                type: 'ajax',
+                url: getContextPath() + '/query/person/fuzzyQuery.json',
+                reader: {
+                    type: 'json',
+                    totalProperty: 'totalItems',
+                    root: 'items'
+                }
+            },
+            autoLoad: true,
+            fields: [{
+                name: 'name'
+            }, {
+                name: 'id'
+            }, {
+                name: 'identifier'
+            }]
+        }),
+        displayField: 'name',
+        valueField: 'identifier',
+        queryParam: 'fuzzyName',
+        listeners: {
+			select: function(){
+					jQuery("#personId").val(this.getValue());
+                }
+		},
+        renderTo: 'personDiv'
+    });
+});
+</script>
+<h2>关联个人到企业</h2>
+<div>
+	<table id="viewTable" class="table table-striped table-bordered table-hover">
+		<tr>
+            <td colspan="2"><b>企业名：</b>$!item.name</td>
+		</tr>
+		<tr>
+            <td colspan="2"><b>企业法人：</b>$!item.legalPerson.name</td>
+		</tr>
+		#foreach($person in $item.relationPersons)
+		<tr>
+            <td name>$!person.name</td>
+            <td>
+                <button class="btn btn-warning" onclick="if(confirm('确定删除此条记录？')) {window.location.href='deleteAssociatePerson.htm?enterpriseId=$!item.identifier&personId=$!person.identifier'} else {return false;}">删除</button>
+			</td>
+		</tr>
+		#end
+	</table>
+</div>
+<div>
+	<form action="associatePerson.htm" method="POST">
+		<input type="hidden" name="enterpriseId" value="$!item.identifier" />
+		<input type="hidden" name="personId" id="personId" />
+		<div id="personDiv"></div>
+		<input class="btn btn-primary" type="submit" value="新增关联" />
+        <button class="btn btn-success" onclick="window.location.href='$!contextPath/query/enterprise/index.htm';return false;">返回</button>
+	</form>
+</div>

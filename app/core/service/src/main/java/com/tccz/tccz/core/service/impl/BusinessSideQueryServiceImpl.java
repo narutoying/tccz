@@ -59,8 +59,8 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 
 	@Override
 	public List<Person> fuzzyQueryPersons(String fuzzyName) {
-		return ObjectConvertor.convertToPersonList(personDAO
-				.fuzzyQueryByName(fuzzyName));
+		return ObjectConvertor.convertToPersonList(
+				personDAO.fuzzyQueryByName(fuzzyName), false);
 	}
 
 	@Override
@@ -172,7 +172,7 @@ public class BusinessSideQueryServiceImpl implements BusinessSideQueryService {
 		com.tccz.tccz.dal.util.PageList pageList = personDAO
 				.fuzzyPageQueryByName(personName, pageSize,
 						PageUtil.getOffset(pageSize, page));
-		result.setDataList(ObjectConvertor.convertToPersonList(pageList));
+		result.setDataList(ObjectConvertor.convertToPersonList(pageList, true));
 		result.setPaginator(pageList.getPaginator());
 		return result;
 	}

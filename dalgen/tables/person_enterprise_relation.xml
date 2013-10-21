@@ -16,6 +16,20 @@
 			delete from person_enterprise_relation where enterprise_id = ?
 		]]></sql>
 	</operation>
+	
+	<operation name="deleteByEnterpriseAndPersonId">
+		<sql><![CDATA[
+			delete from person_enterprise_relation where person_id = ? and enterprise_id = ?
+		]]></sql>
+	</operation>
+	
+	<operation name="updateByEnterpriseAndType">
+		<sql><![CDATA[
+			update person_enterprise_relation
+			 set person_id = ?
+			  where enterprise_id = ? and relation_type = ?
+		]]></sql>
+	</operation>
     
     <operation name="getById" multiplicity="one">
         <sql>

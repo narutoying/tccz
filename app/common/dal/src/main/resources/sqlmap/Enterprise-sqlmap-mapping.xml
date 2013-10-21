@@ -77,7 +77,7 @@
 					name like concat("%", #enterpriseName#, "%")
 				</isNotEmpty>
 			</dynamic>
-			order by id DESC limit #pageNum#, #pageSize#
+			order by id DESC, modify_time desc limit #pageNum#, #pageSize#
     </select>
 
     <!-- mapped statement for IbatisEnterpriseDAO.fuzzyPageQueryByName, needed by paging -->
@@ -109,7 +109,7 @@
     <!-- mapped statement for IbatisEnterpriseDAO.update -->
     <update id="MS-ENTERPRISE-UPDATE">
     <![CDATA[
-        update /*MS-TCCZ-ENTERPRISE-UPDATE*/ enterprise set name=#name#, institution_code=#institutionCode#, account_number=#accountNumber#, modify_time=CURRENT_TIMESTAMP where (institution_code = #institutionCode2#)
+        update /*MS-TCCZ-ENTERPRISE-UPDATE*/ enterprise set name=#name#, account_number=#accountNumber#, modify_time=CURRENT_TIMESTAMP where (institution_code = #institutionCode#)
     ]]>
     </update>
 

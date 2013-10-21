@@ -59,7 +59,7 @@
 					name like concat("%", #enterpriseName#, "%")
 				</isNotEmpty>
 			</dynamic>
-			order by id DESC limit #pageNum#, #pageSize#
+			order by id DESC, modify_time desc limit #pageNum#, #pageSize#
 		 ]]></sqlmap>
 	</operation>
 	
@@ -85,7 +85,6 @@
 		<sql><![CDATA[
 			update enterprise set
 			name = ?,
-			institution_code = ?,
 			account_number = ?,
 			modify_time = CURRENT_TIMESTAMP
 			where institution_code = ?

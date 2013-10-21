@@ -211,7 +211,7 @@ public class IbatisEnterpriseDAO extends SqlMapClientDaoSupport implements Enter
    	 *  <tt></tt>
 	 *  <p>
 	 *  The sql statement for this operation is <br>
-	 *  <tt>update enterprise set name=?, institution_code=?, account_number=?, modify_time=CURRENT_TIMESTAMP where (institution_code = ?)</tt>
+	 *  <tt>update enterprise set name=?, account_number=?, modify_time=CURRENT_TIMESTAMP where (institution_code = ?)</tt>
 	 *
 	 *	@param enterprise
 	 *	@return int

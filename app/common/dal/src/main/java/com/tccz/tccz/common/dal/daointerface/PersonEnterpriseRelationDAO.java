@@ -58,6 +58,41 @@ public interface PersonEnterpriseRelationDAO {
     public int deleteByEnterpriseId(String enterpriseId) throws DataAccessException;
 
 	/**
+	 *  Delete records from DB table <tt>person_enterprise_relation</tt>.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>delete from person_enterprise_relation where ((person_id = ?) AND (enterprise_id = ?))</tt>
+	 *
+	 *	@param personId
+	 *	@param enterpriseId
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int deleteByEnterpriseAndPersonId(String personId, String enterpriseId) throws DataAccessException;
+
+	/**
+	 *  Update DB table <tt>person_enterprise_relation</tt>.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>update person_enterprise_relation set person_id=? where ((enterprise_id = ?) AND (relation_type = ?))</tt>
+	 *
+	 *	@param personId
+	 *	@param enterpriseId
+	 *	@param relationType
+	 *	@return int
+	 *	@throws DataAccessException
+	 */	 
+    public int updateByEnterpriseAndType(String personId, String enterpriseId, String relationType) throws DataAccessException;
+
+	/**
 	 *  Query DB table <tt>person_enterprise_relation</tt> for records.
 	 *
    	 *  <p>

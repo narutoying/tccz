@@ -91,7 +91,7 @@
 					 ]]>
 				</isEqual>
 			</dynamic>
-			order by id DESC
+			order by id DESC, modify_time DESC
 			<isEqual prepend="" property="doPage" compareValue = "true">
 				limit #pageNum#, #pageSize#
 			</isEqual>

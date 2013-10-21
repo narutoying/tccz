@@ -10,13 +10,23 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONSerializer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.tccz.tccz.common.util.CommonResult;
+import com.tccz.tccz.common.util.PageUtil;
 import com.tccz.tccz.core.model.Person;
+import com.tccz.tccz.core.service.manage.BusinessSideManageService;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
+import com.tccz.tccz.web.enums.OperationType;
 import com.tccz.tccz.web.util.JSONUtil;
+import com.tccz.tccz.web.util.WebPageCallback;
+import com.tccz.tccz.web.util.WebUtil;
 
 /**
  * 
@@ -27,8 +37,13 @@ import com.tccz.tccz.web.util.JSONUtil;
 @Controller
 public class PersonController {
 
+	private static final String PREFIX = "person/";
+
 	@Autowired
 	private BusinessSideQueryService businessSideQueryService;
+
+	@Autowired
+	private BusinessSideManageService businessSideManageService;
 
 	@RequestMapping("/query/person/fuzzyQuery.json")
 	public void fuzzyQuery(String fuzzyName, HttpServletResponse response) {
@@ -38,5 +53,93 @@ public class PersonController {
 		resultMap.put("totalItems", enterprises.size());
 		resultMap.put("items", enterprises);
 		JSONUtil.writeBackJsonWithConfig(response, resultMap);
+	}
+
+	@RequestMapping("/query/person/index.htm")
+	public String index(ModelMap modelMap, String fuzzyName,
+			Integer currentPage, Integer pageSize) {
+		if (currentPage == null) {
+			currentPage = 1;
+		}
+		if (pageSize == null) {
+			pageSize = PageUtil.PAGE_SIZE;
+		}
+		modelMap.addAttribute("pageList", businessSideQueryService
+				.fuzzyQueryPersonsPage(fuzzyName, currentPage, pageSize));
+		modelMap.addAttribute("fuzzyName", fuzzyName);
+		return PREFIX + "index";
+	}
+
+	@RequestMapping("/update/person/add.htm")
+	public String goAdd(ModelMap modelMap) {
+		initModelMap(modelMap, OperationType.ADD, null);
+		return PREFIX + "one";
+	}
+
+	@RequestMapping(value = "/update/person/add.htm", method = RequestMethod.POST)
+	public String doAdd(ModelMap modelMap, PersonForm form) {
+		CommonResult result = businessSideManageService.createPerson(form
+				.convertToDomain());
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return buildQueryIndexRedirectHtmUrl();
+			}
+		});
+	}
+
+	private String buildQueryIndexRedirectHtmUrl() {
+		return "redirect:/query/person/index.htm";
+	}
+
+	@RequestMapping("/update/person/delete.htm")
+	public String delete(ModelMap modelMap, String identifier) {
+		CommonResult result = businessSideManageService
+				.deletePerson(identifier);
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return buildQueryIndexRedirectHtmUrl();
+			}
+		});
+	}
+
+	@RequestMapping("/update/person/modify.htm")
+	public String goModify(ModelMap modelMap, String identifier) {
+		initModelMap(modelMap, OperationType.UPDATE,
+				businessSideQueryService.queryPersonByIdCard(identifier, false));
+		return PREFIX + "one";
+	}
+
+	@RequestMapping(value = "/update/person/modify.htm", method = RequestMethod.POST)
+	public String doModify(ModelMap modelMap, PersonForm form) {
+		CommonResult result = businessSideManageService.updatePerson(form
+				.convertToDomain());
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return buildQueryIndexRedirectHtmUrl();
+			}
+		});
+	}
+
+	@RequestMapping("/query/person/view.htm")
+	public String view(ModelMap modelMap, String identifier) {
+		initModelMap(modelMap, OperationType.QUERY,
+				businessSideQueryService.queryPersonByIdCard(identifier, false));
+		return PREFIX + "one";
+	}
+
+	private void initModelMap(ModelMap modelMap, OperationType operationType,
+			Person item) {
+		modelMap.addAttribute(OperationType.OPERATION, operationType.getCode());
+		modelMap.addAttribute(OperationType.OPERATION_DESC,
+				operationType.getDescription());
+		if (item != null) {
+			modelMap.addAttribute("item", JSONSerializer.toJSON(item));
+		}
 	}
 }

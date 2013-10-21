@@ -108,7 +108,7 @@
 					 ]]>
 				</isNotNull>
 			</dynamic>
-			order by id DESC
+			order by id DESC, modify_time DESC
 				limit #pageNum#, #pageSize#
     </select>
 

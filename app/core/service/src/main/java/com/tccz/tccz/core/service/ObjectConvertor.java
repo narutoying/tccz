@@ -295,11 +295,11 @@ public class ObjectConvertor {
 	}
 
 	public static List<Person> convertToPersonList(
-			List<PersonDO> fuzzyQueryByName) {
+			List<PersonDO> fuzzyQueryByName, boolean fillEnterprise) {
 		List<Person> result = new ArrayList<Person>();
 		if (!CollectionUtils.isEmpty(fuzzyQueryByName)) {
 			for (PersonDO data : fuzzyQueryByName) {
-				result.add(convertToPerson(data, false));
+				result.add(convertToPerson(data, fillEnterprise));
 			}
 		}
 		return result;
@@ -328,4 +328,19 @@ public class ObjectConvertor {
 		result.setName(enterprise.getName());
 		return result;
 	}
+
+	public static PersonDO convertToPersonDO(Person person) {
+		if (person == null) {
+			return null;
+		}
+		PersonDO result = new PersonDO();
+		result.setAccountNumber(person.getAccountNumber());
+		result.setCreateTime(person.getCreateTime());
+		result.setId(person.getId());
+		result.setIdCardNumber(person.getIdentifier());
+		result.setModifyTime(person.getModifyTime());
+		result.setName(person.getName());
+		return result;
+	}
+
 }
