@@ -4,6 +4,8 @@
  */
 package com.tccz.tccz.web.controller.person;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +19,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tccz.tccz.common.util.CommonResult;
 import com.tccz.tccz.common.util.PageUtil;
 import com.tccz.tccz.core.model.Person;
 import com.tccz.tccz.core.service.manage.BusinessSideManageService;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
+import com.tccz.tccz.core.service.util.FileHandlerFactory;
+import com.tccz.tccz.core.service.util.FileHandlerNames;
 import com.tccz.tccz.web.enums.OperationType;
 import com.tccz.tccz.web.util.JSONUtil;
 import com.tccz.tccz.web.util.WebPageCallback;
@@ -44,6 +50,9 @@ public class PersonController {
 
 	@Autowired
 	private BusinessSideManageService businessSideManageService;
+
+	@Autowired
+	private FileHandlerFactory fileHandlerFactory;
 
 	@RequestMapping("/query/person/fuzzyQuery.json")
 	public void fuzzyQuery(String fuzzyName, HttpServletResponse response) {
@@ -141,5 +150,21 @@ public class PersonController {
 		if (item != null) {
 			modelMap.addAttribute("item", JSONSerializer.toJSON(item));
 		}
+	}
+
+	@RequestMapping(value = "/update/person/uploadPersonInfo.htm", method = RequestMethod.POST)
+	public String uploadPersonInfo(
+			@RequestParam(value = "file", required = false) MultipartFile file,
+			ModelMap modelMap) throws IOException {
+		InputStream inputStream = file.getInputStream();
+		CommonResult result = fileHandlerFactory.getFileHandler(
+				FileHandlerNames.PERSON).handle(inputStream);
+		return WebUtil.goPage(modelMap, result, new WebPageCallback() {
+
+			@Override
+			public String successPage() {
+				return buildQueryIndexRedirectHtmUrl();
+			}
+		});
 	}
 }

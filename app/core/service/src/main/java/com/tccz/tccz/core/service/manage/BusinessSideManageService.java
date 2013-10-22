@@ -4,6 +4,8 @@
  */
 package com.tccz.tccz.core.service.manage;
 
+import java.util.List;
+
 import com.tccz.tccz.common.util.CommonResult;
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Person;
@@ -18,6 +20,14 @@ import com.tccz.tccz.core.model.Person;
 public interface BusinessSideManageService {
 
 	CommonResult createEnterprise(Enterprise enterprise);
+
+	/**
+	 * 批量创建企业
+	 * 
+	 * @param enterprises
+	 * @return
+	 */
+	CommonResult batchCreateEnterprises(List<Enterprise> enterprises);
 
 	CommonResult deleteEnterprise(String id);
 
@@ -44,6 +54,14 @@ public interface BusinessSideManageService {
 			String personId);
 
 	CommonResult createPerson(Person person);
+
+	/**
+	 * 批量创建个人
+	 * 
+	 * @param persons
+	 * @return
+	 */
+	CommonResult batchCreatePersons(List<Person> persons);
 
 	CommonResult deletePerson(String id);
 

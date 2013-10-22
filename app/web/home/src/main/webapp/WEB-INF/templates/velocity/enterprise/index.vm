@@ -30,6 +30,12 @@
     </form>
 </div>
 <div>
+	<form method="POST" action="$!{contextPath}/update/enterprise/uploadEnterpriseInfo.htm" enctype="multipart/form-data">
+			<input type="file" name="file" style="width:150px"/>
+            <button class="btn btn-primary" type="submit" onclick="if(confirm('确定上传企业信息？（不能含有已存在的企业信息）')){return true;} else {return false}">上传企业信息</button>
+    </form>
+</div>
+<div>
 	<table id="viewTable" class="table table-striped table-bordered table-hover">
 		<tr>
 			<th>企业名</th>

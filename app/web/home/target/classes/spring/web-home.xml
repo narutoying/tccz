@@ -25,5 +25,8 @@
 			<bean class="com.tccz.tccz.web.interceptor.CommonWebInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
-	
+		<!-- 支持上传文件 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    	<property name="maxUploadSize" value="102400000"/> <!-- 100MB -->
+	</bean>
 </beans>

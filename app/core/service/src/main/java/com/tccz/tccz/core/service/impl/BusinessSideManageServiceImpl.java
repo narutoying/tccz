@@ -13,6 +13,7 @@ import com.tccz.tccz.common.dal.daointerface.EnterpriseDAO;
 import com.tccz.tccz.common.dal.daointerface.PersonDAO;
 import com.tccz.tccz.common.dal.daointerface.PersonEnterpriseRelationDAO;
 import com.tccz.tccz.common.dal.dataobject.PersonEnterpriseRelationDO;
+import com.tccz.tccz.common.dal.manual.daointerface.PersonExtDAO;
 import com.tccz.tccz.common.util.CommonResult;
 import com.tccz.tccz.common.util.ParaCheckUtil;
 import com.tccz.tccz.common.util.exception.CommonException;
@@ -37,6 +38,9 @@ public class BusinessSideManageServiceImpl implements BusinessSideManageService 
 
 	@Autowired
 	private PersonDAO personDAO;
+
+	@Autowired
+	private PersonExtDAO personExtDAO;
 
 	@Autowired
 	private PersonEnterpriseRelationDAO personEnterpriseRelationDAO;
@@ -277,6 +281,32 @@ public class BusinessSideManageServiceImpl implements BusinessSideManageService 
 					public void checkParameter() {
 						ParaCheckUtil.checkParaNotNull(person);
 						ParaCheckUtil.checkParaNotBlank(person.getIdentifier());
+					}
+				});
+		return result;
+	}
+
+	@Override
+	public CommonResult batchCreateEnterprises(List<Enterprise> enterprises) {
+		return null;
+	}
+
+	@Override
+	public CommonResult batchCreatePersons(final List<Person> persons) {
+		final CommonResult result = new CommonResult();
+		commonManageTemplate.manageWithTransaction(result,
+				new CommonManageCallback() {
+
+					@Override
+					public void doManage() {
+						personExtDAO.batchInsert(ObjectConvertor
+								.convertToPersonDOList(persons));
+						CommonResult.buildResult(result, true, "批量创建个人成功");
+					}
+
+					@Override
+					public void checkParameter() {
+						ParaCheckUtil.checkParaNotEmpty(persons);
 					}
 				});
 		return result;

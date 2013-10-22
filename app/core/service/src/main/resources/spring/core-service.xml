@@ -33,6 +33,14 @@
 	<bean id="floatingLoanQueryService" class="com.tccz.tccz.core.service.impl.FloatingLoanQueryServiceImpl" />
 	<bean id="floatingLoanManageService" class="com.tccz.tccz.core.service.impl.FloatingLoanManageServiceImpl" />
 	<bean id="businessSideManageService" class="com.tccz.tccz.core.service.impl.BusinessSideManageServiceImpl" />
+	<!-- file handler -->
+	<bean id="fileHandlerFactory" class="com.tccz.tccz.core.service.util.FileHandlerFactory" />
+	<bean id="excelHandler" class="com.tccz.tccz.core.service.impl.filehandler.ExcelHandler" abstract="true"/>
+	<bean id="personExcelHandler" class="com.tccz.tccz.core.service.impl.filehandler.PersonExcelHandler" />
+	<bean id="enterpriseExcelHandler" class="com.tccz.tccz.core.service.impl.filehandler.EnterpriseExcelHandler" />
+	<bean id="bandarNoteExcelHandler" class="com.tccz.tccz.core.service.impl.filehandler.BandarNoteExcelHandler" />
+	<bean id="floatingLoanExcelHandler" class="com.tccz.tccz.core.service.impl.filehandler.FloatingLoanExcelHandler" />
+	<bean id="discountExcelHandler" class="com.tccz.tccz.core.service.impl.filehandler.DiscountExcelHandler" />
 		
 </beans>
 

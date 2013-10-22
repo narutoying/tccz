@@ -343,4 +343,14 @@ public class ObjectConvertor {
 		return result;
 	}
 
+	public static List<PersonDO> convertToPersonDOList(List<Person> dataList) {
+		List<PersonDO> result = new ArrayList<PersonDO>();
+		if (!CollectionUtils.isEmpty(dataList)) {
+			for (Person data : dataList) {
+				result.add(convertToPersonDO(data));
+			}
+		}
+		return result;
+	}
+
 }
