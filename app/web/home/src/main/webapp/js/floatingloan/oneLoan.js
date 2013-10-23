@@ -28,7 +28,7 @@ Ext.onReady(function(){
             value: (item != null ? item.id : 0)
         }, {
             xtype: 'numberfield',
-            fieldLabel: '金额',
+            fieldLabel: '贷款余额',
             afterLabelTextTpl: required,
             name: 'amount',
             readOnly: !canModify("amount"),

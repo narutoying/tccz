@@ -23,7 +23,7 @@ public enum LoanBizSideType {
 	/** 对公 */
 	CORPORATE("CORPORATE", "对公"),
 	/** 对私 */
-	PRIVATE("PRIVATE", "个人");
+	PRIVATE("PRIVATE", "对私");
 	private String code;
 	private String description;
 
@@ -52,6 +52,17 @@ public enum LoanBizSideType {
 		if (StringUtils.isNotBlank(code)) {
 			for (LoanBizSideType mode : values()) {
 				if (StringUtils.equals(code, mode.getCode())) {
+					return mode;
+				}
+			}
+		}
+		return null;
+	}
+
+	public static LoanBizSideType getByDesc(String content) {
+		if (StringUtils.isNotBlank(content)) {
+			for (LoanBizSideType mode : values()) {
+				if (StringUtils.equals(content, mode.getDescription())) {
 					return mode;
 				}
 			}

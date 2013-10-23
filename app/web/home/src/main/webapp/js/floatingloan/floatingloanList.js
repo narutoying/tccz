@@ -197,7 +197,7 @@ Ext.onReady(function(){
             text: "操作",
             renderer: function(value, p, r){
                 return buildButton(value, "查看", "/query/floatingloan/view.htm") +
-                //                buildButton(value, "修改", "/update/floatingloan/modify.htm") +
+                buildButton(value, "修改", "/update/floatingloan/modify.htm") +
                 buildButton(value, "删除", "/update/floatingloan/delete.htm", {
                     text: "确认删除此条记录吗？"
                 });

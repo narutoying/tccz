@@ -70,7 +70,7 @@ var _menu = [
             },
 			{
                 name: "台账管理",
-                url: "",
+                url: "$!contextPath/update/data/index.htm",
             }
         ]
     }

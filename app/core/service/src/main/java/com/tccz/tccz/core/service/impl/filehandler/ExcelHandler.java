@@ -71,7 +71,11 @@ public abstract class ExcelHandler implements FileHandler, InitializingBean {
 								if (hssfRow == null) {
 									continue;
 								} else {
-									dataList.add(parseRow(hssfRow));
+									try {
+										dataList.add(parseRow(hssfRow));
+									} catch (CommonException e) {
+										logger.error("解析一行excel数据出错", e);
+									}
 								}
 							}
 							dealDataModels(dataList);

@@ -9,16 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.tccz.tccz.common.dal.daointerface.FloatingLoanDAO;
 import com.tccz.tccz.common.util.CommonResult;
 import com.tccz.tccz.common.util.ParaCheckUtil;
+import com.tccz.tccz.common.util.exception.CommonException;
 import com.tccz.tccz.common.util.template.CommonManageTemplate;
 import com.tccz.tccz.common.util.template.callback.CommonManageCallback;
 import com.tccz.tccz.core.model.BusinessSide;
 import com.tccz.tccz.core.model.FloatingLoan;
+import com.tccz.tccz.core.model.Money;
 import com.tccz.tccz.core.model.enums.LoanBizSideType;
 import com.tccz.tccz.core.model.result.LimitControlResult;
 import com.tccz.tccz.core.service.LimitService;
 import com.tccz.tccz.core.service.ObjectConvertor;
 import com.tccz.tccz.core.service.manage.FloatingLoanManageService;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
+import com.tccz.tccz.core.service.query.FloatingLoanQueryService;
 
 /**
  * 
@@ -39,6 +42,9 @@ public class FloatingLoanManageServiceImpl implements FloatingLoanManageService 
 
 	@Autowired
 	private FloatingLoanDAO floatingLoanDAO;
+
+	@Autowired
+	private FloatingLoanQueryService floatingLoanQueryService;
 
 	/**
 	 * @see com.tccz.tccz.core.service.manage.FloatingLoanManageService#create(com.tccz.tccz.core.model.FloatingLoan)
@@ -130,6 +136,14 @@ public class FloatingLoanManageServiceImpl implements FloatingLoanManageService 
 						ParaCheckUtil.checkParaNotNull(floatingLoan);
 						ParaCheckUtil.checkParaNotNull(floatingLoan
 								.getBizSideType());
+						FloatingLoan loan = floatingLoanQueryService
+								.queryById(floatingLoan.getId());
+						Money old = loan.getAmount();
+						Money amount = floatingLoan.getAmount();
+						if (amount.greaterThan(old)) {
+							throw new CommonException("更新金额[" + amount
+									+ "]不能超过原来金额[" + old + "]");
+						}
 					}
 				});
 		return result;

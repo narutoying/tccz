@@ -53,7 +53,7 @@ public class FloatingLoanController {
 
 	private static final String QUERY_TYPE = "floatingloan";
 	private static final String PREFIX = "floatingloan/";
-	private static final String QUERY_INDEX_HTM = "/query/" + QUERY_TYPE
+	public static final String QUERY_INDEX_HTM = "/query/" + QUERY_TYPE
 			+ "/index.htm";
 
 	@Autowired

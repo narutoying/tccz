@@ -20,7 +20,7 @@ public class FloatingLoan extends BaseBankBusinessEntity {
 	private BusinessSide loaner;
 	/** 贷款业务方类型 */
 	private LoanBizSideType bizSideType;
-	/** 贷款金额 */
+	/** 贷款金额（当前余额） */
 	private Money amount;
 	/** 发放日 */
 	private Date releaseDate;

@@ -30,7 +30,7 @@
 	}
 	function canModify(fieldName) {
 		#if($!operation == "UPDATE")
-			if(fieldName == "drawDate") {
+			if(fieldName == "drawDate" || fieldName == "amount") {
 			// 特定字段才允许修改
 				return true;
 			} else {
