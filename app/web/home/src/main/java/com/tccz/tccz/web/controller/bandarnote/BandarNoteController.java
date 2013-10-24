@@ -185,21 +185,19 @@ public class BandarNoteController {
 				tmp.setCloseMoney(new Money(form.getCloseMoney()));
 				result = tmp;
 			}
-			if (result != null) {
-				Integer id = form.getId();
-				if (id != null) {
-					result.setId(id);
-				}
-				result.setAmount(new Money(form.getAmount()));
-				result.setDrawDate(form.getDrawDate());
-				Enterprise drawer = new Enterprise();
-				drawer.setIdentifier(form.getDrawerId());
-				result.setDrawer(drawer);
-				result.setExpireDate(form.getExpireDate());
-				result.setMargin(new Money(form.getMarginMoney()));
-				result.setNumber(form.getBandarNoteNumber());
-				result.setType(BandarNoteType.getByCode(form.getType()));
+			Integer id = form.getId();
+			if (id != null) {
+				result.setId(id);
 			}
+			result.setAmount(new Money(form.getAmount()));
+			result.setDrawDate(form.getDrawDate());
+			Enterprise drawer = new Enterprise();
+			drawer.setIdentifier(form.getDrawerId());
+			result.setDrawer(drawer);
+			result.setExpireDate(form.getExpireDate());
+			result.setMargin(new Money(form.getMarginMoney()));
+			result.setNumber(form.getBandarNoteNumber());
+			result.setType(BandarNoteType.getByCode(form.getType()));
 		}
 		return result;
 	}

@@ -80,8 +80,7 @@ public class FloatingLoanExcelHandler extends ExcelHandler {
 						"yyyyMMdd"));
 			}
 		} catch (ParseException e) {
-			throw new CommonException("解析日期[" + dateStr + "]出错，行号="
-					+ hssfRow.getRowNum(), e);
+			throw new CommonException("解析日期[" + dateStr + "]出错", e);
 		}
 		return result;
 	}

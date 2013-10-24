@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Currency;
 
+import com.tccz.tccz.common.util.StringUtil;
+
 /**
  * 单币种货币类，处理货币算术、币种和取整。
  * 
@@ -141,7 +143,8 @@ public class Money implements Serializable, Comparable {
 	 *            金额，以元为单位。
 	 */
 	public Money(String amount) {
-		this(amount, Currency.getInstance(DEFAULT_CURRENCY_CODE));
+		this((StringUtil.isBlank(amount) ? "0" : amount), Currency
+				.getInstance(DEFAULT_CURRENCY_CODE));
 	}
 
 	/**

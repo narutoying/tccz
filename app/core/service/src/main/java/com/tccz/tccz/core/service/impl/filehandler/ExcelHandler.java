@@ -74,7 +74,8 @@ public abstract class ExcelHandler implements FileHandler, InitializingBean {
 									try {
 										dataList.add(parseRow(hssfRow));
 									} catch (CommonException e) {
-										logger.error("解析一行excel数据出错", e);
+										logger.error("解析行【" + rowNum
+												+ "】excel数据出错", e);
 									}
 								}
 							}

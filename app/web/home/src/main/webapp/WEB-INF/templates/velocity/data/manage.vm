@@ -20,6 +20,7 @@
     			<input type="hidden" name="bizType" value="FLOATING_LOAN"/>
     			<input type="file" name="file" style="width:150px"/>
                 <button class="btn btn-primary" type="submit" onclick="if(confirm('确定上传流贷台账？')){return true;} else {return false}">上传流贷台账</button>
+                <button class="btn btn-success" type="button" onclick="window.location.href='$!contextPath/query/floatingloan/index.htm';return false">查看</button>
 			</form>
 		</td>
 		<td></td>
@@ -31,6 +32,7 @@
     			<input type="hidden" name="bizType" value="BANDAR_NOTE"/>
     			<input type="file" name="file" style="width:150px"/>
                 <button class="btn btn-primary" type="submit" onclick="if(confirm('确定上传银票台账？')){return true;} else {return false}">上传银票台账</button>
+                <button class="btn btn-success" type="button" onclick="window.location.href='$!contextPath/query/bandarnote/index.htm';return false">查看</button>
 			</form>
 		</td>
 		<td></td>
@@ -42,6 +44,7 @@
     			<input type="hidden" name="bizType" value="DISCOUNT"/>
     			<input type="file" name="file" style="width:150px"/>
                 <button class="btn btn-primary" type="submit" onclick="if(confirm('确定上传贴现台账？')){return true;} else {return false}">上传贴现台账</button>
+                <button class="btn btn-success" type="button" onclick="window.location.href='$!contextPath/query/discount/index.htm';return false">查看</button>
 			</form>	
 		</td>
 		<td></td>

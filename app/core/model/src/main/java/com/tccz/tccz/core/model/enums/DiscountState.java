@@ -45,6 +45,18 @@ public enum DiscountState {
 			}
 		}
 		return null;
+
+	}
+
+	public static DiscountState getByDesc(String desc) {
+		if (StringUtils.isNotBlank(desc)) {
+			for (DiscountState mode : values()) {
+				if (StringUtils.equals(desc, mode.getDescription())) {
+					return mode;
+				}
+			}
+		}
+		return null;
 	}
 
 	public static Map<String, String> toMap() {

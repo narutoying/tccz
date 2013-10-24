@@ -41,8 +41,13 @@ public class DataImportController {
 	private FileHandlerFactory fileHandlerFactory;
 
 	@RequestMapping(value = "/update/data/index.htm", method = RequestMethod.GET)
-	public String goUploadAccountData(ModelMap modelMap) {
+	public String index(ModelMap modelMap) {
 		return "data/manage";
+	}
+
+	@RequestMapping(value = "/update/data/uploadAccountData.htm", method = RequestMethod.GET)
+	public String goUploadAccountData(ModelMap modelMap) {
+		return index(modelMap);
 	}
 
 	/**
@@ -72,7 +77,7 @@ public class DataImportController {
 			@Override
 			public String successPage() {
 				modelMap.addAttribute("result", result.getResultMessage());
-				return goUploadAccountData(modelMap);
+				return index(modelMap);
 			}
 
 		});

@@ -59,6 +59,17 @@ public enum BandarNoteType {
 		return null;
 	}
 
+	public static BandarNoteType getByDesc(String value) {
+		if (StringUtils.isNotBlank(value)) {
+			for (BandarNoteType mode : values()) {
+				if (StringUtils.equals(value, mode.getDescription())) {
+					return mode;
+				}
+			}
+		}
+		return null;
+	}
+
 	public static Map<String, String> toMap() {
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		for (BandarNoteType BandarNoteType : values()) {
