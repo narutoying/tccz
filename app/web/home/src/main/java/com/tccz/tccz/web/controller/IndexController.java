@@ -4,9 +4,12 @@
  */
 package com.tccz.tccz.web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.tceon.soa.zauth.client.model.AuthVerifyStrategyConfig;
 
 /**
  * 
@@ -17,8 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController {
 
+	@Autowired
+	private AuthVerifyStrategyConfig authVerifyStrategyConfig;
+
 	@RequestMapping("/index.htm")
 	public String index(ModelMap modelMap) {
+		modelMap.addAttribute("authVerifyStrategyConfig",
+				authVerifyStrategyConfig);
 		return "index";
 	}
 

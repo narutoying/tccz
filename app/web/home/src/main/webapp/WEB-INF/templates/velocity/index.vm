@@ -1,16 +1,35 @@
+<link rel="stylesheet" href="$!contextPath/css/base.css" />
+<link rel="stylesheet" href="$!contextPath/css/default.css" />
+<div id="header" class="fn-clear">
+	<h1 class="fn-left" style="font-family:\"微软雅黑\"">太仓民生村镇银行</h1>
+	<ul class="fn-right">
+		#if ($operationContextUtil.isLogin($!request))
+		<li class="fn-left">欢迎您，$!{operationContextUtil.getPrincipal($!request.getSession()).getUserName()}</li>
+		#if(!$!isAdmin)
+			<li class="fn-left"><a href="$!contextPath/templatePage.jsf">系统首页</a></li>
+		#end
+		<li class="fn-left"><a href="$!contextPath/logout.htm">退出</a></li>
+		#else
+		<li class="fn-left">您好，请</li>
+		<li class="fn-left"><a href="$!{authVerifyStrategyConfig.getzSecurityLoginUrl()}">登录</a></li>
+		#end
+	</ul>
+</div>
 <script type="text/javascript">
-	var appName = "太仓民生村镇银行";
+	var appName = "";
 	var rootUrl = "";
-		Ext.onReady(function () {
+	Ext.onReady(function () {
     Ext.create('Ext.container.Viewport', {
         layout: 'border',
-        items: [{
+        items: [
+		{
             region: 'north',
             html: '<h1 class="x-panel-header">' + appName + '</h1>',
             border: false,
             height: 60,
             margins: '0 0 0 0'
-        }, {
+        }, 
+		{
             region: 'west',
             collapsible: true,
             split: true,
@@ -29,7 +48,6 @@
             }
         }]
     });
-
     InitMenu("MainMenu", "MainTabPanel", _menu);
 });
 

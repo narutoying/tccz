@@ -379,6 +379,11 @@
 			  <version>3.8.1</version>
 			  <scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.tceon.soa</groupId>
+				<artifactId>zauth-client</artifactId>
+				<version>1.0.1</version>
+			</dependency>
         </dependencies>
 	</dependencyManagement>
 	
