@@ -5,10 +5,7 @@
 	<ul class="fn-right">
 		#if ($operationContextUtil.isLogin($!request))
 		<li class="fn-left">欢迎您，$!{operationContextUtil.getPrincipal($!request.getSession()).getUserName()}</li>
-		#if(!$!isAdmin)
-			<li class="fn-left"><a href="$!contextPath/templatePage.jsf">系统首页</a></li>
-		#end
-		<li class="fn-left"><a href="$!contextPath/logout.htm">退出</a></li>
+		<li class="fn-left"><a href="$!{authVerifyStrategyConfig.getzSecurityLogoutUrl()}">退出</a></li>
 		#else
 		<li class="fn-left">您好，请</li>
 		<li class="fn-left"><a href="$!{authVerifyStrategyConfig.getzSecurityLoginUrl()}">登录</a></li>
@@ -71,6 +68,10 @@ var _menu = [
                 id: "discountManage",
                 name: "贴现管理",
                 url: "$!contextPath/query/discount/index.htm"
+            },
+			{
+                name: "台账管理",
+                url: "$!contextPath/update/data/index.htm",
             }
         ]
     },
@@ -85,10 +86,6 @@ var _menu = [
 			{
                 name: "个人信息管理",
                 url: "$!contextPath/query/person/index.htm",
-            },
-			{
-                name: "台账管理",
-                url: "$!contextPath/update/data/index.htm",
             }
         ]
     }

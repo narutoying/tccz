@@ -43,7 +43,7 @@
 		<property name="typeAccessDenyMap">
 			<map>
 				 <entry key="SPRING_MVC">
-					 <value>/zauth/accessDenied.htm</value>   
+					 <value>/tccz/accessDenied.htm</value>   
 			    </entry>
 			</map>
 		</property>
@@ -54,24 +54,51 @@
 		</property>
 		<property name="authUris">
 			<list>
+				<!--  -->
+				<value>/index.htm</value>
+				<value>/query/floatingloan/index.htm</value>
+				<value>/update/floatingloan/add.htm</value>
+				<value>/update/floatingloan/delete.htm</value>
+				<value>/update/floatingloan/modify.htm</value>
+				<value>/query/bandarnote/index.htm</value>
+				<value>/update/bandarnote/add.htm</value>
+				<value>/update/bandarnote/delete.htm</value>
+				<value>/update/bandarnote/modify.htm</value>
+				<value>/query/discount/index.htm</value>
+				<value>/update/discount/add.htm</value>
+				<value>/update/discount/delete.htm</value>
+				<value>/update/discount/modify.htm</value>
+				<value>/query/enterprise/index.htm</value>
+				<value>/update/enterprise/add.htm</value>
+				<value>/update/enterprise/delete.htm</value>
+				<value>/update/enterprise/modify.htm</value>
+				<value>/update/enterprise/uploadEnterpriseInfo.htm</value>
+				<value>/query/person/index.htm</value>
+				<value>/update/person/add.htm</value>
+				<value>/update/person/delete.htm</value>
+				<value>/update/person/modify.htm</value>
+				<value>/update/person/uploadPersonInfo.htm</value>
 				<value>/update/data/index.htm</value>
+				<value>/update/data/uploadAccountData.htm</value>
+				
 			</list>
 		</property>
 		<!-- 跳转权限登录页面url -->
 		<property name="zSecurityLoginUrl">
 			<value>/zauth/login.htm</value>
 		</property>
-		<!-- 此处不带上下文路径！ 
-		<property name="adminOnlyRedirectUrl">
-			<value>/homePage.jsf</value>
+		<property name="zSecurityLogoutUrl">
+			<value>/zauth/logout.htm</value>
 		</property>
-		-->
+		<!-- 此处不带上下文路径！ -->
+		<property name="adminOnlyRedirectUrl">
+			<value>/index.htm</value>
+		</property>
 		<property name="administrators">
 			<list>
 				<value>admin</value>
 			</list>
 		</property>
 	</bean>
-
 	
 </beans>
