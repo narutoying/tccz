@@ -27,8 +27,9 @@
 			release_date,
 			create_time,
 			modify_time,
-			expire_date)
-			 values(?, ?, ?, ?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
+			expire_date,
+			has_repayed)
+			 values(?, ?, ?, ?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, ?)
 		]]>
         </sql>
     </operation>
@@ -49,7 +50,8 @@
 			amount = ?,
 			release_date = ?,
 			expire_date = ?,
-			modify_time=CURRENT_TIMESTAMP where id=?
+			modify_time=CURRENT_TIMESTAMP,
+			has_repayed = ? where id=?
 		]]>
         </sql>
     </operation>
@@ -139,4 +141,12 @@
         </sqlmap>
     </operation>
     
+    <operation name="getByRepay" multiplicity="many">
+        <sql>
+            <![CDATA[
+			select * from floating_loan where has_repayed = ? and loaner_id = ? and biz_side_type = ?
+		]]>
+        </sql>
+    </operation>
+	
 </table>

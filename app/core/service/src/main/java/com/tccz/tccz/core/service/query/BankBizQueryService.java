@@ -17,7 +17,13 @@ import java.util.Map;
  */
 public interface BankBizQueryService {
 	/**
+	 * <p>
 	 * 按照到期时间查询业务方的特定业务数据 （如查询某家企业到期时间在2013-01-01到2013-12-31内的流贷数据）
+	 * </p>
+	 * 特例： 
+	 * <ol>
+	 * 	<li>对于流贷，不以到期时间查询，而是查询“未还清”的流贷业务</li>
+	 * </ol>
 	 * 
 	 * @param classType
 	 *            业务种类

@@ -1,0 +1,172 @@
+<link rel="stylesheet" href="$!contextPath/css/base.css" />
+<link rel="stylesheet" href="$!contextPath/css/default.css" />
+<div id="header" class="fn-clear">
+	<h1 class="fn-left" style="font-family:\"微软雅黑\"">太仓民生村镇银行</h1>
+	<ul class="fn-right">
+		#if ($operationContextUtil.isLogin($!request))
+		<li class="fn-left">欢迎您，$!{operationContextUtil.getPrincipal($!request.getSession()).getUserName()}</li>
+		<li class="fn-left"><a href="$!{authVerifyStrategyConfig.getzSecurityLogoutUrl()}">退出</a></li>
+		#else
+		<li class="fn-left">您好，请</li>
+		<li class="fn-left"><a href="$!{authVerifyStrategyConfig.getzSecurityLoginUrl()}">登录</a></li>
+		#end
+	</ul>
+</div>
+<script type="text/javascript">
+	var appName = "";
+	var rootUrl = "";
+	Ext.onReady(function () {
+    Ext.create('Ext.container.Viewport', {
+        layout: 'border',
+        items: [
+		{
+            region: 'north',
+            html: '<h1 class="x-panel-header">' + appName + '</h1>',
+            border: false,
+            height: 60,
+            margins: '0 0 0 0'
+        }, 
+		{
+            region: 'west',
+            collapsible: true,
+            split: true,
+            id: 'MainMenu',
+            title: '系统导航',
+            width: 150,
+            layout: 'accordion'
+        },  {
+            region: 'center',
+            xtype: 'tabpanel',
+            id: 'MainTabPanel',
+            activeTab: 0,
+            items: {
+                title: '首页',
+                html: '<iframe style="overflow:auto;width:100%; height:100%;" src="' + getContextPath() + "/query/limit/viewEnterprise.htm" + '" frameborder="0"></iframe>'
+            }
+        }]
+    });
+    InitMenu("MainMenu", "MainTabPanel", _menu);
+});
+
+// 此Menu可以是后台生成，通过AJAX请求加载到页面中的。
+var _menu = [
+    {
+        id: "bizManage",
+        name: "业务管理",
+        children: [
+			{
+                id: "floatingLoanManage",
+                name: "流贷管理",
+                url: "$!contextPath/query/floatingloan/index.htm"
+            },
+			{
+                id: "bandarnoteManage",
+                name: "银票管理",
+                url: "$!contextPath/query/bandarnote/index.htm"
+            },
+            {
+                id: "discountManage",
+                name: "贴现管理",
+                url: "$!contextPath/query/discount/index.htm"
+            },
+			{
+                name: "台账管理",
+                url: "$!contextPath/update/data/index.htm",
+            }
+        ]
+    },
+    {
+        id: "dataManage",
+        name: "数据管理",
+        children: [
+            {
+                name: "企业信息管理",
+                url: "$!contextPath/query/enterprise/index.htm",
+            },
+			{
+                name: "个人信息管理",
+                url: "$!contextPath/query/person/index.htm",
+            }
+        ]
+    }
+];
+
+//递归创建树节点的配置
+var buildTreeNodeConfig = function (m) {
+    var nodeConfig = {
+        text: m.name,
+        itemId: m.id,
+        leaf: true
+    };
+    if (m.url) nodeConfig.url = m.url;
+    if (m.children) {
+        nodeConfig.leaf = false;
+        nodeConfig.children = [];
+        Ext.Array.each(m.children, function (sub, index) {
+            nodeConfig.children[index] = buildTreeNodeConfig(sub);
+        });
+    }
+
+    return nodeConfig;
+}
+
+function InitMenu(accordionId, tabpanelId, menu) {
+    var accordionPanel = Ext.getCmp(accordionId);
+    if (!accordionPanel) return;
+
+    if (menu) {
+        Ext.Array.each(menu, function (item) {
+            var panel = Ext.create("Ext.panel.Panel", {
+                layout: "fit",
+                title: item.name,
+                itemId: item.id
+            });
+
+            accordionPanel.add(panel);
+
+            if (item.children) {
+                var tree = Ext.create("Ext.tree.Panel", {
+                    border: 0,
+                    rootVisible: false,
+                    root: {
+                        expanded: true
+                    },
+                    listeners: {
+                        itemclick: function (me, record) {
+                            if (record.raw.url) {
+                                //根据record创建tab标签
+                                CreateIframeTab(tabpanelId, record.raw.itemId, record.raw.text, record.raw.url);
+                            }
+                        }
+                    }
+                });
+                panel.add(tree);
+                Ext.Array.each(item.children, function (child) {
+                    // 向树中添加子节点（递归）
+                    var root = tree.getRootNode();
+                    root.appendChild(buildTreeNodeConfig(child));
+                });
+            }
+        });
+    }
+}
+
+function CreateIframeTab(tabpanelId, tabId, tabTitle, iframeSrc) {
+    var tabpanel = Ext.getCmp(tabpanelId);
+    if (!tabpanel) return;  //未找到tabpanel，返回
+
+    //寻找id相同的tab
+    var tab = Ext.getCmp(tabId);
+    if (tab) { tabpanel.setActiveTab(tab); return; }
+
+    //新建一个tab，并将其添加到tabpanel中
+    //tab = Ext.create('Ext.tab.Tab', );
+    tab = tabpanel.add({
+        id: tabId,
+        title: tabTitle,
+        closable: true,
+        html: '<iframe style="overflow:auto;width:100%; height:100%;" src="' + iframeSrc + '" frameborder="0"></iframe>'
+    });
+    tabpanel.setActiveTab(tab);
+}
+</script>

@@ -6,6 +6,7 @@ package com.tccz.tccz.biz.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.tccz.tccz.core.model.Enterprise;
 import com.tccz.tccz.core.model.Money;
@@ -34,6 +35,8 @@ public class PersonLimitView {
 	private Money totalLimit;
 	/** 可用额度 */
 	private Money availableLimit;
+	/** 额度占用明细，如流贷业务 */
+	private Map<String, Money> detailOccupyLimit;
 
 	public Person getPerson() {
 		return person;
@@ -89,5 +92,13 @@ public class PersonLimitView {
 
 	public void setOwnEnterprises(List<Enterprise> ownEnterprises) {
 		this.ownEnterprises = ownEnterprises;
+	}
+
+	public Map<String, Money> getDetailOccupyLimit() {
+		return detailOccupyLimit;
+	}
+
+	public void setDetailOccupyLimit(Map<String, Money> detailOccupyLimit) {
+		this.detailOccupyLimit = detailOccupyLimit;
 	}
 }

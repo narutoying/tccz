@@ -53,7 +53,7 @@ Ext.onReady(function(){
             format: 'Y-m-d',
             allowBlank: false,
             value: Ext.Date.format((item != null ? new Date(item.expireDate.time) : null), 'Y-m-d')
-        }, {
+        }, getRepayedCombobox(), {
             fieldLabel: '当前可用额度(元)',
             id: 'showAvailableLimit',
             readOnly: true
@@ -216,4 +216,51 @@ function getBizSideTypeText(){
         hidden: true,
         value: getLoanBizSideType()
     };
+}
+
+/**
+ *
+ */
+function getRepayedCombobox(){
+    var type = operationType();
+    if (type == "UPDATE" || type == "QUERY") {
+        return {
+            xtype: "combobox",
+            fieldLabel: '还款完毕',
+            afterLabelTextTpl: required,
+            allowBlank: false,
+            forceSelection: true,
+            width: 500,
+            labelWidth: 130,
+            id: "hasRepayedCombo",
+            name: 'hasRepayed',
+            readOnly: !canModify("hasRepayed"),
+            displayField: 'desc',
+            valueField: 'code',
+            store: Ext.create('Ext.data.Store', {
+                mode: 'local',
+                data: [{
+                    'code': 'true',
+                    'desc': '是'
+                }, {
+                    'code': 'false',
+                    'desc': '否'
+                }],
+                fields: [{
+                    name: 'code'
+                }, {
+                    name: 'desc'
+                }]
+            }),
+            queryMode: 'local',
+            listeners: {
+                render: function(c){
+                    if (c.getValue() == null) {
+                        c.setValue((item != null ? item.hasRepayed + "" : null));
+                    }
+                }
+            }
+        }
+    }
+    return null;
 }

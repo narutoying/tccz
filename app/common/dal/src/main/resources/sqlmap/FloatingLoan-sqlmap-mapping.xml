@@ -33,6 +33,7 @@
         <result property="expireDate" column="expire_date" javaType="java.util.Date" jdbcType="DATETIME"/>
         <result property="createTime" column="create_time" javaType="java.util.Date" jdbcType="datetime"/>
         <result property="modifyTime" column="modify_time" javaType="java.util.Date" jdbcType="datetime"/>
+        <result property="hasRepayed" column="has_repayed" javaType="java.lang.String" jdbcType="char"/>
     </resultMap>
 
 
@@ -55,7 +56,7 @@
 
     <!-- mapped statement for IbatisFloatingLoanDAO.insert -->
 	<insert id="MS-FLOATING-LOAN-INSERT">
-	insert /*MS-TCCZ-FLOATING-LOAN-INSERT*/ into floating_loan(loaner_id,biz_side_type,amount,release_date,create_time,modify_time,expire_date) values (#loanerId#, #bizSideType#, #amount#, #releaseDate#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, #expireDate#)
+	insert /*MS-TCCZ-FLOATING-LOAN-INSERT*/ into floating_loan(loaner_id,biz_side_type,amount,release_date,create_time,modify_time,expire_date,has_repayed) values (#loanerId#, #bizSideType#, #amount#, #releaseDate#, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, #expireDate#, #hasRepayed#)
     <selectKey resultClass="int" keyProperty="id">
 		select last_insert_id() as id
     </selectKey>
@@ -71,7 +72,7 @@
     <!-- mapped statement for IbatisFloatingLoanDAO.update -->
     <update id="MS-FLOATING-LOAN-UPDATE">
     <![CDATA[
-        update /*MS-TCCZ-FLOATING-LOAN-UPDATE*/ floating_loan set loaner_id=#loanerId#, biz_side_type=#bizSideType#, amount=#amount#, release_date=#releaseDate#, expire_date=#expireDate#, modify_time=CURRENT_TIMESTAMP where (id = #id#)
+        update /*MS-TCCZ-FLOATING-LOAN-UPDATE*/ floating_loan set loaner_id=#loanerId#, biz_side_type=#bizSideType#, amount=#amount#, release_date=#releaseDate#, expire_date=#expireDate#, modify_time=CURRENT_TIMESTAMP, has_repayed=#hasRepayed# where (id = #id#)
     ]]>
     </update>
 
@@ -165,6 +166,13 @@
 					 ]]>
 				</isNotNull>
 			order by id DESC
+    </select>
+
+    <!-- mapped statement for IbatisFloatingLoanDAO.getByRepay -->
+    <select id="MS-FLOATING-LOAN-GET-BY-REPAY" resultMap="RM-FLOATING-LOAN">
+    <![CDATA[
+        select /*MS-TCCZ-FLOATING-LOAN-GET-BY-REPAY*/ * from floating_loan where ((has_repayed = #hasRepayed#) AND (loaner_id = #loanerId#) AND (biz_side_type = #bizSideType#))
+    ]]>
     </select>
 
 </sqlMap>

@@ -19,6 +19,7 @@ public class FloatingLoanForm {
 	private String amount;
 	private Date releaseDate;
 	private Date expireDate;
+	private boolean hasRepayed;
 
 	public Integer getId() {
 		return id;
@@ -66,5 +67,13 @@ public class FloatingLoanForm {
 
 	public void setLoanerId(String loanerId) {
 		this.loanerId = loanerId;
+	}
+
+	public boolean isHasRepayed() {
+		return hasRepayed;
+	}
+
+	public void setHasRepayed(boolean hasRepayed) {
+		this.hasRepayed = hasRepayed;
 	}
 }

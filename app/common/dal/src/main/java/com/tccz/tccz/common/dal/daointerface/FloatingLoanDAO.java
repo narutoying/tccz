@@ -66,7 +66,7 @@ public interface FloatingLoanDAO {
    	 *  <tt></tt>
 	 *  <p>
 	 *  The sql statement for this operation is <br>
-	 *  <tt>insert into floating_loan(loaner_id,biz_side_type,amount,release_date,create_time,modify_time,expire_date) values (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)</tt>
+	 *  <tt>insert into floating_loan(loaner_id,biz_side_type,amount,release_date,create_time,modify_time,expire_date,has_repayed) values (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, ?)</tt>
 	 *
 	 *	@param floatingLoan
 	 *	@return int
@@ -98,7 +98,7 @@ public interface FloatingLoanDAO {
    	 *  <tt></tt>
 	 *  <p>
 	 *  The sql statement for this operation is <br>
-	 *  <tt>update floating_loan set loaner_id=?, biz_side_type=?, amount=?, release_date=?, expire_date=?, modify_time=CURRENT_TIMESTAMP where (id = ?)</tt>
+	 *  <tt>update floating_loan set loaner_id=?, biz_side_type=?, amount=?, release_date=?, expire_date=?, modify_time=CURRENT_TIMESTAMP, has_repayed=? where (id = ?)</tt>
 	 *
 	 *	@param floatingLoan
 	 *	@return int
@@ -146,5 +146,23 @@ public interface FloatingLoanDAO {
 	 *	@throws DataAccessException
 	 */	 
     public List<FloatingLoanDO> getByExpireDate(String loanerId, String bizSideType, Date expireStart, Date expireEnd) throws DataAccessException;
+
+	/**
+	 *  Query DB table <tt>floating_loan</tt> for records.
+	 *
+   	 *  <p>
+   	 *  Description for this operation is<br>
+   	 *  <tt></tt>
+	 *  <p>
+	 *  The sql statement for this operation is <br>
+	 *  <tt>select * from floating_loan where ((has_repayed = ?) AND (loaner_id = ?) AND (biz_side_type = ?))</tt>
+	 *
+	 *	@param hasRepayed
+	 *	@param loanerId
+	 *	@param bizSideType
+	 *	@return List<FloatingLoanDO>
+	 *	@throws DataAccessException
+	 */	 
+    public List<FloatingLoanDO> getByRepay(String hasRepayed, String loanerId, String bizSideType) throws DataAccessException;
 
 }

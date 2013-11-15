@@ -7,7 +7,7 @@
 	}
 	
 	table#viewTable {
-		width: 80%;
+		width: 100%;
 	}
 	div#mainContent {
 		padding: 10px;
@@ -35,16 +35,25 @@
 			<th>企业名</th>
 			<th>企业法人</th>
 			<th>集合类型</th>
-			<th>关联企业</th>
-			<th>关联个人</th>
 			<th>总额度</th>
 			<th>可用额度</th>
+			<th title="此处所占用额度仅计算该企业/个人自身">流贷占用额度</th>
+			<th title="此处所占用额度仅计算该企业/个人自身">银票占用额度</th>
+			<th title="此处所占用额度仅计算该企业/个人自身">贴现占用额度</th>
+			<th>关联企业</th>
+			<th>关联个人</th>
 		</tr>
 		#foreach($view in $views.dataList)
 			<tr>
 				<td>$!view.enterprise.name</td>
 				<td>$!view.enterprise.legalPerson.name</td>
 				<td>$!view.businessSideSetType.description</td>
+				<td>$moneyUtil.parseMoney("$!view.totalLimit.amount")</td>
+				<td>$moneyUtil.parseMoney("$!view.availableLimit.amount")</td>
+				#set($detailOccupyLimit = $view.detailOccupyLimit)
+				<td>$moneyUtil.parseMoney(${detailOccupyLimit.get("FLOATING_LOAN").toString()})</td>
+				<td>$moneyUtil.parseMoney(${detailOccupyLimit.get("BANDAR_NOTE").toString()})</td>
+				<td>$moneyUtil.parseMoney(${detailOccupyLimit.get("DISCOUNT").toString()})</td>
 				<td>
 					#foreach($e in $view.associateEnterprises)
 						$e.name &nbsp;
@@ -55,8 +64,6 @@
 						$e.name &nbsp;
 					#end
 				</td>
-				<td>$!view.totalLimit.amount</td>
-				<td>$!view.availableLimit.amount</td>
 			</tr>
 		#end
 	</table>

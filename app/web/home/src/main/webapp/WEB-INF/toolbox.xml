@@ -10,4 +10,9 @@
         <scope>application</scope>  
         <class>com.tceon.soa.zauth.client.security.OperationContextUtil</class>  
     </tool>  
+    <tool>  
+        <key>moneyUtil</key>  
+        <scope>application</scope>  
+        <class>com.tccz.tccz.common.util.MoneyUtil</class>  
+    </tool>  
 </toolbox>  

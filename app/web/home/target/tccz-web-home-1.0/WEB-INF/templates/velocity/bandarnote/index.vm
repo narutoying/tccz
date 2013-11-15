@@ -1,0 +1,8 @@
+<script type="text/javascript" src="$!contextPath/js/bandarnote/bandarnoteList.js?num=Math.random()"></script>
+<script type="text/javascript">
+	function getTypes() {
+		return $types;
+	}
+</script>
+<div id="queryForm"></div>
+<div id="queryResult"></div>

@@ -86,10 +86,12 @@ Ext.onReady(function(){
                 }
             }
         }, {
-            xtype: 'checkbox',
+            //xtype: 'checkbox',
+            hidden: true,
             boxLabel: '显示已到期',
             id: 'showExpire',
-            name: 'showExpire'
+            name: 'showExpire',
+            value: true
         }],
         buttons: [{
             xtype: 'component',
@@ -110,7 +112,7 @@ Ext.onReady(function(){
             handler: function(){
                 store.getProxy().setExtraParam("loanerName", Ext.getCmp("loanerName").getValue());
                 store.getProxy().setExtraParam("bizSideType", Ext.getCmp("bizSideType").getValue());
-                store.getProxy().setExtraParam("showExpire", Ext.getCmp("showExpire").getValue());
+                // store.getProxy().setExtraParam("showExpire", Ext.getCmp("showExpire").getValue());
                 store.loadPage(1);
             }
         }],
@@ -212,5 +214,6 @@ Ext.onReady(function(){
     });
     // 默认显示第一页
     store.getProxy().setExtraParam("bizSideType", getLoanBizSideType());
+    store.getProxy().setExtraParam("showExpire", true);
     store.loadPage(1);
 });

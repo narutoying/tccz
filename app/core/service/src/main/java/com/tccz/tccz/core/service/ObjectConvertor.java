@@ -20,6 +20,7 @@ import com.tccz.tccz.common.dal.dataobject.EnterpriseDO;
 import com.tccz.tccz.common.dal.dataobject.FloatingLoanDO;
 import com.tccz.tccz.common.dal.dataobject.PersonDO;
 import com.tccz.tccz.common.dal.dataobject.PersonEnterpriseRelationDO;
+import com.tccz.tccz.common.util.StringUtil;
 import com.tccz.tccz.common.util.exception.CommonException;
 import com.tccz.tccz.core.model.BandarNote;
 import com.tccz.tccz.core.model.Discount;
@@ -275,6 +276,7 @@ public class ObjectConvertor {
 		}
 		result.setModifyTime(data.getModifyTime());
 		result.setReleaseDate(data.getReleaseDate());
+		result.setHasRepayed(convertStringToBoolean(data.getHasRepayed()));
 		return result;
 	}
 
@@ -291,6 +293,7 @@ public class ObjectConvertor {
 		result.setLoanerId(data.getLoaner().getIdentifier());
 		result.setModifyTime(data.getModifyTime());
 		result.setReleaseDate(data.getReleaseDate());
+		result.setHasRepayed(convertBooleanToString(data.isHasRepayed()));
 		return result;
 	}
 
@@ -351,6 +354,14 @@ public class ObjectConvertor {
 			}
 		}
 		return result;
+	}
+
+	public static String convertBooleanToString(boolean flag) {
+		return (flag == true ? "1" : "0");
+	}
+
+	public static boolean convertStringToBoolean(String flag) {
+		return (StringUtil.equals(flag, "1") ? true : false);
 	}
 
 }

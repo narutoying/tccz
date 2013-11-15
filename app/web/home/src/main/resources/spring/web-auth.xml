@@ -54,7 +54,7 @@
 		</property>
 		<property name="authUris">
 			<list>
-				<!--  -->
+				<!--  
 				<value>/index.htm</value>
 				<value>/query/floatingloan/index.htm</value>
 				<value>/update/floatingloan/add.htm</value>
@@ -80,7 +80,7 @@
 				<value>/update/person/uploadPersonInfo.htm</value>
 				<value>/update/data/index.htm</value>
 				<value>/update/data/uploadAccountData.htm</value>
-				
+				-->
 			</list>
 		</property>
 		<!-- 跳转权限登录页面url -->

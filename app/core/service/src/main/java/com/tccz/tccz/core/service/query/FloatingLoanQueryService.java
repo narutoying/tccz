@@ -46,4 +46,13 @@ public interface FloatingLoanQueryService {
 	 */
 	List<FloatingLoan> queryListByExpireDate(String bizSideId,
 			String bizSideType, Date expireStart, Date expireEnd);
+
+	/**
+	 * 查询是否已还清的流贷列表
+	 * 
+	 * @return
+	 */
+	List<FloatingLoan> queryListByRepay(String bizSideId, String bizSideType,
+			boolean hasRepayed);
+
 }

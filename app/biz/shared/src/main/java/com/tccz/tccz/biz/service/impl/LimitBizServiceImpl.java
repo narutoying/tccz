@@ -5,7 +5,9 @@
 package com.tccz.tccz.biz.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -16,7 +18,9 @@ import com.tccz.tccz.biz.service.LimitBizService;
 import com.tccz.tccz.common.util.PageList;
 import com.tccz.tccz.core.model.BusinessSideSet;
 import com.tccz.tccz.core.model.Enterprise;
+import com.tccz.tccz.core.model.Money;
 import com.tccz.tccz.core.model.Person;
+import com.tccz.tccz.core.model.enums.BankBizType;
 import com.tccz.tccz.core.service.LimitService;
 import com.tccz.tccz.core.service.query.BusinessSideQueryService;
 
@@ -73,6 +77,17 @@ public class LimitBizServiceImpl implements LimitBizService {
 				view.setTotalLimit(limitService.calculateTotalLimit(data));
 				view.setAvailableLimit(limitService
 						.calculateAvailableLimit(data));
+				Map<String, Money> detailOccupyLimit = new HashMap<String, Money>();
+				detailOccupyLimit.put(BankBizType.FLOATING_LOAN.getCode(),
+						limitService.calculateDetailLimit(data,
+								BankBizType.FLOATING_LOAN));
+				detailOccupyLimit.put(BankBizType.BANDAR_NOTE.getCode(),
+						limitService.calculateDetailLimit(data,
+								BankBizType.BANDAR_NOTE));
+				detailOccupyLimit.put(BankBizType.DISCOUNT.getCode(),
+						limitService.calculateDetailLimit(data,
+								BankBizType.DISCOUNT));
+				view.setDetailOccupyLimit(detailOccupyLimit);
 				result.add(view);
 			}
 		}
@@ -118,6 +133,11 @@ public class LimitBizServiceImpl implements LimitBizService {
 				item.setAvailableLimit(limitService
 						.calculateAvailableLimit(person));
 				item.setTotalLimit(limitService.calculateTotalLimit(person));
+				Map<String, Money> detailOccupyLimit = new HashMap<String, Money>();
+				detailOccupyLimit.put(BankBizType.FLOATING_LOAN.getCode(),
+						limitService.calculateDetailLimit(person,
+								BankBizType.FLOATING_LOAN));
+				item.setDetailOccupyLimit(detailOccupyLimit);
 				result.add(item);
 			}
 		}

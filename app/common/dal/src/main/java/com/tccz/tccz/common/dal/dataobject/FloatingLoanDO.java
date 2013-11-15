@@ -67,6 +67,11 @@ public class FloatingLoanDO {
 	 */
 	private Date modifyTime;
 
+	/**
+	 * This property corresponds to db column <tt>has_repayed</tt>.
+	 */
+	private String hasRepayed;
+
     //========== getters and setters ==========
 
     /**
@@ -211,5 +216,23 @@ public class FloatingLoanDO {
      */
 	public void setModifyTime(Date modifyTime) {
 		this.modifyTime = modifyTime;
+	}
+
+    /**
+     * Getter method for property <tt>hasRepayed</tt>.
+     *
+     * @return property value of hasRepayed
+     */
+	public String getHasRepayed() {
+		return hasRepayed;
+	}
+	
+	/**
+	 * Setter method for property <tt>hasRepayed</tt>.
+	 * 
+	 * @param hasRepayed value to be assigned to property hasRepayed
+     */
+	public void setHasRepayed(String hasRepayed) {
+		this.hasRepayed = hasRepayed;
 	}
 }

@@ -89,4 +89,12 @@ public class FloatingLoanQueryServiceImpl implements FloatingLoanQueryService {
 				bizSideType, expireStart, expireEnd));
 	}
 
+	@Override
+	public List<FloatingLoan> queryListByRepay(String bizSideId,
+			String bizSideType, boolean hasRepayed) {
+		return convertToDomains(floatingLoanDAO.getByRepay(
+				ObjectConvertor.convertBooleanToString(hasRepayed), bizSideId,
+				bizSideType));
+	}
+
 }

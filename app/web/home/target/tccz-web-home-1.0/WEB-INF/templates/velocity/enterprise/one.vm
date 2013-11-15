@@ -1,0 +1,48 @@
+<script type="text/javascript" src="$!contextPath/js/enterprise/oneEnterprise.js?num=Math.random()"></script>
+<script type="text/javascript">
+	// 业务实体
+	var item; 
+	#if($$item)
+		item = $item;
+	#end
+	// 全局方法
+	function operationType() {
+		return "$!operation";
+	}
+	function operationTypeDesc() {
+		return "$!operationDesc";
+	}
+	function getFormAction() {
+		#if($!operation == "ADD")
+			return "add.htm";
+		#elseif($!operation == "UPDATE")
+			return "modify.htm";
+		#else
+			return "";
+		#end
+	}
+	function canModify(fieldName) {
+		#if($!operation == "UPDATE")
+			if(fieldName == "legalPersonId") {
+			// 特定字段才允许修改
+				return true;
+			} else {
+				return false;
+			}
+		#elseif($!operation == "QUERY")
+			return false;
+		#else
+			return true;
+		#end
+	}
+	function isReadOnly() {
+		#if($readOnly && $readOnly == true)
+			return true;
+		#else
+			return false;
+		#end
+	}
+	function getLoanBizSideType() {
+		return "$!bizSideType";
+	}
+</script>

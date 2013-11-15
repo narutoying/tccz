@@ -1,0 +1,19 @@
+<style>
+	div#errorMessage {
+    	float: left;
+    	max-width: 600px;
+    }
+	div#errorMessageImg {
+    	float: left;
+    }
+</style>
+<div>
+    <div id="errorMessage">
+    	<h2>系统错误</h2>
+    	<b class="red">
+    		$!error
+    	</b><br/>
+		 <a href="javascript:history.back()">返回</a>
+    </div>
+    <div id="errorMessageImg"><img src="$!contextPath/images/error-robot.png" /></div>
+</div>

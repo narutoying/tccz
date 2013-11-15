@@ -1,0 +1,10 @@
+<div>
+<div id="errorMessage">
+	<b class="red">
+		对不起，您没有此操作权限。uri=$!request.getParameter('exception_marking')
+	<br/>
+	请退出后，使用有权限的账户登录，再执行操作，谢谢！
+	</b>
+</div>
+<div id="errorMessageImg"><img src="$!contextPath/images/error-robot.png" /></div>
+</div>

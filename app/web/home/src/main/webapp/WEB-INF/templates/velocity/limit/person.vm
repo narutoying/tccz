@@ -38,6 +38,7 @@
 			<th>关联企业</th>
 			<th>总额度</th>
 			<th>可用额度</th>
+			<th title="此处所占用额度仅计算该企业/个人自身">流贷占用额度</th>
 		</tr>
 		#foreach($view in $views.dataList)
 			<tr>
@@ -53,8 +54,10 @@
 						$e.name &nbsp;
 					#end
 				</td>
-				<td>$!view.totalLimit.amount</td>
-				<td>$!view.availableLimit.amount</td>
+				<td>$moneyUtil.parseMoney("$!view.totalLimit.amount")</td>
+				<td>$moneyUtil.parseMoney("$!view.availableLimit.amount")</td>
+				#set($detailOccupyLimit = $view.detailOccupyLimit)
+				<td>$moneyUtil.parseMoney(${detailOccupyLimit.get("FLOATING_LOAN").toString()})</td>
 			</tr>
 		#end
 	</table>

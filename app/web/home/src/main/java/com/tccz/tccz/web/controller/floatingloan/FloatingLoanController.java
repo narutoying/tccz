@@ -204,6 +204,7 @@ public class FloatingLoanController {
 		}
 		result.setLoaner(loaner);
 		result.setReleaseDate(form.getReleaseDate());
+		result.setHasRepayed(form.isHasRepayed());
 		return result;
 	}
 

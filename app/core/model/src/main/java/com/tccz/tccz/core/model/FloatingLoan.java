@@ -24,6 +24,8 @@ public class FloatingLoan extends BaseBankBusinessEntity {
 	private Money amount;
 	/** 发放日 */
 	private Date releaseDate;
+	/** 已还款 */
+	private boolean hasRepayed;
 
 	public BusinessSide getLoaner() {
 		return loaner;
@@ -60,6 +62,29 @@ public class FloatingLoan extends BaseBankBusinessEntity {
 
 	public void setBizSideType(LoanBizSideType bizSideType) {
 		this.bizSideType = bizSideType;
+	}
+
+	public boolean isHasRepayed() {
+		return hasRepayed;
+	}
+
+	public void setHasRepayed(boolean hasRepayed) {
+		this.hasRepayed = hasRepayed;
+	}
+
+	/**
+	 * 流贷比较特殊
+	 * 
+	 * @see com.tccz.tccz.core.model.BaseBankBusinessEntity#occupyLimit(java.util.Date)
+	 */
+	@Override
+	public boolean occupyLimit(Date compareDate) {
+		// 流贷仅在“已还款”才会释放所占额度，无论到期与否
+		if (!this.hasRepayed) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

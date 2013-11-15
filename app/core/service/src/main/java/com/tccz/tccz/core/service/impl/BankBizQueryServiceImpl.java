@@ -60,8 +60,8 @@ public class BankBizQueryServiceImpl implements BankBizQueryService {
 			}
 			String bizSideType = (object == null ? LoanBizSideType.CORPORATE
 					.getCode() : ((LoanBizSideType) object).getCode());
-			return (List<T>) floatingLoanQueryService.queryListByExpireDate(
-					bizSideId, bizSideType, expireDateStart, expireDateEnd);
+			return (List<T>) floatingLoanQueryService.queryListByRepay(
+					bizSideId, bizSideType, false);
 		}
 		return Collections.emptyList();
 	}
