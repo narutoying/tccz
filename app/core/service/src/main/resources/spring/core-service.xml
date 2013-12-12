@@ -42,6 +42,37 @@
 	<bean id="floatingLoanExcelHandler" class="com.tccz.tccz.core.service.impl.filehandler.FloatingLoanExcelHandler" />
 	<bean id="discountExcelHandler" class="com.tccz.tccz.core.service.impl.filehandler.DiscountExcelHandler" />
 		
+	<!-- 定时任务 -->
+	<bean id="dataExportJob" class="com.tccz.tccz.core.service.manage.job.DataExportJob" />
+	<!-- 定义调度对象和调用的方法 -->  
+	<bean id="quartzJob"  
+	    class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+	    <property name="targetObject" ref="dataExportJob" />  
+	    <property name="targetMethod">  
+	        <value>exportExcel</value>  
+	    </property>  
+	</bean>  
+	<!-- 配置触发器 -->  
+	<bean id="QuartzCornTrigger"   
+	    class="org.springframework.scheduling.quartz.CronTriggerBean">  
+	    <property name="jobDetail">  
+	        <ref local="quartzJob" />  
+	    </property>  
+	    <!-- 触发时间(使用cron表达式) -->  
+	    <property name="cronExpression">  
+	        <value>0/5 * * * * ?</value>  
+	    </property>  
+	</bean> 
+		<!-- 调度程序管理类 -->
+	<bean id="startQuartz" lazy-init="false" autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<!-- 添加触发器 -->
+		<property name="triggers">
+			<list>
+				<ref local="QuartzCornTrigger" />
+			</list>
+		</property>
+	</bean> 
 </beans>
 
 
