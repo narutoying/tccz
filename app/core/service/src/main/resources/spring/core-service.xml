@@ -42,21 +42,24 @@
 	<bean id="floatingLoanExcelHandler" class="com.tccz.tccz.core.service.impl.filehandler.FloatingLoanExcelHandler" />
 	<bean id="discountExcelHandler" class="com.tccz.tccz.core.service.impl.filehandler.DiscountExcelHandler" />
 		
+	<!-- 数据导出服务 -->
+	<bean id="flExportService" class="com.tccz.tccz.core.service.impl.DataExportServiceFLImpl" />
+	
 	<!-- 定时任务 -->
-	<bean id="dataExportJob" class="com.tccz.tccz.core.service.manage.job.DataExportJob" />
+	<bean id="floatingLoanExportJob" class="com.tccz.tccz.core.service.manage.job.FloatingLoanExportJob" />
 	<!-- 定义调度对象和调用的方法 -->  
-	<bean id="quartzJob"  
+	<bean id="floatingLoanExportQuartzJob"  
 	    class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
-	    <property name="targetObject" ref="dataExportJob" />  
+	    <property name="targetObject" ref="floatingLoanExportJob" />  
 	    <property name="targetMethod">  
-	        <value>exportExcel</value>  
+	        <value>export</value>  
 	    </property>  
 	</bean>  
 	<!-- 配置触发器 -->  
-	<bean id="QuartzCornTrigger"   
+	<bean id="floatingLoanExportQuartzJobTrigger"   
 	    class="org.springframework.scheduling.quartz.CronTriggerBean">  
 	    <property name="jobDetail">  
-	        <ref local="quartzJob" />  
+	        <ref local="floatingLoanExportQuartzJob" />  
 	    </property>  
 	    <!-- 触发时间(使用cron表达式) -->  
 	    <property name="cronExpression">  
@@ -69,7 +72,7 @@
 		<!-- 添加触发器 -->
 		<property name="triggers">
 			<list>
-				<ref local="QuartzCornTrigger" />
+				<ref local="floatingLoanExportQuartzJobTrigger" />
 			</list>
 		</property>
 	</bean> 
