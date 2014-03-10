@@ -54,7 +54,7 @@
 		</property>
 		<property name="authUris">
 			<list>
-				<!--  
+				<!--  -->
 				<value>/index.htm</value>
 				<value>/query/floatingloan/index.htm</value>
 				<value>/update/floatingloan/add.htm</value>
@@ -80,8 +80,12 @@
 				<value>/update/person/uploadPersonInfo.htm</value>
 				<value>/update/data/index.htm</value>
 				<value>/update/data/uploadAccountData.htm</value>
-				-->
+				
 			</list>
+		</property>
+		<!-- 跳转权限登录页面url -->
+		<property name="securityDomainName">
+			<value>http://zauth.local.net:8080</value>
 		</property>
 		<!-- 跳转权限登录页面url -->
 		<property name="zSecurityLoginUrl">
@@ -89,6 +93,10 @@
 		</property>
 		<property name="zSecurityLogoutUrl">
 			<value>/zauth/logout.htm</value>
+		</property>
+		<!-- 注销后下次登录跳转url -->
+		<property name="zSecurityAfterLogoutGotoUrl">
+			<value>http://local.net:8081/tccz/index.htm</value>
 		</property>
 		<!-- 此处不带上下文路径！ -->
 		<property name="adminOnlyRedirectUrl">
@@ -99,6 +107,15 @@
 				<value>admin</value>
 			</list>
 		</property>
+	</bean>
+	
+		<!-- 分布式session配置 -->
+	<bean id="distributedSessionConfig" class="com.tceon.soa.zauth.client.session.DistributedSessionConfig">
+		<property name="sessionCookieName" value="DSESSIONID" />
+		<property name="sessionCookieDomain" value=".local.net" />
+		<property name="maxInactiveIntervalTime" value="1800" />
+		<property name="memcachedServer" value="127.0.0.1:11211" />
+		<property name="sessionExpireTerm" value="1800" />
 	</bean>
 	
 </beans>
